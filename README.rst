@@ -9,6 +9,10 @@ Result
     :alt: PyPI Downloads
     :target: https://pypi.python.org/pypi/result
 
+.. image:: https://img.shields.io/coveralls/dbrgn/result/master.svg
+    :alt: Coverage
+    :target: https://coveralls.io/github/dbrgn/result
+
 A simple Result type `inspired by Rust <https://doc.rust-lang.org/std/result/>`__.
 
 The idea is that a ``Result`` value can be either ``Ok(value)`` or ``Err(error)``,
