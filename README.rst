@@ -56,3 +56,72 @@ Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html) have
 been implemented, only the ones that make sense in the Python context. You still
 don't get any type safety, but some easier handling of types that can be OK or
 not, without resorting to custom exceptions.
+
+
+API
+---
+
+Creating an instance::
+
+    >>> from result import Ok, Err
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+
+Or through the class methods::
+
+    >>> from result import Result
+    >>> res1 = Result.Ok('yay')
+    >>> res2 = Result.Err('nay')
+
+Checking whether a result is ok or not::
+
+    >>> res = Ok('yay')
+    >>> res.is_ok()
+    True
+    >>> res.is_err()
+    False
+
+Convert a Result to the value or ``None``::
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res1.ok()
+    'yay'
+    >>> res2.ok()
+    None
+
+Convert a Result to the error or ``None``::
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res1.err()
+    None
+    >>> res2.err()
+    'nay'
+
+Access the value directly, without any other checks (like ``unwrap()`` in Rust)::
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res1.value
+    'yay'
+    >>> res2.value
+    'nay'
+
+Note that this is a property, you cannot assign to it. Results are immutable.
+
+In case you're missing methods like ``unwrap_or(default)``, these can be
+achieved by regular Python constructs::
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res1.ok() or 'default'
+    'yay'
+    >>> res2.ok() or 'default'
+    'default'
+
+
+License
+-------
+
+MIT License
