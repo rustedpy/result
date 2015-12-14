@@ -1,6 +1,14 @@
 Result
 ======
 
+.. image:: https://img.shields.io/travis/dbrgn/result/master.svg
+    :alt: Build status
+    :target: https://travis-ci.org/dbrgn/result
+
+.. image:: https://img.shields.io/pypi/dm/result.svg
+    :alt: PyPI Downloads
+    :target: https://pypi.python.org/pypi/result
+
 A simple Result type `inspired by Rust <https://doc.rust-lang.org/std/result/>`__.
 
 The idea is that a ``Result`` value can be either ``Ok(value)`` or ``Err(error)``,
