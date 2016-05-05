@@ -122,6 +122,16 @@ Access the value directly, without any other checks (like ``unwrap()`` in Rust):
 
 Note that this is a property, you cannot assign to it. Results are immutable.
 
+For your convenience, simply creating an `Ok` result without value is the same as using `True`::
+
+    >>> res1 = Result.Ok()
+    >>> res1.value
+    True
+    >>> res2 = Ok()
+    >>> res2.value
+    True
+
+
 In case you're missing methods like ``unwrap_or(default)``, these can be
 achieved by regular Python constructs::
 

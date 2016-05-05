@@ -17,7 +17,7 @@ class Result(object):
                                "Use the Ok(value) and Err(error) class methods instead.")
 
     @classmethod
-    def Ok(cls, value):
+    def Ok(cls, value=True):
         instance = cls(force=True)
         instance._val = value
         instance._type = 'ok'
@@ -58,7 +58,7 @@ class Result(object):
     # TODO: Implement __iter__ for destructuring
 
 
-def Ok(value):
+def Ok(value=True):
     """
     Shortcut function to create a new Result.
     """
