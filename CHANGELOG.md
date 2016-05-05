@@ -15,6 +15,10 @@ Possible log types:
 
  - ...
 
+## [0.2.0] - 2016-05-05
+
+ - [added] Convenience default: `Ok()` == `Ok(True)`
+
 ## [0.1.1] - 2015-12-14
 
  - [fixed] Import bugfix
@@ -23,6 +27,7 @@ Possible log types:
 
  - Initial version
 
-[Unreleased]: https://github.com/dbrgn/fahrplan/compare/v0.1.0...HEAD
-[0.1.1]: https://github.com/dbrgn/fahrplan/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/dbrgn/fahrplan/compare/3ca7d83...v0.1.0
+[Unreleased]: https://github.com/dbrgn/result/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/dbrgn/result/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/dbrgn/result/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/dbrgn/result/compare/3ca7d83...v0.1.0
