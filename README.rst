@@ -122,6 +122,24 @@ Access the value directly, without any other checks (like ``unwrap()`` in Rust):
 
 Note that this is a property, you cannot assign to it. Results are immutable.
 
+Calls a function if the result is Err, otherwise returns self::
+
+    >>> Ok(1).or_else(lambda x: Ok(x * 2)) == Ok(2)
+    False
+    >>> Err(1).or_else(lambda x: Ok(x * 2)) == Ok(2)
+    True
+    >>> Err(1).or_else(lambda x, y: Ok(x * y), y=2) == Ok(2)
+    True
+
+Calls a function if the result is Ok, otherwise returns self::
+
+    >>> Ok(1).and_then(lambda x: Ok(x * 2)) == Ok(2)
+    True
+    >>> Err(1).and_then(lambda x: Ok(x * 2)) == Ok(2)
+    False
+    >>> Ok(1).and_then(lambda x, y: Ok(x * y), y=2) == Ok(2)
+    True
+
 For your convenience, simply creating an `Ok` result without value is the same as using `True`::
 
     >>> res1 = Result.Ok()

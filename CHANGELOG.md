@@ -13,7 +13,7 @@ Possible log types:
 
 ## [Unreleased]
 
- - ...
+ - [added] and_then and or_else control flow methods
 
 ## [0.2.0] - 2016-05-05
 

@@ -16,6 +16,10 @@ class Result(object):
             raise RuntimeError("Don't instantiate a Result directly. "
                                "Use the Ok(value) and Err(error) class methods instead.")
 
+    def __eq__(self, other):
+        return self._type == other._type and self._val == other._val
+
+
     @classmethod
     def Ok(cls, value=True):
         instance = cls(force=True)
@@ -47,6 +51,22 @@ class Result(object):
         Return the error if this is an `Err` type. Return `None` otherwise.
         """
         return self._val if self.is_err() else None
+
+    def and_then(self, function, **kwargs):
+        """
+        Return the error if this is an `Err` type. Return `function` calls return value otherwise.
+        """
+        if self._type == 'error':
+            return self
+        return function(self._val, **kwargs)
+
+    def or_else(self, function, **kwargs):
+        """
+        Return the error if this is an `Ok` type. Return `function` calls return value otherwise.
+        """
+        if self._type == 'ok':
+            return self
+        return function(self._val, **kwargs)
 
     @property
     def value(self):
