@@ -16,6 +16,10 @@ class Result(object):
             raise RuntimeError("Don't instantiate a Result directly. "
                                "Use the Ok(value) and Err(error) class methods instead.")
 
+    def __eq__(self, other):
+        return self._type == other._type and self._val == other._val
+
+
     @classmethod
     def Ok(cls, value=True):
         instance = cls(force=True)

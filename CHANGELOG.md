@@ -13,7 +13,7 @@ Possible log types:
 
 ## [Unreleased]
 
- - ...
+ - [added] __eq__ magic method
 
 ## [0.2.0] - 2016-05-05
 

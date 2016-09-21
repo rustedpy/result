@@ -23,6 +23,13 @@ def test_err_factories(instance):
     instance.is_err() is True
 
 
+def test_eq():
+    assert Ok(1) == Ok(1)
+    assert Err(1) == Err(1)
+    assert Ok(1) != Err(1)
+    assert Ok(1) != Ok(2)
+
+
 def test_ok():
     res = Ok('haha')
     res.is_ok() is True
