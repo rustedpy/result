@@ -27,11 +27,7 @@ Sign files:
     gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}.tar.gz
     gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}-py2.py3-none-any.whl
 
-Register package on PyPI:
-
-    twine3 register dist/result-${VERSION}.tar.gz
-
-Upload package:
+Upload package to PyPI:
 
     twine3 upload dist/result-${VERSION}*
     git push
