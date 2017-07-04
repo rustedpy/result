@@ -46,7 +46,7 @@ class Result(Generic[E, T]):
 
     def __hash__(self):
         # type: () -> int
-        return hash((self.is_ok, self._value))
+        return hash((self.is_ok(), self._value))
 
     def __repr__(self):
         # type: () -> str

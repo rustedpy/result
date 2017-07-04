@@ -28,8 +28,14 @@ def test_eq():
     assert Err(1) == Err(1)
     assert Ok(1) != Err(1)
     assert Ok(1) != Ok(2)
-    assert Ok(1) != "asdf"
+    assert Ok(1) != "abc"
     assert Ok("0") != Ok(0)
+
+
+def test_hash():
+    assert len({Ok(1), Err("2"), Ok(1), Err("2")}) == 2
+    assert len({Ok(1), Ok(2)}) == 2
+    assert len({Ok("a"), Err("a")}) == 2
 
 
 def test_ok():
