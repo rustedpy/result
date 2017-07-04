@@ -10,8 +10,8 @@ from result import Result, Ok, Err
     Result.Ok(1),
 ])
 def test_ok_factories(instance):
-    instance._value == 1
-    instance.is_ok() is True
+    assert instance._value == 1
+    assert instance.is_ok() is True
 
 
 @pytest.mark.parametrize('instance', [
@@ -19,8 +19,8 @@ def test_ok_factories(instance):
     Result.Err(2),
 ])
 def test_err_factories(instance):
-    instance._value == 2
-    instance.is_err() is True
+    assert instance._value == 2
+    assert instance.is_err() is True
 
 
 def test_eq():
@@ -40,16 +40,16 @@ def test_hash():
 
 def test_ok():
     res = Ok('haha')
-    res.is_ok() is True
-    res.is_err() is False
-    res.value == 'haha'
+    assert res.is_ok() is True
+    assert res.is_err() is False
+    assert res.value == 'haha'
 
 
 def test_err():
     res = Err(':(')
-    res.is_ok() is False
-    res.is_err() is True
-    res.value == ':('
+    assert res.is_ok() is False
+    assert res.is_err() is True
+    assert res.value == ':('
 
 
 def test_ok_method():
@@ -68,12 +68,12 @@ def test_err_method():
 
 def test_no_arg_ok():
     top_level = Ok()
-    top_level.is_ok() is True
-    top_level.ok() is True
+    assert top_level.is_ok() is True
+    assert top_level.ok() is True
 
     class_method = Result.Ok()
-    class_method.is_ok() is True
-    class_method.ok() is True
+    assert class_method.is_ok() is True
+    assert class_method.ok() is True
 
 
 def test_no_constructor():
