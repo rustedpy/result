@@ -38,7 +38,6 @@ class Result(Generic[E, T]):
         # type: (Any) -> bool
         return cast(bool, (self.__class__ == other.__class__ and
                            self.is_ok() == other.is_ok() and
-                           self._value.__class__ == other._value.__class__ and
                            self._value == other._value))
 
     def __ne__(self, other):
