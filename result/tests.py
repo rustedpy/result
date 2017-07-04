@@ -2,7 +2,7 @@
 
 import pytest
 
-from .result import Result, Ok, Err
+from result import Result, Ok, Err
 
 
 @pytest.mark.parametrize('instance', [
@@ -10,7 +10,7 @@ from .result import Result, Ok, Err
     Result.Ok(1),
 ])
 def test_ok_factories(instance):
-    instance._val == 1
+    instance._value == 1
     instance.is_ok() is True
 
 
@@ -19,7 +19,7 @@ def test_ok_factories(instance):
     Result.Err(2),
 ])
 def test_err_factories(instance):
-    instance._val == 2
+    instance._value == 2
     instance.is_err() is True
 
 
@@ -58,9 +58,19 @@ def test_err_method():
     assert n.err() == 'nay'
 
 
+def test_no_arg_ok():
+    top_level = Ok()
+    top_level.is_ok() is True
+    top_level.ok() is True
+
+    class_method = Result.Ok()
+    class_method.is_ok() is True
+    class_method.ok() is True
+
+
 def test_no_constructor():
     """
     Constructor should not be used directly.
     """
     with pytest.raises(RuntimeError):
-        Result()
+        Result(is_ok=True, value='yay')
