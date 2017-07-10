@@ -51,9 +51,9 @@ class Result(Generic[E, T]):
     def __repr__(self):
         # type: () -> str
         if self.is_ok():
-            return "Ok({})".format(repr(self._value)).encode("utf-8")
+            return str("Ok({})").format(repr(self._value))
         else:
-            return "Err({})".format(repr(self._value)).encode("utf-8")
+            return str("Err({})").format(repr(self._value))
 
     @classmethod
     @overload
