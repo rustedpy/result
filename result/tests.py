@@ -41,14 +41,8 @@ def test_hash():
 
 
 def test_repr():
-    assert repr(Ok(u"£10")) == "Ok(u'\\xa310')"
     assert Ok(u"£10") == eval(repr(Ok(u"£10")))
-
-    assert repr(Ok("£10")) == "Ok('\\xc2\\xa310')"
     assert Ok("£10") == eval(repr(Ok("£10")))
-
-    assert repr(Ok(b"£10")) == "Ok('\\xc2\\xa310')"
-    assert Ok(b"£10") == eval(repr(Ok(b"£10")))
 
 
 def test_ok():
