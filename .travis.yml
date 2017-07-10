@@ -9,5 +9,6 @@ install:
   - pip install coveralls
 script:
   - py.test
+  - mypy result/result.py
 after_success:
   - coveralls
