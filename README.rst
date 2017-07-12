@@ -13,7 +13,7 @@ Result
     :alt: Coverage
     :target: https://coveralls.io/github/dbrgn/result
 
-A simple Result type `inspired by Rust <https://doc.rust-lang.org/std/result/>`__.
+A simple Result type for Python 3 `inspired by Rust <https://doc.rust-lang.org/std/result/>`__.
 
 The idea is that a ``Result`` value can be either ``Ok(value)`` or ``Err(error)``,
 with a way to differentiate between the two. It will change code like this:
