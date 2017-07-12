@@ -13,13 +13,14 @@ Possible log types:
 
 ## [Unreleased]
 
+ - [removed] Dropped support for Python 2
  - ...
 
 ## [0.3.0] - 2017-07-12
 
-- [added] This library is now fully type annotated (#4, thanks @tyehle)
-- [added] Implementations for `__ne__`, `__hash__` and `__repr__`
-- [deprecated] Python 2 support is deprecated and will be removed in the 0.4 release
+ - [added] This library is now fully type annotated (#4, thanks @tyehle)
+ - [added] Implementations for `__ne__`, `__hash__` and `__repr__`
+ - [deprecated] Python 2 support is deprecated and will be removed in the 0.4 release
 
 ## [0.2.2] - 2016-09-21
 

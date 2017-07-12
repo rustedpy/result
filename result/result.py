@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import print_function, division, absolute_import, unicode_literals
 from typing import Generic, TypeVar, Union, Any, Optional, cast, overload
 
 
@@ -51,9 +49,9 @@ class Result(Generic[E, T]):
     def __repr__(self):
         # type: () -> str
         if self.is_ok():
-            return str("Ok({})").format(repr(self._value))
+            return 'Ok({})'.format(repr(self._value))
         else:
-            return str("Err({})").format(repr(self._value))
+            return 'Err({})'.format(repr(self._value))
 
     @classmethod
     @overload
