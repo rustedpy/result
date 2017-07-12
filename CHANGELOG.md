@@ -15,6 +15,12 @@ Possible log types:
 
  - ...
 
+## [0.3.0] - 2017-07-12
+
+- [added] This library is now fully type annotated (#4, thanks @tyehle)
+- [added] Implementations for `__ne__`, `__hash__` and `__repr__`
+- [deprecated] Python 2 support is deprecated and will be removed in the 0.4 release
+
 ## [0.2.2] - 2016-09-21
 
  - [added] `__eq__` magic method
@@ -31,7 +37,9 @@ Possible log types:
 
  - Initial version
 
-[Unreleased]: https://github.com/dbrgn/result/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/dbrgn/result/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/dbrgn/result/compare/v0.2.2...v0.3.0
+[0.2.2]: https://github.com/dbrgn/result/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/dbrgn/result/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/dbrgn/result/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/dbrgn/result/compare/v0.1.0...v0.1.1
