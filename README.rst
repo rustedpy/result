@@ -5,10 +5,6 @@ Result
     :alt: Build status
     :target: https://travis-ci.org/dbrgn/result
 
-.. image:: https://img.shields.io/pypi/dm/result.svg
-    :alt: PyPI Downloads
-    :target: https://pypi.python.org/pypi/result
-
 .. image:: https://img.shields.io/coveralls/dbrgn/result/master.svg
     :alt: Coverage
     :target: https://coveralls.io/github/dbrgn/result
