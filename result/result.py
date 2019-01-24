@@ -91,6 +91,21 @@ class Result(Generic[E, T]):
         """
         return self._value
 
+    def expect(self, message: str) -> T:
+        """
+        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
+        """
+        if self._is_ok:
+            return self._value
+        else:
+            raise UnwrapError(message)
+
+    def unwrap(self) -> T:
+        """
+        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
+        """
+        return self.expect("Called `Result.unwrap()` on an `Err` value")
+
     # TODO: Implement __iter__ for destructuring
 
 
@@ -116,3 +131,7 @@ def Err(error: E) -> Result[E, T]:
     Shortcut function to create a new Result.
     """
     return Result.Err(error)
+
+
+class UnwrapError(Exception):
+    pass

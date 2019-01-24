@@ -3,7 +3,7 @@
 
 import pytest
 
-from result import Result, Ok, Err
+from result import Result, Ok, Err, UnwrapError
 
 
 @pytest.mark.parametrize('instance', [
@@ -89,3 +89,19 @@ def test_no_constructor():
     """
     with pytest.raises(RuntimeError):
         Result(is_ok=True, value='yay')
+
+
+def test_unwrap():
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.unwrap() == 'yay'
+    with pytest.raises(UnwrapError):
+        n.unwrap()
+
+
+def test_expect():
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.expect('failure') == 'yay'
+    with pytest.raises(UnwrapError):
+        n.expect('failure')
