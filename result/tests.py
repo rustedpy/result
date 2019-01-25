@@ -105,3 +105,10 @@ def test_expect():
     assert o.expect('failure') == 'yay'
     with pytest.raises(UnwrapError):
         n.expect('failure')
+
+
+def test_unwrap_or():
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.unwrap_or('some_default') == 'yay'
+    assert n.unwrap_or('another_default') == 'another_default'

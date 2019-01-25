@@ -106,6 +106,15 @@ class Result(Generic[E, T]):
         """
         return self.expect("Called `Result.unwrap()` on an `Err` value")
 
+    def unwrap_or(self, default: T) -> T:
+        """
+        Return the value if it is an `Ok` type. Return `default` if it is an `Err`.
+        """
+        if self._is_ok:
+            return self._value
+        else:
+            return default
+
     # TODO: Implement __iter__ for destructuring
 
 
