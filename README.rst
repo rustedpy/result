@@ -107,7 +107,7 @@ Convert a Result to the error or ``None``::
     >>> res2.err()
     'nay'
 
-Access the value directly, without any other checks (like ``unwrap()`` in Rust)::
+Access the value directly, without any other checks::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -127,15 +127,41 @@ For your convenience, simply creating an `Ok` result without value is the same a
     >>> res2.value
     True
 
-
-In case you're missing methods like ``unwrap_or(default)``, these can be
-achieved by regular Python constructs::
+The `unwrap` method returns the value if `Ok`, otherwise it raises an `UnwrapError`::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
-    >>> res1.ok() or 'default'
+    >>> res1.unwrap()
     'yay'
-    >>> res2.ok() or 'default'
+    >>> res2.unwrap()
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "C:\project\result\result.py", line 107, in unwrap
+        return self.expect("Called `Result.unwrap()` on an `Err` value")
+    File "C:\project\result\result.py", line 101, in expect
+        raise UnwrapError(message)
+    result.result.UnwrapError: Called `Result.unwrap()` on an `Err` value
+
+A custom error message can be displayed instead by using `expect`::
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res1.expect('not ok')
+    'yay'
+    >>> res2.expect('not ok')
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "C:\project\result\result.py", line 101, in expect
+        raise UnwrapError(message)
+    result.result.UnwrapError: not ok
+
+A default value can be returned instead by using `unwrap_or`::
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res1.unwrap_or('default')
+    'yay'
+    >>> res2.unwrap_or('default')
     'default'
 
 
