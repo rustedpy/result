@@ -96,7 +96,7 @@ class Result(Generic[E, T]):
         Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
         """
         if self._is_ok:
-            return self._value
+            return cast(T, self._value)
         else:
             raise UnwrapError(message)
 
@@ -111,7 +111,7 @@ class Result(Generic[E, T]):
         Return the value if it is an `Ok` type. Return `default` if it is an `Err`.
         """
         if self._is_ok:
-            return self._value
+            return cast(T, self._value)
         else:
             return default
 
