@@ -155,6 +155,23 @@ A custom error message can be displayed instead by using `expect`::
         raise UnwrapError(message)
     result.result.UnwrapError: not ok
 
+Equivalent methods are available for accessing the error value::
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res2.unwrap_err()
+    'nay'
+    >>> res2.expect_err('not an err')
+    'nay'
+    >>> res1.unwrap_err()
+    Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+    File "C:\project\result\result\result.py", line 131, in unwrap_err
+        return self.expect_err("Called `Result.unwrap_err()` on an `Ok` value")
+    File "C:\project\result\result\result.py", line 123, in expect_err
+        raise UnwrapError(message)
+    result.result.UnwrapError: Called `Result.unwrap_err()` on an `Ok` value
+
 A default value can be returned instead by using `unwrap_or`::
 
     >>> res1 = Ok('yay')
