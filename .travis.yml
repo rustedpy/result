@@ -9,8 +9,8 @@ install:
   - pip install -r requirements-dev.txt
   - pip install coveralls
 script:
+  - pip install -e .
   - py.test
   - mypy result/result.py
-  - python setup.py install
 after_success:
   - coveralls
