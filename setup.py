@@ -24,4 +24,4 @@ setup(name='result',
           'Programming Language :: Python :: 3.6',
           'Programming Language :: Python :: 3 :: Only',
       ],
-      install_requires=['typing'])
+      install_requires=['typing; python_version < "3.5"'])
