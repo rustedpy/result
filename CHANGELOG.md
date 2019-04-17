@@ -11,10 +11,10 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
-## [Unreleased]
+## [0.4.0] - 2019-04-17
 
- - [removed] Dropped support for Python 2
- - ...
+ - [removed] Drop support for Python 2
+ - [changed] Only install typing dependency for Python <3.5
 
 ## [0.3.0] - 2017-07-12
 
