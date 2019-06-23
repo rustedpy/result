@@ -1,9 +1,10 @@
-from typing import Generic, TypeVar, Union, Any, Optional, cast, overload
+from typing import Callable, Generic, TypeVar, Union, Any, Optional, cast, overload
 
 
 E = TypeVar("E")
+F = TypeVar("F")
 T = TypeVar("T")
-A = TypeVar("A")
+U = TypeVar("U")
 
 
 class Result(Generic[E, T]):
@@ -21,8 +22,8 @@ class Result(Generic[E, T]):
         Args:
             is_ok: If this represents an ok result
             value: The value inside the result
-            force: Force creation of the object. This is false by default to prevent accidentally
-                creating instance of a Result in an unsafe way.
+            force: Force creation of the object. This is false by default to prevent
+                accidentally creating instance of a Result in an unsafe way.
         """
         if force is not True:
             raise RuntimeError("Don't instantiate a Result directly. "
@@ -114,6 +115,42 @@ class Result(Generic[E, T]):
             return cast(T, self._value)
         else:
             return default
+
+    def map(self, op: Callable[[T], U]) -> 'Result[E, U]':
+        """
+        Return `Ok` with original value mapped to a new value using the passed
+        in function. Otherwise return `Err` with same value.
+        """
+        if self._is_ok:
+            return Ok(op(cast(T, self._value)))
+        else:
+            return Err(cast(E, self._value))
+
+    def map_or_else(
+            self, default_op: Callable[[E], U], op: Callable[[T], U]) -> 'Result[E, U]':
+        """
+        Return `Ok` with original value mapped to a new value using the passed
+        in `op` function. Otherwise return `Ok` with the error value mapped to a
+        new value using the passed in `default_op` function.
+
+        Args:
+            default_op: Function to map an `Err` value to an `Ok` value.
+            op: Function to map an `Ok` value to an `Ok` value.
+        """
+        if self._is_ok:
+            return self.map(op)
+        else:
+            return Ok(default_op(cast(E, self._value)))
+
+    def map_err(self, op: Callable[[E], F]) -> 'Result[F, T]':
+        """
+        Return `Err` with original error value mapped to a new error value using
+        the passed in function. Otherwise return `Ok` with same value.
+        """
+        if self._is_ok:
+            return Ok(cast(T, self._value))
+        else:
+            return Err(op(cast(E, self._value)))
 
     # TODO: Implement __iter__ for destructuring
 

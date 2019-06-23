@@ -53,7 +53,7 @@ To something like this:
     user_result = get_user_by_email(email)
     if user_result.is_ok():
         do_something(user_result.value)
-    else: 
+    else:
         raise RuntimeError('Could not fetch user: %s' user_result.value)
 
 As this is Python and not Rust, you will lose some of the advantages that it
@@ -163,6 +163,21 @@ A default value can be returned instead by using `unwrap_or`::
     'yay'
     >>> res2.unwrap_or('default')
     'default'
+
+Values and errors can be mapped using `map`, `map_or_else` and `map_err` ::
+
+   >>> Ok(1).map(lambda x: x + 1).ok()
+   2
+   >>> Err('nay').map(lambda x: x + 1).err()
+   'nay'
+   >>> Ok(1).map_or_else(lambda e: 3, lambda x: x + 1).ok()
+   2
+   >>> Err('nay').map_or_else(lambda e: 3, lambda x: x + 1).ok()
+   3
+   >>> Ok(1).map_err(lambda e: e + e).ok()
+   1
+   >>> Err('nay').map_err(lambda e: e + e).err()
+   'naynay'
 
 
 License

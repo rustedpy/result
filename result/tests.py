@@ -112,3 +112,24 @@ def test_unwrap_or():
     n = Err('nay')
     assert o.unwrap_or('some_default') == 'yay'
     assert n.unwrap_or('another_default') == 'another_default'
+
+
+def test_map():
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.map(lambda x: x + x).ok() == 'yayyay'
+    assert n.map(lambda x: x + x).err() == 'nay'
+
+
+def test_map_or_else():
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.map_or_else(lambda e: 'hay', lambda x: x + x).ok() == 'yayyay'
+    assert n.map_or_else(lambda e: 'hay', lambda x: x + x).ok() == 'hay'
+
+
+def test_map_err():
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.map_err(lambda e: 'hay').ok() == 'yay'
+    assert n.map_err(lambda e: 'hay').err() == 'hay'
