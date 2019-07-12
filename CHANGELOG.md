@@ -13,7 +13,8 @@ Possible log types:
 
 ## [0.4.0] - 2019-04-17
 
- - [removed] Drop support for Python 2
+ - [added] Add `unwrap`, `unwrap_or` and `expect` (#9)
+ - [removed] Drop support for Python 2 and 3.3
  - [changed] Only install typing dependency for Python <3.5
 
 ## [0.3.0] - 2017-07-12
