@@ -6,20 +6,14 @@ import pytest
 from result import Result, Ok, Err, UnwrapError
 
 
-@pytest.mark.parametrize('instance', [
-    Ok(1),
-    Result.Ok(1),
-])
-def test_ok_factories(instance):
+def test_ok_constructor():
+    instance = Ok(1)
     assert instance._value == 1
     assert instance.is_ok() is True
 
 
-@pytest.mark.parametrize('instance', [
-    Err(2),
-    Result.Err(2),
-])
-def test_err_factories(instance):
+def test_err_constructor():
+    instance = Err(2)
     assert instance._value == 2
     assert instance.is_err() is True
 
@@ -32,6 +26,7 @@ def test_eq():
     assert not (Ok(1) != Ok(1))
     assert Ok(1) != "abc"
     assert Ok("0") != Ok(0)
+    assert Err("0") != Err(0)
 
 
 def test_hash():
@@ -71,24 +66,6 @@ def test_err_method():
     n = Err('nay')
     assert o.err() is None
     assert n.err() == 'nay'
-
-
-def test_no_arg_ok():
-    top_level = Ok()
-    assert top_level.is_ok() is True
-    assert top_level.ok() is True
-
-    class_method = Result.Ok()
-    assert class_method.is_ok() is True
-    assert class_method.ok() is True
-
-
-def test_no_constructor():
-    """
-    Constructor should not be used directly.
-    """
-    with pytest.raises(RuntimeError):
-        Result(is_ok=True, value='yay')
 
 
 def test_unwrap():

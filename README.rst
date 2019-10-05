@@ -12,11 +12,13 @@ Result
 A simple Result type for Python 3 `inspired by Rust <https://doc.rust-lang.org/std/result/>`__.
 
 The idea is that a ``Result`` value can be either ``Ok(value)`` or ``Err(error)``,
-with a way to differentiate between the two. It will change code like this:
+with a way to differentiate between the two. ``Ok`` and ``Err`` are both classes
+encapsulating an arbitrary value. ``Result[T, E]`` is a generic type alias for
+``typing.Union[Ok[T], Err[E]]``. It will change code like this:
 
 .. sourcecode:: python
 
-    def get_user_by_email(email):
+    def get_user_by_email(email: str) -> Tuple[Optional[User], Optional[str]]:
         """
         Return the user instance or an error message.
         """
@@ -37,9 +39,9 @@ To something like this:
 
 .. sourcecode:: python
 
-    from result import Ok, Err
+    from result import Ok, Err, Result
 
-    def get_user_by_email(email):
+    def get_user_by_email(email: str) -> Result[User, str]:
         """
         Return the user instance or an error message.
         """
@@ -51,19 +53,22 @@ To something like this:
         return Ok(user)
 
     user_result = get_user_by_email(email)
-    if user_result.is_ok():
+    if isinstance(user_result, Ok):
+        # type(user_result.value) == User
         do_something(user_result.value)
-    else: 
-        raise RuntimeError('Could not fetch user: %s' user_result.value)
+    else:
+        # type(value) == str
+        raise RuntimeError('Could not fetch user: %s' % user_result.value)
 
 As this is Python and not Rust, you will lose some of the advantages that it
 brings, like elegant combinations with the ``match`` statement. On the other
 side, you don't have to return semantically unclear tuples anymore.
 
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html) have
-been implemented, only the ones that make sense in the Python context. You still
-don't get any type safety, but some easier handling of types that can be OK or
-not, without resorting to custom exceptions.
+been implemented, only the ones that make sense in the Python context. By using
+``isinstance`` to check for ``Ok`` or ``Err`` you get type safe access to the
+stored values. All of this in a package allowing easier handling of values
+that can be OK or not, without resorting to custom exceptions.
 
 
 API
@@ -75,15 +80,14 @@ Creating an instance::
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
 
-Or through the class methods::
-
-    >>> from result import Result
-    >>> res1 = Result.Ok('yay')
-    >>> res2 = Result.Err('nay')
-
-Checking whether a result is ok or not::
+Checking whether a result is ok or not. With ``isinstance`` you get type safe
+access that can be checked with mypy::
 
     >>> res = Ok('yay')
+    >>> isinstance(res, Ok)
+    True
+    >>> isinstance(res, Err)
+    False
     >>> res.is_ok()
     True
     >>> res.is_err()

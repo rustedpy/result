@@ -1,145 +1,146 @@
-from typing import Generic, TypeVar, Union, Any, Optional, cast, overload
+from typing import Generic, TypeVar, Union, Any, Optional, cast, overload, NoReturn
 
 
-E = TypeVar("E")
 T = TypeVar("T")
-A = TypeVar("A")
+E = TypeVar("E")
 
 
-class Result(Generic[E, T]):
+class Ok(Generic[T]):
     """
-    A simple `Result` type inspired by Rust.
-
-    Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html)
-    have been implemented, only the ones that make sense in the Python context.
+    A value that indicates success and which stores arbitrary data for the return value.
     """
-    def __init__(self, is_ok: bool, value: Union[E, T], force: bool = False) -> None:
-        """Do not call this constructor, use the Ok or Err class methods instead.
 
-        There are no type guarantees on the value if this is called directly.
+    def __init__(self, value: T) -> None:
+        self._value = value
 
-        Args:
-            is_ok: If this represents an ok result
-            value: The value inside the result
-            force: Force creation of the object. This is false by default to prevent accidentally
-                creating instance of a Result in an unsafe way.
-        """
-        if force is not True:
-            raise RuntimeError("Don't instantiate a Result directly. "
-                               "Use the Ok(value) and Err(error) class methods instead.")
-        else:
-            self._is_ok = is_ok
-            self._value = value
+    def __repr__(self) -> str:
+        return "Ok({})".format(repr(self._value))
 
     def __eq__(self, other: Any) -> bool:
-        return (self.__class__ == other.__class__ and
-                self.is_ok() == cast(Result, other).is_ok() and
-                self._value == other._value)
+        return isinstance(other, Ok) and self.value == other.value
 
     def __ne__(self, other: Any) -> bool:
         return not (self == other)
 
     def __hash__(self) -> int:
-        return hash((self.is_ok(), self._value))
-
-    def __repr__(self) -> str:
-        if self.is_ok():
-            return 'Ok({})'.format(repr(self._value))
-        else:
-            return 'Err({})'.format(repr(self._value))
-
-    @classmethod
-    @overload
-    def Ok(cls) -> 'Result[E, bool]':
-        pass
-
-    @classmethod
-    @overload
-    def Ok(cls, value: T) -> 'Result[E, T]':
-        pass
-
-    @classmethod
-    def Ok(cls, value: Any = True) -> 'Result[E, Any]':
-        return cls(is_ok=True, value=value, force=True)
-
-    @classmethod
-    def Err(cls, error: E) -> 'Result[E, T]':
-        return cls(is_ok=False, value=error, force=True)
+        return hash((True, self._value))
 
     def is_ok(self) -> bool:
-        return self._is_ok
+        return True
 
     def is_err(self) -> bool:
-        return not self._is_ok
+        return False
 
-    def ok(self) -> Optional[T]:
+    def ok(self) -> T:
         """
-        Return the value if it is an `Ok` type. Return `None` if it is an `Err`.
-        """
-        return cast(T, self._value) if self.is_ok() else None
-
-    def err(self) -> Optional[E]:
-        """
-        Return the error if this is an `Err` type. Return `None` otherwise.
-        """
-        return cast(E, self._value) if self.is_err() else None
-
-    @property
-    def value(self) -> Union[E, T]:
-        """
-        Return the inner value. This might be either the ok or the error type.
+        Return the value.
         """
         return self._value
 
-    def expect(self, message: str) -> T:
+    def err(self) -> None:
         """
-        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
+        Return `None`.
         """
-        if self._is_ok:
-            return cast(T, self._value)
-        else:
-            raise UnwrapError(message)
+        return None
+
+    @property
+    def value(self) -> T:
+        """
+        Return the inner value.
+        """
+        return self._value
+
+    def expect(self, _message: str) -> T:
+        """
+        Return the value.
+        """
+        return self._value
 
     def unwrap(self) -> T:
         """
-        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
+        Return the value.
         """
-        return self.expect("Called `Result.unwrap()` on an `Err` value")
+        return self._value
+
+    def unwrap_or(self, _default: T) -> T:
+        """
+        Return the value.
+        """
+        return self._value
+
+
+class Err(Generic[E]):
+    """
+    A value that signifies failure and which stores arbitrary data for the error.
+    """
+    def __init__(self, value: E) -> None:
+        self._value = value
+
+    def __repr__(self) -> str:
+        return "Err({})".format(repr(self._value))
+
+    def __eq__(self, other: Any) -> bool:
+        return isinstance(other, Err) and self.value == other.value
+
+    def __ne__(self, other: Any) -> bool:
+        return not (self == other)
+
+    def __hash__(self) -> int:
+        return hash((False, self._value))
+
+    def is_ok(self) -> bool:
+        return False
+
+    def is_err(self) -> bool:
+        return True
+
+    def ok(self) -> None:
+        """
+        Return `None`.
+        """
+        return None
+
+    def err(self) -> E:
+        """
+        Return the error.
+        """
+        return self._value
+
+    @property
+    def value(self) -> E:
+        """
+        Return the inner value.
+        """
+        return self._value
+
+    def expect(self, message: str) -> NoReturn:
+        """
+        Raises an `UnwrapError`.
+        """
+        raise UnwrapError(message)
+
+    def unwrap(self) -> NoReturn:
+        """
+        Raises an `UnwrapError`.
+        """
+        raise UnwrapError("Called `Result.unwrap()` on an `Err` value")
 
     def unwrap_or(self, default: T) -> T:
         """
-        Return the value if it is an `Ok` type. Return `default` if it is an `Err`.
+        Return `default`.
         """
-        if self._is_ok:
-            return cast(T, self._value)
-        else:
-            return default
-
-    # TODO: Implement __iter__ for destructuring
+        return default
 
 
-@overload
-def Ok() -> Result[E, bool]:
-    pass
+# define Result as a generic type alias for use
+# in type annotations
+"""
+A simple `Result` type inspired by Rust.
 
-
-@overload
-def Ok(value: T) -> Result[E, T]:
-    pass
-
-
-def Ok(value: Any = True) -> Result[E, Any]:
-    """
-    Shortcut function to create a new Result.
-    """
-    return Result.Ok(value)
-
-
-def Err(error: E) -> Result[E, T]:
-    """
-    Shortcut function to create a new Result.
-    """
-    return Result.Err(error)
+Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html)
+have been implemented, only the ones that make sense in the Python context.
+"""
+Result = Union[Ok[T], Err[E]]
 
 
 class UnwrapError(Exception):
