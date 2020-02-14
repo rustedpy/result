@@ -120,16 +120,31 @@ def test_map():
     assert o.map(lambda x: x + x).ok() == 'yayyay'
     assert n.map(lambda x: x + x).err() == 'nay'
 
+    num = Ok(3)
+    errnum = Err(2)
+    assert num.map(lambda x: str(x)).ok() == '3'
+    assert errnum.map(lambda x: str(x)).err() == 2
+
+
+def test_map_or():
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.map_or('hay', lambda x: x + x) == 'yayyay'
+    assert n.map_or('hay', lambda x: x + x) == 'hay'
+
+    num = Ok(3)
+    errnum = Err(2)
+    assert num.map_or('-1', lambda x: str(x)) == '3'
+    assert errnum.map_or('-1', lambda x: str(x)) == '-1'
+
 
 def test_map_or_else():
     o = Ok('yay')
     n = Err('nay')
-    assert o.map_or_else(lambda e: 'hay', lambda x: x + x).ok() == 'yayyay'
-    assert n.map_or_else(lambda e: 'hay', lambda x: x + x).ok() == 'hay'
+    assert o.map_or_else(lambda: 'hay', lambda x: x + x) == 'yayyay'
+    assert n.map_or_else(lambda: 'hay', lambda x: x + x) == 'hay'
 
-
-def test_map_err():
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.map_err(lambda e: 'hay').ok() == 'yay'
-    assert n.map_err(lambda e: 'hay').err() == 'hay'
+    num = Ok(3)
+    errnum = Err(2)
+    assert num.map_or_else(lambda: '-1', lambda x: str(x)) == '3'
+    assert errnum.map_or_else(lambda: '-1', lambda x: str(x)) == '-1'

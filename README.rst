@@ -81,7 +81,7 @@ Or through the class methods::
     >>> res1 = Result.Ok('yay')
     >>> res2 = Result.Err('nay')
 
-Checking whether a result is ``Ok`` or not::
+Checking whether a result is ok or not::
 
     >>> res = Ok('yay')
     >>> res.is_ok()
@@ -89,7 +89,7 @@ Checking whether a result is ``Ok`` or not::
     >>> res.is_err()
     False
 
-Convert a ``Result`` to the value or ``None``::
+Convert a Result to the value or ``None``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -98,7 +98,7 @@ Convert a ``Result`` to the value or ``None``::
     >>> res2.ok()
     None
 
-Convert a ``Result`` to the error or ``None``::
+Convert a Result to the error or ``None``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -116,9 +116,9 @@ Access the value directly, without any other checks::
     >>> res2.value
     'nay'
 
-Note that this is a property, you cannot assign to it. ``Result``\s are immutable.
+Note that this is a property, you cannot assign to it. Results are immutable.
 
-For your convenience, simply creating an ``Ok`` result without value is the same as using ``True``::
+For your convenience, simply creating an `Ok` result without value is the same as using `True`::
 
     >>> res1 = Result.Ok()
     >>> res1.value
@@ -127,7 +127,7 @@ For your convenience, simply creating an ``Ok`` result without value is the same
     >>> res2.value
     True
 
-The ``unwrap`` method returns the value if ``Ok``, otherwise it raises an ``UnwrapError``::
+The `unwrap` method returns the value if `Ok`, otherwise it raises an `UnwrapError`::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -142,7 +142,7 @@ The ``unwrap`` method returns the value if ``Ok``, otherwise it raises an ``Unwr
         raise UnwrapError(message)
     result.result.UnwrapError: Called `Result.unwrap()` on an `Err` value
 
-A custom error message can be displayed instead by using ``expect``::
+A custom error message can be displayed instead by using `expect`::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -155,7 +155,7 @@ A custom error message can be displayed instead by using ``expect``::
         raise UnwrapError(message)
     result.result.UnwrapError: not ok
 
-A default value can be returned instead by using ``unwrap_or``::
+A default value can be returned instead by using `unwrap_or`::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -164,20 +164,21 @@ A default value can be returned instead by using ``unwrap_or``::
     >>> res2.unwrap_or('default')
     'default'
 
-Values and errors can be mapped using ``map``, ``map_or_else`` and ``map_err``::
+Values and errors can be mapped using `map`, `map_or`, `map_or_else`
+and `map_err` ::
 
    >>> Ok(1).map(lambda x: x + 1).ok()
    2
    >>> Err('nay').map(lambda x: x + 1).err()
    'nay'
-   >>> Ok(1).map_or_else(lambda e: 3, lambda x: x + 1).ok()
+   >>> Ok(1).map_or(-1, lambda x: x + 1)
    2
-   >>> Err('nay').map_or_else(lambda e: 3, lambda x: x + 1).ok()
+   >>> Err(1).map_or(-1, lambda x: x + 1)
+   -1
+   >>> Ok(1).map_or_else(lambda: 3, lambda x: x + 1)
+   2
+   >>> Err('nay').map_or_else(lambda: 3, lambda x: x + 1)
    3
-   >>> Ok(1).map_err(lambda e: e + e).ok()
-   1
-   >>> Err('nay').map_err(lambda e: e + e).err()
-   'naynay'
 
 
 License

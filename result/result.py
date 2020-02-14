@@ -75,7 +75,8 @@ class Result(Generic[E, T]):
 
     def ok(self) -> Optional[T]:
         """
-        Return the value if it is an `Ok` type. Return `None` if it is an `Err`.
+        Return the value if it is an `Ok` type. Return `None` if it is an
+        `Err`.
         """
         return cast(T, self._value) if self.is_ok() else None
 
@@ -94,7 +95,8 @@ class Result(Generic[E, T]):
 
     def expect(self, message: str) -> T:
         """
-        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
+        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it
+        is an `Err`.
         """
         if self._is_ok:
             return cast(T, self._value)
@@ -103,13 +105,15 @@ class Result(Generic[E, T]):
 
     def unwrap(self) -> T:
         """
-        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
+        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it
+        is an `Err`.
         """
         return self.expect("Called `Result.unwrap()` on an `Err` value")
 
     def unwrap_or(self, default: T) -> T:
         """
-        Return the value if it is an `Ok` type. Return `default` if it is an `Err`.
+        Return the value if it is an `Ok` type. Return `default` if it is an
+        `Err`.
         """
         if self._is_ok:
             return cast(T, self._value)
@@ -118,39 +122,40 @@ class Result(Generic[E, T]):
 
     def map(self, op: Callable[[T], U]) -> 'Result[E, U]':
         """
-        Return `Ok` with original value mapped to a new value using the passed
-        in function. Otherwise return `Err` with same value.
+        If contained result is `Ok`, return `Ok` with original value mapped to
+        a new value using the passed in function. Otherwise return `Err` with
+        same value.
         """
-        if self._is_ok:
-            return Ok(op(cast(T, self._value)))
-        else:
-            return Err(cast(E, self._value))
+        if not self._is_ok:
+            return self
+        return Ok(op(cast(T, self._value)))
+
+    def map_or(self, default: T, op: Callable[[T], U]) -> Union[T, U]:
+        """
+        If contained result is `Ok`, return the original value mapped to a new
+        value using the passed in function. Otherwise return the default value.
+        """
+        if not self._is_ok:
+            return default
+        return op(cast(T, self._value))
 
     def map_or_else(
-            self, default_op: Callable[[E], U], op: Callable[[T], U]) -> 'Result[E, U]':
+        self,
+        default_op: Callable[[], U],
+        op: Callable[[T], U]
+    ) -> 'Result[E, U]':
         """
-        Return `Ok` with original value mapped to a new value using the passed
-        in `op` function. Otherwise return `Ok` with the error value mapped to a
-        new value using the passed in `default_op` function.
+        If contained result is `Ok`, return original value mapped to
+        a new value using the passed in `op` function. Otherwise use `default_op`
+        to compute a default value.
 
         Args:
             default_op: Function to map an `Err` value to an `Ok` value.
             op: Function to map an `Ok` value to an `Ok` value.
         """
-        if self._is_ok:
-            return self.map(op)
-        else:
-            return Ok(default_op(cast(E, self._value)))
-
-    def map_err(self, op: Callable[[E], F]) -> 'Result[F, T]':
-        """
-        Return `Err` with original error value mapped to a new error value using
-        the passed in function. Otherwise return `Ok` with same value.
-        """
-        if self._is_ok:
-            return Ok(cast(T, self._value))
-        else:
-            return Err(op(cast(E, self._value)))
+        if not self._is_ok:
+            return default_op()
+        return op(self._value)
 
     # TODO: Implement __iter__ for destructuring
 
