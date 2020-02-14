@@ -127,10 +127,10 @@ class Result(Generic[E, T]):
         same value.
         """
         if not self._is_ok:
-            return self
+            return cast(Result[E, U], self)
         return Ok(op(cast(T, self._value)))
 
-    def map_or(self, default: T, op: Callable[[T], U]) -> Union[T, U]:
+    def map_or(self, default: U, op: Callable[[T], U]) -> U:
         """
         If contained result is `Ok`, return the original value mapped to a new
         value using the passed in function. Otherwise return the default value.
@@ -143,7 +143,7 @@ class Result(Generic[E, T]):
         self,
         default_op: Callable[[], U],
         op: Callable[[T], U]
-    ) -> 'Result[E, U]':
+    ) -> U:
         """
         If contained result is `Ok`, return original value mapped to
         a new value using the passed in `op` function. Otherwise use `default_op`
@@ -155,7 +155,7 @@ class Result(Generic[E, T]):
         """
         if not self._is_ok:
             return default_op()
-        return op(self._value)
+        return op(cast(T, self._value))
 
     # TODO: Implement __iter__ for destructuring
 
