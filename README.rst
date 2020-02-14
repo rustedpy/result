@@ -53,7 +53,7 @@ To something like this:
     user_result = get_user_by_email(email)
     if user_result.is_ok():
         do_something(user_result.value)
-    else: 
+    else:
         raise RuntimeError('Could not fetch user: %s' user_result.value)
 
 As this is Python and not Rust, you will lose some of the advantages that it
@@ -81,7 +81,7 @@ Or through the class methods::
     >>> res1 = Result.Ok('yay')
     >>> res2 = Result.Err('nay')
 
-Checking whether a result is ok or not::
+Checking whether a result is ``Ok`` or not::
 
     >>> res = Ok('yay')
     >>> res.is_ok()
@@ -89,7 +89,7 @@ Checking whether a result is ok or not::
     >>> res.is_err()
     False
 
-Convert a Result to the value or ``None``::
+Convert a ``Result`` to the value or ``None``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -98,7 +98,7 @@ Convert a Result to the value or ``None``::
     >>> res2.ok()
     None
 
-Convert a Result to the error or ``None``::
+Convert a ``Result`` to the error or ``None``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -118,7 +118,7 @@ Access the value directly, without any other checks::
 
 Note that this is a property, you cannot assign to it. Results are immutable.
 
-For your convenience, simply creating an `Ok` result without value is the same as using `True`::
+For your convenience, simply creating an ``Ok`` result without value is the same as using ``True``::
 
     >>> res1 = Result.Ok()
     >>> res1.value
@@ -127,7 +127,7 @@ For your convenience, simply creating an `Ok` result without value is the same a
     >>> res2.value
     True
 
-The `unwrap` method returns the value if `Ok`, otherwise it raises an `UnwrapError`::
+The ``unwrap`` method returns the value if ``Ok``, otherwise it raises an ``UnwrapError``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -142,7 +142,7 @@ The `unwrap` method returns the value if `Ok`, otherwise it raises an `UnwrapErr
         raise UnwrapError(message)
     result.result.UnwrapError: Called `Result.unwrap()` on an `Err` value
 
-A custom error message can be displayed instead by using `expect`::
+A custom error message can be displayed instead by using ``expect``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -155,7 +155,7 @@ A custom error message can be displayed instead by using `expect`::
         raise UnwrapError(message)
     result.result.UnwrapError: not ok
 
-A default value can be returned instead by using `unwrap_or`::
+A default value can be returned instead by using ``unwrap_or``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
