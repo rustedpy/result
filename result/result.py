@@ -157,6 +157,11 @@ class Result(Generic[E, T]):
             return default_op()
         return op(cast(T, self._value))
 
+    def map_err(self, op: Callable[[E], F]) -> 'Result[F, T]':
+        if self._is_ok:
+            return cast(Result[F, T], self)
+        return Err(op(cast(E, self._value)))
+
     # TODO: Implement __iter__ for destructuring
 
 

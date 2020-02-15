@@ -167,10 +167,10 @@ A default value can be returned instead by using `unwrap_or`::
 Values and errors can be mapped using `map`, `map_or`, `map_or_else`
 and `map_err` ::
 
-   >>> Ok(1).map(lambda x: x + 1).ok()
-   2
-   >>> Err('nay').map(lambda x: x + 1).err()
-   'nay'
+   >>> Ok(1).map(lambda x: x + 1)
+   Ok(2)
+   >>> Err('nay').map(lambda x: x + 1)
+   Err('nay')
    >>> Ok(1).map_or(-1, lambda x: x + 1)
    2
    >>> Err(1).map_or(-1, lambda x: x + 1)
@@ -179,6 +179,10 @@ and `map_err` ::
    2
    >>> Err('nay').map_or_else(lambda: 3, lambda x: x + 1)
    3
+   >>> Ok(1).map_err(lambda x: x + 1)
+   Ok(1)
+   >>> Err(1).map_err(lambda x: x + 1).err()
+   Err(2)
 
 
 License
