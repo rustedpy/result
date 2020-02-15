@@ -45,6 +45,14 @@ def test_repr():
     assert Ok("£10") == eval(repr(Ok("£10")))
 
 
+def test__iter__():
+    (ook, oerr) = Ok('yay')
+    assert (None, 'yay') == (ook, oerr)
+
+    (nok, nerr) = Err('nay')
+    assert ('nay', None) == (nok, nerr)
+
+
 def test_ok():
     res = Ok('haha')
     assert res.is_ok() is True
