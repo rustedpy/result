@@ -148,10 +148,6 @@ class Result(Generic[E, T]):
         If contained result is `Ok`, return original value mapped to
         a new value using the passed in `op` function. Otherwise use `default_op`
         to compute a default value.
-
-        Args:
-            default_op: Function to map an `Err` value to an `Ok` value.
-            op: Function to map an `Ok` value to an `Ok` value.
         """
         if not self._is_ok:
             return default_op()
