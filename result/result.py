@@ -4,7 +4,6 @@ from typing import (
     Generic,
     Optional,
     Iterator,
-    Tuple,
     TypeVar,
     Union,
     cast,
