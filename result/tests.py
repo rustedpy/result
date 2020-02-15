@@ -150,18 +150,6 @@ def test_map_or_else():
     assert errnum.map_or_else(lambda: '-1', lambda x: str(x)) == '-1'
 
 
-def test_map_or_else():
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.map_or_else(lambda: 'hay', lambda x: x + x) == 'yayyay'
-    assert n.map_or_else(lambda: 'hay', lambda x: x + x) == 'hay'
-
-    num = Ok(3)
-    errnum = Err(2)
-    assert num.map_or_else(lambda: '-1', lambda x: str(x)) == '3'
-    assert errnum.map_or_else(lambda: '-1', lambda x: str(x)) == '-1'
-
-
 def test_map_err():
     o = Ok('yay')
     n = Err('nay')
