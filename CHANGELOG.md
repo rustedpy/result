@@ -11,6 +11,10 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
+## [0.4.1] - 2020-02-17
+
+ - [added] Add `py.typed` for PEP561 package compliance (#16)
+
 ## [0.4.0] - 2019-04-17
 
  - [added] Add `unwrap`, `unwrap_or` and `expect` (#9)
@@ -39,7 +43,8 @@ Possible log types:
 
  - Initial version
 
-[Unreleased]: https://github.com/dbrgn/result/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/dbrgn/result/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/dbrgn/result/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/dbrgn/result/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/dbrgn/result/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/dbrgn/result/compare/v0.2.1...v0.2.2

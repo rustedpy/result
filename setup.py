@@ -3,7 +3,7 @@ from setuptools import setup
 readme = open('README.rst').read()
 
 setup(name='result',
-      version='0.4.0',
+      version='0.4.1',
       description='A rust-like result type for Python',
       author='Danilo Bargen',
       author_email='mail@dbrgn.ch',
