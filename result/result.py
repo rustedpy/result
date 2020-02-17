@@ -115,8 +115,6 @@ class Result(Generic[E, T]):
         else:
             return default
 
-    # TODO: Implement __iter__ for destructuring
-
 
 @overload
 def Ok() -> Result[E, bool]:
