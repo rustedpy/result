@@ -1,14 +1,4 @@
-from typing import (
-    Any,
-    Callable,
-    Generic,
-    Optional,
-    Iterator,
-    TypeVar,
-    Union,
-    cast,
-    overload,
-)
+from typing import Generic, TypeVar, Union, Any, Optional, cast, overload
 
 
 E = TypeVar("E")
@@ -57,9 +47,6 @@ class Result(Generic[E, T]):
             return 'Ok({})'.format(repr(self._value))
         else:
             return 'Err({})'.format(repr(self._value))
-
-    def __iter__(self) -> Iterator:
-        return iter((self.err(), self.ok()))
 
     @classmethod
     @overload

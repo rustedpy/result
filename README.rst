@@ -116,13 +116,6 @@ Access the value directly, without any other checks::
     >>> res2.value
     'nay'
 
-Destructure values::
-
-    >> (err, ok) = Ok('yay')
-    # err == None; ok == 'yay'
-    >> (err, ok) = Err('nay')
-    # err == 'nay'; ok == None
-
 Note that this is a property, you cannot assign to it. Results are immutable.
 
 For your convenience, simply creating an ``Ok`` result without value is the same as using ``True``::
