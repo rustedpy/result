@@ -158,8 +158,6 @@ class Result(Generic[E, T]):
             return cast(Result[F, T], self)
         return Err(op(cast(E, self._value)))
 
-    # TODO: Implement __iter__ for destructuring
-
 
 @overload
 def Ok() -> Result[E, bool]:
