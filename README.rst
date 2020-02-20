@@ -181,7 +181,7 @@ and `map_err` ::
    3
    >>> Ok(1).map_err(lambda x: x + 1)
    Ok(1)
-   >>> Err(1).map_err(lambda x: x + 1).err()
+   >>> Err(1).map_err(lambda x: x + 1)
    Err(2)
 
 

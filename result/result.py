@@ -154,6 +154,11 @@ class Result(Generic[E, T]):
         return op(cast(T, self._value))
 
     def map_err(self, op: Callable[[E], F]) -> 'Result[F, T]':
+        """
+        If contained result is `Err`, return `Err` with original value mapped
+        to a new value using the passed in `op` function. Otherwise return `Ok`
+        with the same value.
+        """
         if self._is_ok:
             return cast(Result[F, T], self)
         return Err(op(cast(E, self._value)))
