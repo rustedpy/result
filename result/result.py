@@ -1,9 +1,10 @@
-from typing import Generic, TypeVar, Union, Any, Optional, cast, overload
+from typing import Callable, Generic, TypeVar, Union, Any, Optional, cast, overload
 
 
 E = TypeVar("E")
+F = TypeVar("F")
 T = TypeVar("T")
-A = TypeVar("A")
+U = TypeVar("U")
 
 
 class Result(Generic[E, T]):
@@ -21,8 +22,8 @@ class Result(Generic[E, T]):
         Args:
             is_ok: If this represents an ok result
             value: The value inside the result
-            force: Force creation of the object. This is false by default to prevent accidentally
-                creating instance of a Result in an unsafe way.
+            force: Force creation of the object. This is false by default to prevent
+                accidentally creating instance of a Result in an unsafe way.
         """
         if force is not True:
             raise RuntimeError("Don't instantiate a Result directly. "
@@ -74,7 +75,8 @@ class Result(Generic[E, T]):
 
     def ok(self) -> Optional[T]:
         """
-        Return the value if it is an `Ok` type. Return `None` if it is an `Err`.
+        Return the value if it is an `Ok` type. Return `None` if it is an
+        `Err`.
         """
         return cast(T, self._value) if self.is_ok() else None
 
@@ -93,7 +95,8 @@ class Result(Generic[E, T]):
 
     def expect(self, message: str) -> T:
         """
-        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
+        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it
+        is an `Err`.
         """
         if self._is_ok:
             return cast(T, self._value)
@@ -102,18 +105,63 @@ class Result(Generic[E, T]):
 
     def unwrap(self) -> T:
         """
-        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it is an `Err`.
+        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it
+        is an `Err`.
         """
         return self.expect("Called `Result.unwrap()` on an `Err` value")
 
     def unwrap_or(self, default: T) -> T:
         """
-        Return the value if it is an `Ok` type. Return `default` if it is an `Err`.
+        Return the value if it is an `Ok` type. Return `default` if it is an
+        `Err`.
         """
         if self._is_ok:
             return cast(T, self._value)
         else:
             return default
+
+    def map(self, op: Callable[[T], U]) -> 'Result[E, U]':
+        """
+        If contained result is `Ok`, return `Ok` with original value mapped to
+        a new value using the passed in function. Otherwise return `Err` with
+        same value.
+        """
+        if not self._is_ok:
+            return cast(Result[E, U], self)
+        return Ok(op(cast(T, self._value)))
+
+    def map_or(self, default: U, op: Callable[[T], U]) -> U:
+        """
+        If contained result is `Ok`, return the original value mapped to a new
+        value using the passed in function. Otherwise return the default value.
+        """
+        if not self._is_ok:
+            return default
+        return op(cast(T, self._value))
+
+    def map_or_else(
+        self,
+        default_op: Callable[[], U],
+        op: Callable[[T], U]
+    ) -> U:
+        """
+        If contained result is `Ok`, return original value mapped to
+        a new value using the passed in `op` function. Otherwise use `default_op`
+        to compute a default value.
+        """
+        if not self._is_ok:
+            return default_op()
+        return op(cast(T, self._value))
+
+    def map_err(self, op: Callable[[E], F]) -> 'Result[F, T]':
+        """
+        If contained result is `Err`, return `Err` with original value mapped
+        to a new value using the passed in `op` function. Otherwise return `Ok`
+        with the same value.
+        """
+        if self._is_ok:
+            return cast(Result[F, T], self)
+        return Err(op(cast(E, self._value)))
 
 
 @overload
