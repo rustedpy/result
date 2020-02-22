@@ -164,8 +164,8 @@ A default value can be returned instead by using ``unwrap_or``::
     >>> res2.unwrap_or('default')
     'default'
 
-Values and errors can be mapped using `map`, `map_or`, `map_or_else`
-and `map_err` ::
+Values and errors can be mapped using ``map``, ``map_or``, ``map_or_else`` and
+``map_err``::
 
    >>> Ok(1).map(lambda x: x + 1)
    Ok(2)
