@@ -1,6 +1,8 @@
 [run]
 source =
     result
+omit =
+    result/typetests.py
 
 [report]
 # Regexes for lines to exclude from consideration

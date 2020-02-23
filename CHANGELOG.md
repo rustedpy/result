@@ -11,6 +11,11 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
+## Unreleased
+
+ - [changed] Type annotations: Change parameter order
+   from `Result[E, T]` to `Result[T, E]` to match Rust/OCaml/F# (#7)
+
 ## [0.4.1] - 2020-02-17
 
  - [added] Add `py.typed` for PEP561 package compliance (#16)

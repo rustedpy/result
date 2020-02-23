@@ -9,7 +9,8 @@ Result
     :alt: Coverage
     :target: https://coveralls.io/github/dbrgn/result
 
-A simple Result type for Python 3 `inspired by Rust <https://doc.rust-lang.org/std/result/>`__.
+A simple Result type for Python 3 `inspired by Rust
+<https://doc.rust-lang.org/std/result/>`__, fully type annotated.
 
 The idea is that a ``Result`` value can be either ``Ok(value)`` or ``Err(error)``,
 with a way to differentiate between the two. It will change code like this:
@@ -62,8 +63,8 @@ side, you don't have to return semantically unclear tuples anymore.
 
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html) have
 been implemented, only the ones that make sense in the Python context. You still
-don't get any type safety, but some easier handling of types that can be OK or
-not, without resorting to custom exceptions.
+don't get any type safety at runtime, but some easier handling of types that can
+be OK or not, without resorting to custom exceptions.
 
 
 API
