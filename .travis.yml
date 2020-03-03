@@ -9,7 +9,14 @@ install:
   - pip install -r requirements-dev.txt
   - pip install coveralls
 script:
+  - pip install -e .
   - py.test
-  - mypy result/result.py
+  - if [ $(python -c 'import sys; print(sys.version_info.minor)') -gt 4 ]; then
+      mypy result/result.py;
+      mypy result/typetests.py;
+      echo "Mypy tests done";
+    else
+      echo "Skipping mypy";
+    fi
 after_success:
   - coveralls

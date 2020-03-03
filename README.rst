@@ -9,7 +9,8 @@ Result
     :alt: Coverage
     :target: https://coveralls.io/github/dbrgn/result
 
-A simple Result type for Python 3 `inspired by Rust <https://doc.rust-lang.org/std/result/>`__.
+A simple Result type for Python 3 `inspired by Rust
+<https://doc.rust-lang.org/std/result/>`__, fully type annotated.
 
 The idea is that a ``Result`` value can be either ``Ok(value)`` or ``Err(error)``,
 with a way to differentiate between the two. It will change code like this:
@@ -53,7 +54,7 @@ To something like this:
     user_result = get_user_by_email(email)
     if user_result.is_ok():
         do_something(user_result.value)
-    else: 
+    else:
         raise RuntimeError('Could not fetch user: %s' user_result.value)
 
 As this is Python and not Rust, you will lose some of the advantages that it
@@ -62,8 +63,8 @@ side, you don't have to return semantically unclear tuples anymore.
 
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html) have
 been implemented, only the ones that make sense in the Python context. You still
-don't get any type safety, but some easier handling of types that can be OK or
-not, without resorting to custom exceptions.
+don't get any type safety at runtime, but some easier handling of types that can
+be OK or not, without resorting to custom exceptions.
 
 
 API
@@ -81,7 +82,7 @@ Or through the class methods::
     >>> res1 = Result.Ok('yay')
     >>> res2 = Result.Err('nay')
 
-Checking whether a result is ok or not::
+Checking whether a result is ``Ok`` or not::
 
     >>> res = Ok('yay')
     >>> res.is_ok()
@@ -89,7 +90,7 @@ Checking whether a result is ok or not::
     >>> res.is_err()
     False
 
-Convert a Result to the value or ``None``::
+Convert a ``Result`` to the value or ``None``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -98,7 +99,7 @@ Convert a Result to the value or ``None``::
     >>> res2.ok()
     None
 
-Convert a Result to the error or ``None``::
+Convert a ``Result`` to the error or ``None``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -118,7 +119,7 @@ Access the value directly, without any other checks::
 
 Note that this is a property, you cannot assign to it. Results are immutable.
 
-For your convenience, simply creating an `Ok` result without value is the same as using `True`::
+For your convenience, simply creating an ``Ok`` result without value is the same as using ``True``::
 
     >>> res1 = Result.Ok()
     >>> res1.value
@@ -127,7 +128,8 @@ For your convenience, simply creating an `Ok` result without value is the same a
     >>> res2.value
     True
 
-The `unwrap` method returns the value if `Ok`, otherwise it raises an `UnwrapError`::
+The ``unwrap`` method returns the value if ``Ok`` and ``unwrap_err`` method
+returns the error value if ``Err``, otherwise it raises an ``UnwrapError``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -142,7 +144,7 @@ The `unwrap` method returns the value if `Ok`, otherwise it raises an `UnwrapErr
         raise UnwrapError(message)
     result.result.UnwrapError: Called `Result.unwrap()` on an `Err` value
 
-A custom error message can be displayed instead by using `expect`::
+A custom error message can be displayed instead by using ``expect`` and ``expect_err``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -155,24 +157,7 @@ A custom error message can be displayed instead by using `expect`::
         raise UnwrapError(message)
     result.result.UnwrapError: not ok
 
-Equivalent methods are available for accessing the error value::
-
-    >>> res1 = Ok('yay')
-    >>> res2 = Err('nay')
-    >>> res2.unwrap_err()
-    'nay'
-    >>> res2.expect_err('not an err')
-    'nay'
-    >>> res1.unwrap_err()
-    Traceback (most recent call last):
-    File "<stdin>", line 1, in <module>
-    File "C:\project\result\result\result.py", line 131, in unwrap_err
-        return self.expect_err("Called `Result.unwrap_err()` on an `Ok` value")
-    File "C:\project\result\result\result.py", line 123, in expect_err
-        raise UnwrapError(message)
-    result.result.UnwrapError: Called `Result.unwrap_err()` on an `Ok` value
-
-A default value can be returned instead by using `unwrap_or`::
+A default value can be returned instead by using ``unwrap_or``::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -180,6 +165,26 @@ A default value can be returned instead by using `unwrap_or`::
     'yay'
     >>> res2.unwrap_or('default')
     'default'
+
+Values and errors can be mapped using ``map``, ``map_or``, ``map_or_else`` and
+``map_err``::
+
+   >>> Ok(1).map(lambda x: x + 1)
+   Ok(2)
+   >>> Err('nay').map(lambda x: x + 1)
+   Err('nay')
+   >>> Ok(1).map_or(-1, lambda x: x + 1)
+   2
+   >>> Err(1).map_or(-1, lambda x: x + 1)
+   -1
+   >>> Ok(1).map_or_else(lambda: 3, lambda x: x + 1)
+   2
+   >>> Err('nay').map_or_else(lambda: 3, lambda x: x + 1)
+   3
+   >>> Ok(1).map_err(lambda x: x + 1)
+   Ok(1)
+   >>> Err(1).map_err(lambda x: x + 1)
+   Err(2)
 
 
 License

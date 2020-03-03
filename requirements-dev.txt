@@ -1,5 +1,4 @@
 pytest==2.8.5
 pytest-cov==2.2.0
 pytest-pep8==1.0.6
-typing==3.6.1
--e git+https://github.com/python/mypy@005fd6b357b995f13e3d90293cabf3c8c8c2a952#egg=mypy
+mypy==0.720
