@@ -143,6 +143,12 @@ returns the error value if ``Err``, otherwise it raises an ``UnwrapError``::
     File "C:\project\result\result.py", line 101, in expect
         raise UnwrapError(message)
     result.result.UnwrapError: Called `Result.unwrap()` on an `Err` value
+    >>> res1.unwrap_err()
+    Traceback (most recent call last):
+    ...
+    >>>res2.unwrap_err()
+    'nay'
+
 
 A custom error message can be displayed instead by using ``expect`` and ``expect_err``::
 
@@ -156,6 +162,11 @@ A custom error message can be displayed instead by using ``expect`` and ``expect
     File "C:\project\result\result.py", line 101, in expect
         raise UnwrapError(message)
     result.result.UnwrapError: not ok
+    >>> res1.expect_err('not err')
+    Traceback (most recent call last):
+    ...
+    >>> res2.expect_err('not err')
+    'nay'
 
 A default value can be returned instead by using ``unwrap_or``::
 
