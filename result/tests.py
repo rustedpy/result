@@ -91,6 +91,22 @@ def test_no_constructor():
         Result(is_ok=True, value='yay')
 
 
+def test_expect():
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.expect('failure') == 'yay'
+    with pytest.raises(UnwrapError):
+        n.expect('failure')
+
+
+def test_expect_err():
+    o = Ok('yay')
+    n = Err('nay')
+    assert n.expect_err('hello') == 'nay'
+    with pytest.raises(UnwrapError):
+        o.expect_err('hello')
+
+
 def test_unwrap():
     o = Ok('yay')
     n = Err('nay')
@@ -99,12 +115,12 @@ def test_unwrap():
         n.unwrap()
 
 
-def test_expect():
+def test_unwrap_err():
     o = Ok('yay')
     n = Err('nay')
-    assert o.expect('failure') == 'yay'
+    assert n.unwrap_err() == 'nay'
     with pytest.raises(UnwrapError):
-        n.expect('failure')
+        o.unwrap_err()
 
 
 def test_unwrap_or():

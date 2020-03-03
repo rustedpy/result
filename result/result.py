@@ -107,12 +107,28 @@ class Result(Generic[T, E]):
         else:
             raise UnwrapError(message)
 
+    def expect_err(self, message: str) -> E:
+        """
+        Return the value if it is an `Err` type. Raises an `UnwrapError` if it
+        is `Ok`.
+        """
+        if self._is_ok:
+            raise UnwrapError(message)
+        return cast(E, self._value)
+
     def unwrap(self) -> T:
         """
         Return the value if it is an `Ok` type. Raises an `UnwrapError` if it
         is an `Err`.
         """
         return self.expect("Called `Result.unwrap()` on an `Err` value")
+
+    def unwrap_err(self) -> E:
+        """
+        Return the value if it is an `Err` type. Raises an `UnwrapError` if it
+        is `Ok`.
+        """
+        return self.expect_err("Called `Result.unwrap_err()` on an `Ok` value")
 
     def unwrap_or(self, default: T) -> T:
         """
