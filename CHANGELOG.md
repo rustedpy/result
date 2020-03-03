@@ -13,6 +13,12 @@ Possible log types:
 
 ## Unreleased
 
+...
+
+## [0.5.0] - 2020-03-03
+
+ - [added] Implement `map`, `map_err`, `map_or` and `map_or_else` (#19)
+ - [added] Add `unwrap_err` and `expect_err` methods (#26)
  - [changed] Type annotations: Change parameter order
    from `Result[E, T]` to `Result[T, E]` to match Rust/OCaml/F# (#7)
 
@@ -48,7 +54,8 @@ Possible log types:
 
  - Initial version
 
-[Unreleased]: https://github.com/dbrgn/result/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/dbrgn/result/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/dbrgn/result/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/dbrgn/result/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/dbrgn/result/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/dbrgn/result/compare/v0.2.2...v0.3.0
