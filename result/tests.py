@@ -7,8 +7,7 @@ from result import Result, Ok, Err, UnwrapError
 
 
 @pytest.mark.parametrize('instance', [
-    Ok(1),
-    Result.Ok(1),
+    Ok(1)
 ])
 def test_ok_factories(instance):
     assert instance._value == 1
@@ -16,8 +15,7 @@ def test_ok_factories(instance):
 
 
 @pytest.mark.parametrize('instance', [
-    Err(2),
-    Result.Err(2),
+    Err(2)
 ])
 def test_err_factories(instance):
     assert instance._value == 2
@@ -77,18 +75,6 @@ def test_no_arg_ok():
     top_level = Ok()
     assert top_level.is_ok() is True
     assert top_level.ok() is True
-
-    class_method = Result.Ok()
-    assert class_method.is_ok() is True
-    assert class_method.ok() is True
-
-
-def test_no_constructor():
-    """
-    Constructor should not be used directly.
-    """
-    with pytest.raises(RuntimeError):
-        Result(is_ok=True, value='yay')
 
 
 def test_expect():

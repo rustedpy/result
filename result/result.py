@@ -1,211 +1,237 @@
-from typing import Callable, Generic, TypeVar, Union, Any, Optional, cast, overload
-
+from typing import Callable, Generic, TypeVar, Union, Any, Optional, cast, overload, NoReturn
 
 T = TypeVar("T")  # Success type
 E = TypeVar("E")  # Error type
-F = TypeVar("F")
 U = TypeVar("U")
+F = TypeVar("F")
 
 
-class Result(Generic[T, E]):
+class Ok(Generic[T]):
     """
-    A simple `Result` type inspired by Rust.
-
-    Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html)
-    have been implemented, only the ones that make sense in the Python context.
+    A value that indicates success and which stores arbitrary data for the return value.
     """
-    def __init__(self, is_ok: bool, value: Union[T, E], force: bool = False) -> None:
-        """Do not call this constructor, use the Ok or Err class methods instead.
+    @overload
+    def __init__(self) -> None:
+        pass
 
-        There are no type guarantees on the value if this is called directly.
+    @overload
+    def __init__(self, value: T) -> None:
+        self._value = value
 
-        Args:
-            is_ok:
-                If this represents an ok result
-            value:
-                The value inside the result
-            force:
-                Force creation of the object. This is false by default to prevent
-                accidentally creating instance of a Result in an unsafe way.
+    def __init__(self, value: Any = True) -> None:
+        self._value = value
 
-        """
-        if force is not True:
-            raise RuntimeError("Don't instantiate a Result directly. "
-                               "Use the Ok(value) and Err(error) class methods instead.")
-        else:
-            self._is_ok = is_ok
-            self._value = value
+    def __repr__(self) -> str:
+        return "Ok({})".format(repr(self._value))
 
     def __eq__(self, other: Any) -> bool:
-        return (self.__class__ == other.__class__ and
-                self.is_ok() == cast(Result, other).is_ok() and
-                self._value == other._value)
+        return isinstance(other, Ok) and self.value == other.value
 
     def __ne__(self, other: Any) -> bool:
         return not (self == other)
 
     def __hash__(self) -> int:
-        return hash((self.is_ok(), self._value))
-
-    def __repr__(self) -> str:
-        if self.is_ok():
-            return 'Ok({})'.format(repr(self._value))
-        else:
-            return 'Err({})'.format(repr(self._value))
-
-    @classmethod
-    @overload
-    def Ok(cls) -> 'Result[bool, Any]':
-        pass
-
-    @classmethod
-    @overload
-    def Ok(cls, value: T) -> 'Result[T, Any]':
-        pass
-
-    @classmethod
-    def Ok(cls, value: Any = True) -> 'Result[Any, Any]':
-        return cls(is_ok=True, value=value, force=True)
-
-    @classmethod
-    def Err(cls, error: E) -> 'Result[Any, E]':
-        return cls(is_ok=False, value=error, force=True)
+        return hash((True, self._value))
 
     def is_ok(self) -> bool:
-        return self._is_ok
+        return True
 
     def is_err(self) -> bool:
-        return not self._is_ok
+        return False
 
-    def ok(self) -> Optional[T]:
+    def ok(self) -> T:
         """
-        Return the value if it is an `Ok` type. Return `None` if it is an
-        `Err`.
-        """
-        return cast(T, self._value) if self.is_ok() else None
-
-    def err(self) -> Optional[E]:
-        """
-        Return the error if this is an `Err` type. Return `None` otherwise.
-        """
-        return cast(E, self._value) if self.is_err() else None
-
-    @property
-    def value(self) -> Union[T, E]:
-        """
-        Return the inner value. This might be either the ok or the error type.
+        Return the value.
         """
         return self._value
 
-    def expect(self, message: str) -> T:
+    def err(self) -> None:
         """
-        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it
-        is an `Err`.
+        Return `None`.
         """
-        if self._is_ok:
-            return cast(T, self._value)
-        else:
-            raise UnwrapError(message)
+        return None
 
-    def expect_err(self, message: str) -> E:
+    @property
+    def value(self) -> T:
         """
-        Return the value if it is an `Err` type. Raises an `UnwrapError` if it
-        is `Ok`.
+        Return the inner value.
         """
-        if self._is_ok:
-            raise UnwrapError(message)
-        return cast(E, self._value)
+        return self._value
+
+    def expect(self, _message: str) -> T:
+        """
+        Return the value.
+        """
+        return self._value
+
+    def expect_err(self, _message: str) -> T:
+        """
+        Raise an UnwrapError since this type is `Ok`
+        """
+        raise UnwrapError(_message)
 
     def unwrap(self) -> T:
         """
-        Return the value if it is an `Ok` type. Raises an `UnwrapError` if it
-        is an `Err`.
+        Return the value.
         """
-        return self.expect("Called `Result.unwrap()` on an `Err` value")
+        return self._value
 
-    def unwrap_err(self) -> E:
+    def unwrap_err(self) -> NoReturn:
         """
-        Return the value if it is an `Err` type. Raises an `UnwrapError` if it
-        is `Ok`.
+        Raise an UnwrapError since this type is `Ok`
         """
-        return self.expect_err("Called `Result.unwrap_err()` on an `Ok` value")
+        raise UnwrapError("Called `Result.unwrap_err()` on an `Ok` value")
 
-    def unwrap_or(self, default: T) -> T:
+    def unwrap_or(self, _default: T) -> T:
         """
-        Return the value if it is an `Ok` type. Return `default` if it is an
-        `Err`.
+        Return the value.
         """
-        if self._is_ok:
-            return cast(T, self._value)
-        else:
-            return default
+        return self._value
 
     def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
         """
-        If contained result is `Ok`, return `Ok` with original value mapped to
-        a new value using the passed in function. Otherwise return `Err` with
-        same value.
+        The contained result is `Ok`, so return `Ok` with original value mapped to
+        a new value using the passed in function.
         """
-        if not self._is_ok:
-            return cast(Result[U, E], self)
-        return Ok(op(cast(T, self._value)))
+        return Ok(op(self._value))
 
     def map_or(self, default: U, op: Callable[[T], U]) -> U:
         """
-        If contained result is `Ok`, return the original value mapped to a new
-        value using the passed in function. Otherwise return the default value.
+        The contained result is `Ok`, so return the original value mapped to a new
+        value using the passed in function.
         """
-        if not self._is_ok:
-            return default
-        return op(cast(T, self._value))
+        return op(self._value)
 
     def map_or_else(
-        self,
-        default_op: Callable[[], U],
-        op: Callable[[T], U]
+            self,
+            default_op: Callable[[], U],
+            op: Callable[[T], U]
     ) -> U:
         """
-        If contained result is `Ok`, return original value mapped to
-        a new value using the passed in `op` function. Otherwise use `default_op`
-        to compute a default value.
+        The contained result is `Ok`, so return original value mapped to
+        a new value using the passed in `op` function.
         """
-        if not self._is_ok:
-            return default_op()
-        return op(cast(T, self._value))
+        return op(self._value)
 
     def map_err(self, op: Callable[[E], F]) -> 'Result[T, F]':
         """
-        If contained result is `Err`, return `Err` with original value mapped
-        to a new value using the passed in `op` function. Otherwise return `Ok`
-        with the same value.
+        The contained result is `Ok`, so return `Ok` with the original value
         """
-        if self._is_ok:
-            return cast(Result[T, F], self)
-        return Err(op(cast(E, self._value)))
+        return cast(Result[T, F], self)
 
 
-@overload
-def Ok() -> Result[bool, Any]:
-    pass
-
-
-@overload
-def Ok(value: T) -> Result[T, Any]:
-    pass
-
-
-def Ok(value: Any = True) -> Result[Any, Any]:
+class Err(Generic[E]):
     """
-    Shortcut function to create a new Result.
+    A value that signifies failure and which stores arbitrary data for the error.
     """
-    return Result.Ok(value)
+
+    def __init__(self, value: E) -> None:
+        self._value = value
+
+    def __repr__(self) -> str:
+        return "Err({})".format(repr(self._value))
+
+    def __eq__(self, other: Any) -> bool:
+        return isinstance(other, Err) and self.value == other.value
+
+    def __ne__(self, other: Any) -> bool:
+        return not (self == other)
+
+    def __hash__(self) -> int:
+        return hash((False, self._value))
+
+    def is_ok(self) -> bool:
+        return False
+
+    def is_err(self) -> bool:
+        return True
+
+    def ok(self) -> None:
+        """
+        Return `None`.
+        """
+        return None
+
+    def err(self) -> E:
+        """
+        Return the error.
+        """
+        return self._value
+
+    @property
+    def value(self) -> E:
+        """
+        Return the inner value.
+        """
+        return self._value
+
+    def expect(self, message: str) -> NoReturn:
+        """
+        Raises an `UnwrapError`.
+        """
+        raise UnwrapError(message)
+
+    def expect_err(self, _message: str) -> E:
+        """
+        Return the inner value
+        """
+        return self._value
+
+    def unwrap(self) -> NoReturn:
+        """
+        Raises an `UnwrapError`.
+        """
+        raise UnwrapError("Called `Result.unwrap()` on an `Err` value")
+
+    def unwrap_err(self) -> E:
+        """
+        Return the inner value
+        """
+        return self._value
+
+    def unwrap_or(self, default: T) -> T:
+        """
+        Return `default`.
+        """
+        return default
+
+    def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
+        """
+        Return `Err` with the same value
+        """
+        return cast(Result[U, E], self)
+
+    def map_or(self, default: U, op: Callable[[T], U]) -> U:
+        """
+        Return the default value
+        """
+        return default
+
+    def map_or_else(
+            self,
+            default_op: Callable[[], U],
+            op: Callable[[T], U]
+    ) -> U:
+        """
+        Return the result of the default operation
+        """
+        return default_op()
+
+    def map_err(self, op: Callable[[E], F]) -> 'Result[T, F]':
+        """
+        Return `Ok` with the same value
+        """
+        return Err(op(self._value))
 
 
-def Err(error: E) -> Result[Any, E]:
-    """
-    Shortcut function to create a new Result.
-    """
-    return Result.Err(error)
+# define Result as a generic type alias for use
+# in type annotations
+"""
+A simple `Result` type inspired by Rust.
+Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html)
+have been implemented, only the ones that make sense in the Python context.
+"""
+Result = Union[Ok[T], Err[E]]
 
 
 class UnwrapError(Exception):
