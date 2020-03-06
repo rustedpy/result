@@ -4,7 +4,7 @@ from .result import Result, Ok, Err
 
 
 res1 = Ok('hello')  # type: Result[str, int]
-if res1.is_ok():
+if isinstance(res1, Ok):
     ok = res1.ok()  # type: Optional[str]
     mapped_to_float = res1.map_or(1.0, lambda s: len(s) * 1.5)  # type: float
 else:
