@@ -205,7 +205,11 @@ FAQ
 
 - **Why do I get the "Cannot infer type argument" error with MyPy?**
 
-MyPy cannot infer the type of the union by using ``if res.is_ok()``. Instead use ``if isinstance(res, Ok)``.
+There is `a bug in MyPy
+<https://github.com/python/mypy/issues/230>`_ which can be triggered in some scenario's.
+Using ``if isinstance(res, Ok)`` instead of ``if res.is_ok()`` will help in some cases.
+Otherwise using `one of these workarounds
+<https://github.com/python/mypy/issues/3889#issuecomment-325997911>`_ can help.
 
 
 
