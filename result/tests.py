@@ -27,6 +27,7 @@ def test_eq():
     assert Err(1) == Err(1)
     assert Ok(1) != Err(1)
     assert Ok(1) != Ok(2)
+    assert Err(1) != Err(2)
     assert not (Ok(1) != Ok(1))
     assert Ok(1) != "abc"
     assert Ok("0") != Ok(0)
