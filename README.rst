@@ -58,7 +58,7 @@ To something like this:
         # type(user_result.value) == User
         do_something(user_result.value)
     else:
-        # type(value) == str
+        # type(user_result.value) == str
         raise RuntimeError('Could not fetch user: %s' % user_result.value)
 
 As this is Python and not Rust, you will lose some of the advantages that it
@@ -81,8 +81,9 @@ Creating an instance::
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
 
-Checking whether a result is ok or not. With ``isinstance`` you get type safe
-access that can be checked with MyPy::
+Checking whether a result is `Ok` or `Err`. With ``isinstance`` you get type safe
+access that can be checked with MyPy. The `is_ok()` or `is_err()` methods can be
+used if you don't need the type safety with MyPy::
 
     >>> res = Ok('yay')
     >>> isinstance(res, Ok)
@@ -206,7 +207,7 @@ FAQ
 - **Why do I get the "Cannot infer type argument" error with MyPy?**
 
 There is `a bug in MyPy
-<https://github.com/python/mypy/issues/230>`_ which can be triggered in some scenario's.
+<https://github.com/python/mypy/issues/230>`_ which can be triggered in some scenarios.
 Using ``if isinstance(res, Ok)`` instead of ``if res.is_ok()`` will help in some cases.
 Otherwise using `one of these workarounds
 <https://github.com/python/mypy/issues/3889#issuecomment-325997911>`_ can help.
