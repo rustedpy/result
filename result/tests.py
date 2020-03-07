@@ -4,6 +4,7 @@
 import pytest
 
 from result import Result, Ok, Err, UnwrapError
+from result.result import ResultType
 
 
 def test_ok_factories():
@@ -154,3 +155,11 @@ def test_map_err():
     n = Err('nay')
     assert o.map_err(lambda x: x + x).ok() == 'yay'
     assert n.map_err(lambda x: x + x).err() == 'naynay'
+
+
+def test_isinstance_result_type():
+    o = Ok('yay')
+    n = Err('nay')
+    assert isinstance(o, ResultType)
+    assert isinstance(n, ResultType)
+    assert not isinstance(1, ResultType)

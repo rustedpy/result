@@ -1,2 +1,2 @@
-from .result import Result, Ok, Err, UnwrapError
-__all__ = ['Result', 'Ok', 'Err', 'UnwrapError']
+from .result import Result, Ok, Err, UnwrapError, ResultType
+__all__ = ['Result', 'Ok', 'Err', 'UnwrapError', 'ResultType']

@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import Callable, Generic, TypeVar, Union, Any, Optional, cast, overload, NoReturn
 
 T = TypeVar("T")  # Success type
@@ -6,10 +7,15 @@ U = TypeVar("U")
 F = TypeVar("F")
 
 
-class Ok(Generic[T]):
+class ResultType(ABC):
+    pass
+
+
+class Ok(Generic[T], ResultType):
     """
     A value that indicates success and which stores arbitrary data for the return value.
     """
+
     @overload
     def __init__(self) -> None:
         pass
@@ -120,7 +126,7 @@ class Ok(Generic[T]):
         return cast(Result[T, F], self)
 
 
-class Err(Generic[E]):
+class Err(Generic[E], ResultType):
     """
     A value that signifies failure and which stores arbitrary data for the error.
     """

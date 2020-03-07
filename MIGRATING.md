@@ -22,7 +22,7 @@ res2 = Err('nay')
 ```
 
 2\. Result is now a Union type between `Ok[T]` and `Err[E]`. As such, you cannot use `isinstance(res, Result)` anymore.
-These should be replaced by `isinstance(res, (Ok, Err))`. As an example, the following code:
+These should be replaced by `isinstance(res, ResultType)`. As an example, the following code:
 
 ```python
 from result import Ok, Result
@@ -34,9 +34,9 @@ if isinstance(res, Result):
 should be replaced with:
 
 ```python
-from result import Ok, Err
+from result import Ok, ResultType
 res = Ok('yay')
-if isinstance(res, (Ok, Err)):
+if isinstance(res, ResultType):
     print("Result type!")
 ```
 
