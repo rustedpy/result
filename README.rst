@@ -95,6 +95,17 @@ used if you don't need the type safety with MyPy::
     >>> res.is_err()
     False
 
+You can also check if an object is `Ok` or `Err` by using `ResultType`::
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> isinstance(res1, ResultType)
+    True
+    >>> isinstance(res2, ResultType)
+    True
+    >>> isinstance(1, ResultType)
+    False
+
 Convert a ``Result`` to the value or ``None``::
 
     >>> res1 = Ok('yay')
