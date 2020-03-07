@@ -6,18 +6,14 @@ import pytest
 from result import Result, Ok, Err, UnwrapError
 
 
-@pytest.mark.parametrize('instance', [
-    Ok(1)
-])
-def test_ok_factories(instance):
+def test_ok_factories():
+    instance = Ok(1)
     assert instance._value == 1
     assert instance.is_ok() is True
 
 
-@pytest.mark.parametrize('instance', [
-    Err(2)
-])
-def test_err_factories(instance):
+def test_err_factories():
+    instance = Err(2)
     assert instance._value == 2
     assert instance.is_err() is True
 
