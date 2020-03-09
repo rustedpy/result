@@ -68,8 +68,9 @@ side, you don't have to return semantically unclear tuples anymore.
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html) have
 been implemented, only the ones that make sense in the Python context. By using
 ``isinstance`` to check for ``Ok`` or ``Err`` you get type safe access to the
-stored values. All of this in a package allowing easier handling of values
-that can be OK or not, without resorting to custom exceptions.
+contained value, if you use `MyPy <https://mypy.readthedocs.io/>`__ to typecheck
+your code. All of this in a package allowing easier handling of values that can
+be OK or not, without resorting to custom exceptions.
 
 
 API
@@ -81,8 +82,8 @@ Creating an instance::
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
 
-Checking whether a result is `Ok` or `Err`. With ``isinstance`` you get type safe
-access that can be checked with MyPy. The `is_ok()` or `is_err()` methods can be
+Checking whether a result is ``Ok`` or ``Err``. With ``isinstance`` you get type safe
+access that can be checked with MyPy. The ``is_ok()`` or ``is_err()`` methods can be
 used if you don't need the type safety with MyPy::
 
     >>> res = Ok('yay')
@@ -95,9 +96,9 @@ used if you don't need the type safety with MyPy::
     >>> res.is_err()
     False
 
-You can also check if an object is `Ok` or `Err` by using the `OkErr` type.
+You can also check if an object is ``Ok`` or ``Err`` by using the ``OkErr`` type.
 Please note that this type is designed purely for convenience, and should not be used
-for anything else. Using `(Ok, Err)` also works fine::
+for anything else. Using ``(Ok, Err)`` also works fine::
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
