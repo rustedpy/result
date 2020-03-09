@@ -3,7 +3,7 @@
 
 import pytest
 
-from result import Ok, Err, UnwrapError, Result_
+from result import Ok, Err, UnwrapError, OkErr
 
 
 def test_ok_factories():
@@ -159,6 +159,6 @@ def test_map_err():
 def test_isinstance_result_type():
     o = Ok('yay')
     n = Err('nay')
-    assert isinstance(o, Result_)
-    assert isinstance(n, Result_)
-    assert not isinstance(1, Result_)
+    assert isinstance(o, OkErr)
+    assert isinstance(n, OkErr)
+    assert not isinstance(1, OkErr)

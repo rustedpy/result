@@ -34,9 +34,9 @@ if isinstance(res, Result):
 should be replaced with:
 
 ```python
-from result import Ok, Result_
+from result import Ok, OkErr
 res = Ok('yay')
-if isinstance(res, Result_):
+if isinstance(res, OkErr):
     print("Result type!")
 ```
 

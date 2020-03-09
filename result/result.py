@@ -239,7 +239,7 @@ Result = Union[Ok[T], Err[E]]
 A type to use in `isinstance` checks.
 This is purely for convenience sake, as you could also just write `isinstance(res, (Ok, Err))
 """
-Result_ = (Ok, Err)
+OkErr = (Ok, Err)
 
 
 class UnwrapError(Exception):
