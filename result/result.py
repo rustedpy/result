@@ -7,11 +7,7 @@ U = TypeVar("U")
 F = TypeVar("F")
 
 
-class ResultType(ABC):
-    pass
-
-
-class Ok(Generic[T], ResultType):
+class Ok(Generic[T]):
     """
     A value that indicates success and which stores arbitrary data for the return value.
     """
@@ -126,7 +122,7 @@ class Ok(Generic[T], ResultType):
         return cast(Result[T, F], self)
 
 
-class Err(Generic[E], ResultType):
+class Err(Generic[E]):
     """
     A value that signifies failure and which stores arbitrary data for the error.
     """
@@ -238,6 +234,12 @@ Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html)
 have been implemented, only the ones that make sense in the Python context.
 """
 Result = Union[Ok[T], Err[E]]
+
+"""
+A type to use in `isinstance` checks.
+This is purely for convenience sake, as you could also just write `isinstance(res, (Ok, Err))
+"""
+Result_ = (Ok, Err)
 
 
 class UnwrapError(Exception):
