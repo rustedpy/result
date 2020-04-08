@@ -66,11 +66,11 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def expect_err(self, _message: str) -> T:
+    def expect_err(self, message: str) -> T:
         """
         Raise an UnwrapError since this type is `Ok`
         """
-        raise UnwrapError(_message)
+        raise UnwrapError(message)
 
     def unwrap(self) -> T:
         """
