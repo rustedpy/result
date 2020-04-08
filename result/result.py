@@ -66,7 +66,7 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def expect_err(self, message: str) -> T:
+    def expect_err(self, message: str) -> NoReturn:
         """
         Raise an UnwrapError since this type is `Ok`
         """
