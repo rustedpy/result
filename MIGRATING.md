@@ -22,7 +22,7 @@ res2 = Err('nay')
 ```
 
 2\. Result is now a Union type between `Ok[T]` and `Err[E]`. As such, you cannot use `isinstance(res, Result)` anymore.
-These should be replaced by `isinstance(res, Result_)`. As an example, the following code:
+These should be replaced by `isinstance(res, Result)`. As an example, the following code:
 
 ```python
 from result import Ok, Result
