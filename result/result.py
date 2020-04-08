@@ -221,7 +221,8 @@ class Err(Generic[E]):
 
     def map_err(self, op: Callable[[E], F]) -> 'Result[T, F]':
         """
-        Return `Ok` with the same value
+        The contained result is `Err`, so return `Err` with original error mapped to
+        a new value using the passed in function.
         """
         return Err(op(self._value))
 
