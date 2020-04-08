@@ -105,9 +105,9 @@ class Ok(Generic[T]):
         return op(self._value)
 
     def map_or_else(
-            self,
-            default_op: Callable[[], U],
-            op: Callable[[T], U]
+        self,
+        default_op: Callable[[], U],
+        op: Callable[[T], U]
     ) -> U:
         """
         The contained result is `Ok`, so return original value mapped to
@@ -210,9 +210,9 @@ class Err(Generic[E]):
         return default
 
     def map_or_else(
-            self,
-            default_op: Callable[[], U],
-            op: Callable[[T], U]
+        self,
+        default_op: Callable[[], U],
+        op: Callable[[T], U]
     ) -> U:
         """
         Return the result of the default operation
