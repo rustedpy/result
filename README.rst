@@ -12,7 +12,7 @@ Result
 A simple Result type for Python 3 `inspired by Rust
 <https://doc.rust-lang.org/std/result/>`__, fully type annotated.
 
-The idea is that a ``Result`` value can be either ``Ok(value)`` or ``Err(error)``,
+The idea is that a result value can be either ``Ok(value)`` or ``Err(error)``,
 with a way to differentiate between the two. ``Ok`` and ``Err`` are both classes
 encapsulating an arbitrary value. ``Result[T, E]`` is a generic type alias for
 ``typing.Union[Ok[T], Err[E]]``. It will change code like this:
@@ -68,7 +68,7 @@ side, you don't have to return semantically unclear tuples anymore.
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html) have
 been implemented, only the ones that make sense in the Python context. By using
 ``isinstance`` to check for ``Ok`` or ``Err`` you get type safe access to the
-contained value, if you use `MyPy <https://mypy.readthedocs.io/>`__ to typecheck
+contained value when using `MyPy <https://mypy.readthedocs.io/>`__ to typecheck
 your code. All of this in a package allowing easier handling of values that can
 be OK or not, without resorting to custom exceptions.
 
