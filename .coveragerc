@@ -4,6 +4,7 @@ source =
 omit =
     setup.py
     result/typetests.py
+    venv/*
 
 [report]
 # Regexes for lines to exclude from consideration

@@ -1,5 +1,4 @@
-from abc import ABC
-from typing import Callable, Generic, TypeVar, Union, Any, Optional, cast, overload, NoReturn
+from typing import Callable, Generic, TypeVar, Union, Any, cast, overload, NoReturn
 
 T = TypeVar("T")  # Success type
 E = TypeVar("E")  # Error type
