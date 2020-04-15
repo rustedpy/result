@@ -1,9 +1,9 @@
 Result
 ======
 
-.. image:: https://img.shields.io/travis/dbrgn/result/master.svg
-    :alt: Build status
-    :target: https://travis-ci.org/dbrgn/result
+.. image:: https://img.shields.io/github/workflow/status/dbrgn/result/CI/master
+    :alt: GitHub Workflow Status (branch)
+    :target: https://github.com/dbrgn/result/actions?query=workflow%3ACI+branch%3Amaster
 
 .. image:: https://img.shields.io/coveralls/dbrgn/result/master.svg
     :alt: Coverage

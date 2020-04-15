@@ -1,0 +1,37 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+name: CI
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python:
+          - '3.5'
+          - '3.6'
+          - '3.7'
+          - '3.8'
+    name: Python ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup python ${{ matrix.python }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install dev dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Install result
+        run: pip install -e .
+      - name: Run tests
+        run: py.test
+      - name: Run mypy on result.py
+        run: mypy result/result.py
+      - name: Run typetests
+        run: mypy result/typetests.py

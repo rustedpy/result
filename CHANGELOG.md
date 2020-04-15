@@ -13,7 +13,8 @@ Possible log types:
 
 ## Unreleased
 
-...
+- [deprecated] Python 3.4 support is deprecated and will be removed in the next
+  release
 
 ## [0.5.0] - 2020-03-03
 
