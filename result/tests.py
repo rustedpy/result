@@ -3,23 +3,17 @@
 
 import pytest
 
-from result import Result, Ok, Err, UnwrapError
+from result import Ok, Err, UnwrapError, OkErr
 
 
-@pytest.mark.parametrize('instance', [
-    Ok(1),
-    Result.Ok(1),
-])
-def test_ok_factories(instance):
+def test_ok_factories():
+    instance = Ok(1)
     assert instance._value == 1
     assert instance.is_ok() is True
 
 
-@pytest.mark.parametrize('instance', [
-    Err(2),
-    Result.Err(2),
-])
-def test_err_factories(instance):
+def test_err_factories():
+    instance = Err(2)
     assert instance._value == 2
     assert instance.is_err() is True
 
@@ -29,6 +23,7 @@ def test_eq():
     assert Err(1) == Err(1)
     assert Ok(1) != Err(1)
     assert Ok(1) != Ok(2)
+    assert Err(1) != Err(2)
     assert not (Ok(1) != Ok(1))
     assert Ok(1) != "abc"
     assert Ok("0") != Ok(0)
@@ -77,18 +72,6 @@ def test_no_arg_ok():
     top_level = Ok()
     assert top_level.is_ok() is True
     assert top_level.ok() is True
-
-    class_method = Result.Ok()
-    assert class_method.is_ok() is True
-    assert class_method.ok() is True
-
-
-def test_no_constructor():
-    """
-    Constructor should not be used directly.
-    """
-    with pytest.raises(RuntimeError):
-        Result(is_ok=True, value='yay')
 
 
 def test_expect():
@@ -171,3 +154,11 @@ def test_map_err():
     n = Err('nay')
     assert o.map_err(lambda x: x + x).ok() == 'yay'
     assert n.map_err(lambda x: x + x).err() == 'naynay'
+
+
+def test_isinstance_result_type():
+    o = Ok('yay')
+    n = Err('nay')
+    assert isinstance(o, OkErr)
+    assert isinstance(n, OkErr)
+    assert not isinstance(1, OkErr)
