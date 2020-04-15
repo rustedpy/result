@@ -8,3 +8,4 @@ dist/
 build/
 .idea/
 .mypy_cache/
+venv/

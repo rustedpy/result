@@ -30,7 +30,7 @@ jobs:
       - name: Install result
         run: pip install -e .
       - name: Run tests
-        run: py.test
+        run: pytest
       - name: Run mypy on result.py
         run: mypy result/result.py
       - name: Run typetests
