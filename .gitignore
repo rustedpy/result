@@ -1,5 +1,6 @@
 .cache/
 .coverage
+coverage.xml
 *.swp
 *.pyc
 __pycache__
@@ -8,3 +9,4 @@ dist/
 build/
 .idea/
 .mypy_cache/
+venv/
