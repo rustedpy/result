@@ -1,5 +1,6 @@
 .cache/
 .coverage
+coverage.xml
 *.swp
 *.pyc
 __pycache__

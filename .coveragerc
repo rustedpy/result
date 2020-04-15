@@ -2,6 +2,7 @@
 source =
     result
 omit =
+    setup.py
     result/typetests.py
 
 [report]

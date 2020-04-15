@@ -5,9 +5,9 @@ Result
     :alt: GitHub Workflow Status (branch)
     :target: https://github.com/dbrgn/result/actions?query=workflow%3ACI+branch%3Amaster
 
-.. image:: https://img.shields.io/coveralls/dbrgn/result/master.svg
+.. image:: https://codecov.io/gh/dbrgn/result/branch/master/graph/badge.svg
     :alt: Coverage
-    :target: https://coveralls.io/github/dbrgn/result
+    :target: https://codecov.io/gh/dbrgn/result
 
 A simple Result type for Python 3 `inspired by Rust
 <https://doc.rust-lang.org/std/result/>`__, fully type annotated.
