@@ -19,16 +19,30 @@ jobs:
           - '3.8'
     name: Python ${{ matrix.python }}
     steps:
-      - uses: actions/checkout@v2
+      # Python
       - name: Setup python ${{ matrix.python }}
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python }}
 
+      # Check out code
+      - uses: actions/checkout@v2
+
+      # Cached dependencies
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-py${{ matrix.python }}-${{ hashFiles('**/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-py${{ matrix.python }}-
       - name: Install dev dependencies
         run: pip install -r requirements-dev.txt
+
+      # Install library
       - name: Install result
         run: pip install -e .
+
+      # Tests
       - name: Run tests
         run: pytest
       - name: Run mypy on result.py
