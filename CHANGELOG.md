@@ -11,8 +11,18 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
-## Unreleased
+## [0.6.0-rc.1] - 2020-04-16
 
+Release candidate for the 0.6.0 release.
+
+**IMPORTANT:** This release a big API refactoring to make the API more type
+safe. Unfortunately this means some breaking changes. Please check out
+[MIGRATING.md], it will guide you through the necessary changes in your
+codebase.
+
+[MIGRATING.md]: https://github.com/dbrgn/result/blob/master/MIGRATING.md
+
+- [changed] Split result type into `Ok` and `Err` classes (#17, #27)
 - [deprecated] Python 3.4 support is deprecated and will be removed in the next
   release
 
