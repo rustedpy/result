@@ -12,6 +12,48 @@ Result
 A simple Result type for Python 3 `inspired by Rust
 <https://doc.rust-lang.org/std/result/>`__, fully type annotated.
 
+Purpose
+-------
+
+A result type provide a means of controlling program execution without
+resorting to exceptions when something goes wrong and code execution can't
+continue along the successful path. Or to put it another way, the result type
+encodes a function's result which may have failed without returning ad-hoc
+tuples, custom objects or custom exception to indicate to the caller function
+failed somehow.
+
+Why not use exceptions? Well, to list some shortcomings in no particular order,
+- Require custom exceptions to indicate each possible failure case -- verbose,
+  ad-hoc
+- No guarantee caller is required to catch it -- runtime errors galore
+- Failures implicitly propagate up without warning to locations not expecting
+  them -- DB exception in a HTTP request handler?
+- Runtime costs of throwing exceptions, much slower than returning a value --
+  understandably a minor issue here as opposed to something like C++, since
+  Python is no speed demon itself and due to the dynamic nature of Python
+- Abuse and messy code...using exceptions in non-exceptional situations, stack traces
+  everywhere, hard to predict program execution path due to automatic exception
+  propagation upward
+
+Whats alternative?
+- Well defined return type and function API contract -- clear and upfront what
+  the code does and what you should except back
+- Facilitate and encourage caller to handle errors explicitly
+- No error can propagate up multiple levels; each caller is encouraged to
+  explicitly handle any possible errors instead of leaving it up to its own
+  caller to deal with them when they maybe shouldn't have to or might cause
+  them to understand lower level details than they should (leak implementation
+  details and violate of separation of concerns)
+    - No need to guess all the possible exception you might encounter and need
+      to handle
+
+Consider this example,
+.. sourcecode:: python
+
+
+Description
+-----------
+
 The idea is that a result value can be either ``Ok(value)`` or ``Err(error)``,
 with a way to differentiate between the two. ``Ok`` and ``Err`` are both classes
 encapsulating an arbitrary value. ``Result[T, E]`` is a generic type alias for
@@ -19,22 +61,38 @@ encapsulating an arbitrary value. ``Result[T, E]`` is a generic type alias for
 
 .. sourcecode:: python
 
-    def get_user_by_email(email: str) -> Tuple[Optional[User], Optional[str]]:
+    def validate_user(user: User) -> bool:
         """
-        Return the user instance or an error message.
+        Check if user is valid, otherwise throws an exception
+        """
+        if not is_valid_username(user.name):
+            # or if you're lucky a custom exception, UsernameInvalidError
+            raise SomeGenericError('User\'s name is not valid')
+        ... # other invalid checks and exceptions
+
+        # Notice we never return false
+        return true
+
+    def get_user_by_email(email: str) -> User:
+        """
+        Gets user from DB or throws an exception if not found
         """
         if not user_exists(email):
-            return None, 'User does not exist'
-        if not user_active(email):
-            return None, 'User is inactive'
-        user = get_user(email)
-        return user, None
+            return DBError('User does not exist')
 
-    user, reason = get_user_by_email('ueli@example.com')
-    if user is None:
-        raise RuntimeError('Could not fetch user: %s' % reason)
-    else:
-        do_something(user)
+        user = get_user(email)
+        return user
+
+    try:
+        user = get_user_by_email('ueli@example.com')
+    except:
+        raise RuntimeError('Could not fetch user')
+
+    try:
+        if validate_user(user):
+            # do stuff with a valid user object
+    except Exception as exc:
+        # handle invalid user
 
 To something like this:
 
@@ -42,24 +100,34 @@ To something like this:
 
     from result import Ok, Err, Result
 
-    def get_user_by_email(email: str) -> Result[User, str]:
-        """
-        Return the user instance or an error message.
-        """
-        if not user_exists(email):
-            return Err('User does not exist')
-        if not user_active(email):
-            return Err('User is inactive')
-        user = get_user(email)
-        return Ok(user)
+    # All possible errors for validation can be in a single place
+    class ValidationError(Enum):
+        InvalidUsername = auto(),
+        InvalidEmail = auto(),
+        BelowMinAge = auto(),
 
-    user_result = get_user_by_email(email)
-    if isinstance(user_result, Ok):
-        # type(user_result.value) == User
-        do_something(user_result.value)
+    def validate_user(details) -> Result[None, ValidationError]:
+        # We don't need to care about implementation, we know what to expect!
+        ...
+
+    def get_user_by_email(email: str) -> Result[User, None]:
+        # We don't need to care about implementation, we know what to expect!
+        ...
+
+    result = (get_user_by_email()
+        .then(validate_user) # TODO: Should we add a `then` (or `and_then`) like Rust?
+        .then(send_email_to_user) # TODO: what does send_mail_to_user return
+    )
+    # TODO: Finish this example
+    if isinstance(result, Ok):
+        ... # everything is okay, continue on
     else:
-        # type(user_result.value) == str
-        raise RuntimeError('Could not fetch user: %s' % user_result.value)
+        if valdation_result.err() === ValidationError.InvalidUsername:
+            ...
+        if valdation_result.err() === ValidationError.InvalidEmail:
+            ...
+
+---
 
 As this is Python and not Rust, you will lose some of the advantages that it
 brings, like elegant combinations with the ``match`` statement. On the other
