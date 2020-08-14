@@ -13,7 +13,7 @@ A simple Result type for Python 3 `inspired by Rust
 <https://doc.rust-lang.org/std/result/>`__, fully type annotated.
 
 
-[toc]
+.. contents:: Table of Contents
 
 
 Description
