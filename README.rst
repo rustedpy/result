@@ -12,43 +12,8 @@ Result
 A simple Result type for Python 3 `inspired by Rust
 <https://doc.rust-lang.org/std/result/>`__, fully type annotated.
 
-Purpose
--------
 
-A result type provide a means of controlling program execution without
-resorting to exceptions when something goes wrong and code execution can't
-continue along the successful path. Or to put it another way, the result type
-encodes a function's result which may have failed without returning ad-hoc
-tuples, custom objects or custom exception to indicate to the caller function
-failed somehow.
-
-Why not use exceptions? Well, to list some shortcomings in no particular order,
-- Require custom exceptions to indicate each possible failure case -- verbose,
-  ad-hoc
-- No guarantee caller is required to catch it -- runtime errors galore
-- Failures implicitly propagate up without warning to locations not expecting
-  them -- DB exception in a HTTP request handler?
-- Runtime costs of throwing exceptions, much slower than returning a value --
-  understandably a minor issue here as opposed to something like C++, since
-  Python is no speed demon itself and due to the dynamic nature of Python
-- Abuse and messy code...using exceptions in non-exceptional situations, stack traces
-  everywhere, hard to predict program execution path due to automatic exception
-  propagation upward
-
-Whats alternative?
-- Well defined return type and function API contract -- clear and upfront what
-  the code does and what you should except back
-- Facilitate and encourage caller to handle errors explicitly
-- No error can propagate up multiple levels; each caller is encouraged to
-  explicitly handle any possible errors instead of leaving it up to its own
-  caller to deal with them when they maybe shouldn't have to or might cause
-  them to understand lower level details than they should (leak implementation
-  details and violate of separation of concerns)
-    - No need to guess all the possible exception you might encounter and need
-      to handle
-
-Consider this example,
-.. sourcecode:: python
+[toc]
 
 
 Description
@@ -126,8 +91,6 @@ To something like this:
             ...
         if valdation_result.err() === ValidationError.InvalidEmail:
             ...
-
----
 
 As this is Python and not Rust, you will lose some of the advantages that it
 brings, like elegant combinations with the ``match`` statement. On the other
@@ -284,9 +247,46 @@ Values and errors can be mapped using ``map``, ``map_or``, ``map_or_else`` and
    Err(2)
 
 
-FAQ
+Purpose
 -------
 
+A result type provide a means of controlling program execution without
+resorting to exceptions when something goes wrong and code execution can't
+continue along the successful path. Or to put it another way, the result type
+encodes a function's result which may have failed without returning ad-hoc
+tuples, custom objects or custom exception to indicate to the caller function
+failed somehow.
+
+Why not use exceptions? Well, to list some shortcomings in no particular order,
+
+- Require custom exceptions to indicate each possible failure case -- verbose,
+  ad-hoc
+- No guarantee caller is required to catch it -- runtime errors galore
+- Failures implicitly propagate up without warning to locations not expecting
+  them -- DB exception in a HTTP request handler?
+- Runtime costs of throwing exceptions, much slower than returning a value --
+  understandably a minor issue here as opposed to something like C++, since
+  Python is no speed demon itself and due to the dynamic nature of Python
+- Abuse and messy code...using exceptions in non-exceptional situations, stack
+  traces everywhere, hard to predict program execution path due to automatic
+  exception propagation upward
+
+What's the alternative?
+
+- Well defined return type and function API contract -- clear and upfront what
+  the code does and what you should except back
+- Facilitate and encourage caller to handle errors explicitly
+- No error can propagate up multiple levels; each caller is encouraged to
+  explicitly handle any possible errors instead of leaving it up to its own
+  caller to deal with them when they maybe shouldn't have to or might cause
+  them to understand lower level details than they should (leak implementation
+  details and violate of separation of concerns)
+- No need to guess all the possible exception you might encounter and need to
+  handle
+
+
+FAQ
+-------
 
 - **Why do I get the "Cannot infer type argument" error with MyPy?**
 
@@ -295,7 +295,6 @@ There is `a bug in MyPy
 Using ``if isinstance(res, Ok)`` instead of ``if res.is_ok()`` will help in some cases.
 Otherwise using `one of these workarounds
 <https://github.com/python/mypy/issues/3889#issuecomment-325997911>`_ can help.
-
 
 
 License
