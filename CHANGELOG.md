@@ -22,6 +22,7 @@ codebase.
 
 [MIGRATING.md]: https://github.com/dbrgn/result/blob/master/MIGRATING.md
 
+- [added] Implement `and_then` (#32)
 - [changed] Split result type into `Ok` and `Err` classes (#17, #27)
 - [deprecated] Python 3.4 support is deprecated and will be removed in the next
   release

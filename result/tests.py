@@ -162,3 +162,24 @@ def test_isinstance_result_type():
     assert isinstance(o, OkErr)
     assert isinstance(n, OkErr)
     assert not isinstance(1, OkErr)
+
+
+def test_and_then_ok():
+    k = (Ok(1)
+        .and_then(lambda x: Ok(x + 1) if x > 0 else Err('too small'))
+        .and_then(lambda x: Ok(x ** 2)))
+    assert k.ok() == 4
+
+
+def test_and_then_err():
+    e = (Ok(1)
+        .and_then(lambda x: Ok(x + 1) if x > 5 else Err('too small'))
+        .and_then(lambda x: Ok(x ** 2)))
+    assert e.err() == 'too small'
+
+
+def test_and_then_start_with_err():
+    e = (Err('something went wrong')
+        .and_then(lambda x: Ok(x + 1) if x > 5 else Err('too small'))
+        .and_then(lambda x: Ok(x ** 2)))
+    assert e.err() == 'something went wrong'

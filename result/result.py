@@ -120,6 +120,11 @@ class Ok(Generic[T]):
         """
         return cast(Result[T, F], self)
 
+    def and_then(self, op: Callable[[T], 'Result[U, E]']) -> 'Result[U, E]':
+        """
+        """
+        return op(self._value)
+
 
 class Err(Generic[E]):
     """
@@ -224,6 +229,11 @@ class Err(Generic[E]):
         a new value using the passed in function.
         """
         return Err(op(self._value))
+
+    def and_then(self, op: Callable[[T], 'Result[U, E]']) -> 'Result[U, E]':
+        """
+        """
+        return self
 
 
 # define Result as a generic type alias for use
