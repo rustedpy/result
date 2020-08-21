@@ -108,8 +108,8 @@ Why not use exceptions? Well, to list some shortcomings in no particular order,
 - Custom exceptions required to indicate each possible failure case -- verbose,
   ad-hoc
 - No guarantee caller is going to catch your exception -- runtime errors galore
-- Failures implicitly propagate up, without warning, to function higher in the
-  call stack probably not expecting them -- DB exception in a HTTP request
+- Exceptions implicitly propagate up, without warning, to function higher in
+  the call stack probably not expecting them -- DB exception in a HTTP request
   handler?
 - Runtime costs of throwing exceptions; much slower than returning a value --
   understandably a smaller issue here as opposed to something like C++, since
@@ -121,17 +121,15 @@ Why not use exceptions? Well, to list some shortcomings in no particular order,
 
 What's the alternative?
 
-- Well defined return type and function API contract -- clear and upfront what
-  the code does and what you should except back
+- (In combination with type annotations) Well defined return type and function
+  API contract -- clear and upfront what the code does and what you should
+  except back
 - Facilitate and encourage caller to handle errors explicitly
-- No error can propagate up multiple levels -- each caller is encouraged to
-  explicitly handle any possible errors instead of leaving it up to some
-  function higher in the stack trace to deal with them when they maybe
-  shouldn't have to or might cause them to understand lower level details
-  than they should (leak implementation details and violate of separation of
-  concerns)
-- No need to guess all the possible exception you might encounter and need to
-  handle
+- No error can implicitly or inadvertently propagate up multiple levels -- each
+  caller is encouraged to explicitly handle errors instead of leaving it up to
+  some function higher in the stack trace to deal with them
+  - The propagation of exceptions is often a leak of implementation details and
+    a violation of separation of concerns
 
 
 API
