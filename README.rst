@@ -61,7 +61,7 @@ To something like this:
             .and_then(get_user)
             .and_then(lambda u: Ok((u, prompt_for_password()))))
 
-        if r_user_and_password.is_err:
+        if r_user_and_password.is_err():
             err = r_user_and_password.err()
             if isinstance(err, IoError): # prompt_for_username or prompt_for_password might return this
                 return Err('Failed to read user input, unable to login')
@@ -75,7 +75,7 @@ To something like this:
             return Err('Invalid password')
 
     r_login = try_n(login, 3)
-    if r_login.is_err:
+    if r_login.is_err():
         print('Failed to login')
     else:
         user = r_login.ok()
