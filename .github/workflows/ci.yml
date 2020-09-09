@@ -49,6 +49,10 @@ jobs:
         run: mypy result/result.py
       - name: Run typetests
         run: mypy result/typetests.py
+      - name: Run type checking across examples
+        env:
+          EXAMPLE_FILES: examples/without_result.py examples/with_result.py
+        run: for f in $EXAMPLE_FILES; do mypy $f; done
 
       # Coverage
       - name: Upload coverage to codecov.io

@@ -26,64 +26,74 @@ encapsulating an arbitrary value. ``Result[T, E]`` is a generic type alias for
 
 .. sourcecode:: python
 
-    def login() -> User:
-        try:
-            username = prompt_for_username()
-        except IoError:
-            raise LoginError('Failed to login due to IO error')
+    def get_user_input() -> str:
+        if random() > 0.5: raise IOError('Could not read input')
+        return 'my name is alice'
 
-        user = get_user(username)
-        if user is None:
-            raise UnknownUserError(f'User {username} does not exist')
+    def extract_name_from_input(inp: str) -> str:
+        p = re.compile('my name is (\w+)')
+        m = p.match(inp)
+        if m is None: raise ValueError('Input is invalid')
+        return m.group(1)
 
-        try:
-            password = prompt_for_password
-        except IoError:
-            raise LoginError('Failed to login due to IO error')
-
-        if user.check_password(password):
-            return user
-        else:
-            raise LoginError('Invalid password')
+    def authorize_user(user: str) -> bool:
+        return user == 'alice'
 
     try:
-        user = try_n(login, 3)
-        print(f'Logged in as user "{user.name}"')
-    except RetryFailure as e:
-        print('Failed to login')
+        inp = get_user_input()
+        try:
+            if authorize_user(extract_name_from_input(inp)):
+                print('Hi! Welcome to the secret club')
+            else:
+                print('Stop! You are not authorized to enter.')
+        except ValueError as e:
+            print('Something went wrong while trying to extract name from input', e)
+    except IOError as e:
+        print('Something went wrong while trying to read user input', e)
 
 To something like this:
 
 .. sourcecode:: python
 
-    def login() -> Result[User, str]:
-        r_user_and_password = (prompt_for_username()
-            .and_then(get_user)
-            .and_then(lambda u: Ok((u, prompt_for_password()))))
+    class AppError(Enum):
+        IOError = 1
+        InvalidInput = 2
+        AuthorizationError = 3
 
-        if r_user_and_password.is_err():
-            err = r_user_and_password.err()
-            if isinstance(err, IoError): # prompt_for_username or prompt_for_password might return this
-                return Err('Failed to read user input, unable to login')
-            elif isinstance(err, UnknownUserError): # get_user might return this
-                return Err('User tried to login with an unknown user')
+    def get_user_input() -> Result[str, AppError]:
+        return Ok('my name is alice')
 
-        user, password = r_user_and_password.ok()
-        if user.check_password(password):
-            return Ok(user)
+    def extract_name_from_input(inp: str) -> Result[str, AppError]:
+        p = re.compile('my name is (\w+)')
+        m = p.match(inp)
+        if m is None: return Err(AppError.InvalidInput)
+        return Ok(m.group(1))
+
+    def authorize_user(user: str) -> Result[bool, AppError]:
+        if random() > 0.5: return Err(AppError.AuthorizationError)
+        return Ok(user == 'alice')
+
+    auth_check = (
+        get_user_input()
+            .and_then(extract_name_from_input)
+            .and_then(authorize_user)
+    ) # type: Result[bool, AppError]
+
+    if isinstance(auth_check, Ok):
+        authorized = auth_check.ok()
+        if authorized:
+            print('Hi! Welcome to the secret club')
         else:
-            return Err('Invalid password')
-
-    r_login = try_n(login, 3)
-    if r_login.is_err():
-        print('Failed to login')
+            print('Stop! You are not authorized to enter.')
     else:
-        user = r_login.ok()
-        print(f'Logged in as user "{user.name}"')
+        print('Something went wrong', auth_check.err())
 
 As this is Python and not Rust, you will lose some of the advantages that it
 brings, like elegant combinations with the ``match`` statement. On the other
-side, you don't have to return semantically unclear tuples anymore.
+side, you don't have to return semantically unclear tuples anymore or rely on
+exception for control flow. Of course a lot of Python code still throws
+exceptions which you can't control and in those cases ``try/except`` is still
+your friend.
 
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html) have
 been implemented, only the ones that make sense in the Python context. By using
