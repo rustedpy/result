@@ -1,3 +1,8 @@
+from enum import Enum
+from random import random
+from result import Result, Ok, Err
+import re
+
 class AppError(Enum):
     IOError = 1
     InvalidInput = 2
