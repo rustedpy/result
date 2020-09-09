@@ -1,18 +1,24 @@
 from random import random
 import re
 
+
 def get_user_input() -> str:
-    if random() > 0.5: raise IOError('Could not read input')
+    if random() > 0.5:
+        raise IOError('Could not read input')
     return 'my name is alice'
 
+
 def extract_name_from_input(inp: str) -> str:
-    p = re.compile('my name is (\w+)')
+    p = re.compile('my name is (\\w+)')
     m = p.match(inp)
-    if m is None: raise ValueError('Input is invalid')
+    if m is None:
+        raise ValueError('Input is invalid')
     return m.group(1)
+
 
 def authorize_user(user: str) -> bool:
     return user == 'alice'
+
 
 try:
     inp = get_user_input()
