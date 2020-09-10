@@ -122,7 +122,7 @@ class Ok(Generic[T]):
 
     def and_then(self, op: Callable[[T], 'Result[U, F]']) -> 'Result[U, F]':
         """
-        The contained result is `Ok`, so Calls `op` and returns a new `Result`
+        The contained result is `Ok`, so calls `op` and returns a new `Result`
         """
         return op(self._value)
 
@@ -233,7 +233,7 @@ class Err(Generic[E]):
 
     def and_then(self, op: Callable[[T], 'Result[U, E]']) -> 'Result[U, E]':
         """
-        Returns the `Err` value of self.
+        Returns the `Err` value of self
         """
         return self
 
