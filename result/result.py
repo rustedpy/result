@@ -243,10 +243,17 @@ OkErr = (Ok, Err)
 
 
 class UnwrapError(Exception):
+    """
+    Exception thrown upon `.unwrap_<...>` and `.expect_<...>` calls
+    """
+
     def __init__(self, result: Result, message: str) -> None:
         self._result = result
         super().__init__(message)
 
     @property
     def result(self) -> Result:
+        """
+        Returns the original result.
+        """
         return self._result
