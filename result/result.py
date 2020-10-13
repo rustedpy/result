@@ -69,7 +69,7 @@ class Ok(Generic[T]):
         """
         Raise an UnwrapError since this type is `Ok`
         """
-        raise UnwrapError(message)
+        raise UnwrapError(self, message)
 
     def unwrap(self) -> T:
         """
@@ -81,7 +81,7 @@ class Ok(Generic[T]):
         """
         Raise an UnwrapError since this type is `Ok`
         """
-        raise UnwrapError("Called `Result.unwrap_err()` on an `Ok` value")
+        raise UnwrapError(self, "Called `Result.unwrap_err()` on an `Ok` value")
 
     def unwrap_or(self, _default: T) -> T:
         """
@@ -170,7 +170,7 @@ class Err(Generic[E]):
         """
         Raises an `UnwrapError`.
         """
-        raise UnwrapError(message)
+        raise UnwrapError(self, message)
 
     def expect_err(self, _message: str) -> E:
         """
@@ -182,7 +182,7 @@ class Err(Generic[E]):
         """
         Raises an `UnwrapError`.
         """
-        raise UnwrapError("Called `Result.unwrap()` on an `Err` value")
+        raise UnwrapError(self, "Called `Result.unwrap()` on an `Err` value")
 
     def unwrap_err(self) -> E:
         """
@@ -243,4 +243,17 @@ OkErr = (Ok, Err)
 
 
 class UnwrapError(Exception):
-    pass
+    """
+    Exception thrown upon `.unwrap_<...>` and `.expect_<...>` calls
+    """
+
+    def __init__(self, result: Result, message: str) -> None:
+        self._result = result
+        super().__init__(message)
+
+    @property
+    def result(self) -> Result:
+        """
+        Returns the original result.
+        """
+        return self._result

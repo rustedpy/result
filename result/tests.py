@@ -162,3 +162,10 @@ def test_isinstance_result_type():
     assert isinstance(o, OkErr)
     assert isinstance(n, OkErr)
     assert not isinstance(1, OkErr)
+
+
+def test_error_context():
+    n = Err('nay')
+    with pytest.raises(UnwrapError) as e:
+        n.unwrap()
+    assert e.value.result is n
