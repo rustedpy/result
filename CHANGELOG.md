@@ -11,9 +11,7 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
-## [0.6.0-rc.1] - 2020-04-16
-
-Release candidate for the 0.6.0 release.
+## [0.6.0] - 2021-03-17
 
 **IMPORTANT:** This release a big API refactoring to make the API more type
 safe. Unfortunately this means some breaking changes. Please check out
