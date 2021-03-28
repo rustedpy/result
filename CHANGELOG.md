@@ -11,6 +11,11 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
+## [Unreleased]
+
+- `[removed]` Drop support for Python 3.5 (#34)
+- `[added]` Add support for Python 3.9
+
 ## [0.6.0] - 2021-03-17
 
 **IMPORTANT:** This release a big API refactoring to make the API more type
