@@ -11,7 +11,7 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
-## [0.7.0-rc.1] 2021-03-28
+## [Unreleased]
 
 - `[removed]` Drop support for Python 3.5 (#34)
 - `[added]` Add support for Python 3.9
