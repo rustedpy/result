@@ -76,7 +76,9 @@ be OK or not, without resorting to custom exceptions.
 API
 ---
 
-Creating an instance::
+Creating an instance:
+
+.. sourcecode:: python
 
     >>> from result import Ok, Err
     >>> res1 = Ok('yay')
@@ -84,7 +86,9 @@ Creating an instance::
 
 Checking whether a result is ``Ok`` or ``Err``. With ``isinstance`` you get type safe
 access that can be checked with MyPy. The ``is_ok()`` or ``is_err()`` methods can be
-used if you don't need the type safety with MyPy::
+used if you don't need the type safety with MyPy:
+
+.. sourcecode:: python
 
     >>> res = Ok('yay')
     >>> isinstance(res, Ok)
@@ -98,7 +102,9 @@ used if you don't need the type safety with MyPy::
 
 You can also check if an object is ``Ok`` or ``Err`` by using the ``OkErr`` type.
 Please note that this type is designed purely for convenience, and should not be used
-for anything else. Using ``(Ok, Err)`` also works fine::
+for anything else. Using ``(Ok, Err)`` also works fine:
+
+.. sourcecode:: python
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -111,7 +117,9 @@ for anything else. Using ``(Ok, Err)`` also works fine::
     >>> isinstance(res1, (Ok, Err))
     True
 
-Convert a ``Result`` to the value or ``None``::
+Convert a ``Result`` to the value or ``None``:
+
+.. sourcecode:: python
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -120,7 +128,9 @@ Convert a ``Result`` to the value or ``None``::
     >>> res2.ok()
     None
 
-Convert a ``Result`` to the error or ``None``::
+Convert a ``Result`` to the error or ``None``:
+
+.. sourcecode:: python
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -129,7 +139,9 @@ Convert a ``Result`` to the error or ``None``::
     >>> res2.err()
     'nay'
 
-Access the value directly, without any other checks::
+Access the value directly, without any other checks:
+
+.. sourcecode:: python
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -140,14 +152,18 @@ Access the value directly, without any other checks::
 
 Note that this is a property, you cannot assign to it. Results are immutable.
 
-For your convenience, simply creating an ``Ok`` result without value is the same as using ``True``::
+For your convenience, simply creating an ``Ok`` result without value is the same as using ``True``:
+
+.. sourcecode:: python
 
     >>> res1 = Ok()
     >>> res1.value
     True
 
 The ``unwrap`` method returns the value if ``Ok`` and ``unwrap_err`` method
-returns the error value if ``Err``, otherwise it raises an ``UnwrapError``::
+returns the error value if ``Err``, otherwise it raises an ``UnwrapError``:
+
+.. sourcecode:: python
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -168,7 +184,9 @@ returns the error value if ``Err``, otherwise it raises an ``UnwrapError``::
     'nay'
 
 
-A custom error message can be displayed instead by using ``expect`` and ``expect_err``::
+A custom error message can be displayed instead by using ``expect`` and ``expect_err``:
+
+.. sourcecode:: python
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -186,7 +204,9 @@ A custom error message can be displayed instead by using ``expect`` and ``expect
     >>> res2.expect_err('not err')
     'nay'
 
-A default value can be returned instead by using ``unwrap_or``::
+A default value can be returned instead by using ``unwrap_or``:
+
+.. sourcecode:: python
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
@@ -196,7 +216,9 @@ A default value can be returned instead by using ``unwrap_or``::
     'default'
 
 Values and errors can be mapped using ``map``, ``map_or``, ``map_or_else`` and
-``map_err``::
+``map_err``:
+
+.. sourcecode:: python
 
    >>> Ok(1).map(lambda x: x + 1)
    Ok(2)
