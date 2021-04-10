@@ -3,7 +3,6 @@ source =
     result
 omit =
     setup.py
-    tests/typetests.py
     venv/*
 
 [report]
