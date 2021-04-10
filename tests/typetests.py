@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from .result import Result, Ok, Err
+from result import Result, Ok, Err
 
 
 res1: Result[str, int] = Ok('hello')
