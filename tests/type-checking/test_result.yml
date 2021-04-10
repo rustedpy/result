@@ -1,0 +1,33 @@
+# reveal_type(res3) # N: Revealed type is 'result.result.Err[builtins.int]'
+- case: failure_lash
+  disable_cache: false
+  main: |
+    from typing import List, Optional
+
+    from result import Result, Ok, Err
+
+
+    res1: Result[str, int] = Ok('hello')
+    reveal_type(res1) # N: Revealed type is 'Union[result.result.Ok[builtins.str], result.result.Err[builtins.int]]'
+    if isinstance(res1, Ok):
+        ok: Ok[str] = res1
+        reveal_type(ok) # N: Revealed type is 'result.result.Ok[builtins.str]'
+        okValue: str = res1.ok()
+        reveal_type(okValue) # N: Revealed type is 'builtins.str'
+        mapped_to_float: float = res1.map_or(1.0, lambda s: len(s) * 1.5)
+        reveal_type(mapped_to_float) # N: Revealed type is 'builtins.float'
+    else:
+        err: Err[int] = res1
+        reveal_type(err) # N: Revealed type is 'result.result.Err[builtins.int]'
+        errValue: int = err.err()
+        reveal_type(errValue) # N: Revealed type is 'builtins.int'
+        mapped_to_list: Optional[List[int]] = res1.map_err(lambda e: [e]).err()
+        reveal_type(mapped_to_list) # N: Revealed type is 'Union[builtins.list[builtins.int], None]'
+
+    # Test constructor functions
+    res1 = Ok()
+    reveal_type(res1) # N: Revealed type is 'result.result.Ok[builtins.str]'
+    res2 = Ok(42)
+    reveal_type(res2) # N: Revealed type is 'result.result.Ok[builtins.int*]'
+    res3 = Err(1)
+    reveal_type(res3) # N: Revealed type is 'result.result.Err[builtins.int*]'
