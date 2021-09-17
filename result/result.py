@@ -1,7 +1,7 @@
 from typing import Callable, Generic, TypeVar, Union, Any, cast, overload, NoReturn
 
-T = TypeVar("T")  # Success type
-E = TypeVar("E")  # Error type
+T = TypeVar("T", covariant=True)  # Success type
+E = TypeVar("E", covariant=True)  # Error type
 U = TypeVar("U")
 F = TypeVar("F")
 
@@ -83,7 +83,7 @@ class Ok(Generic[T]):
         """
         raise UnwrapError(self, "Called `Result.unwrap_err()` on an `Ok` value")
 
-    def unwrap_or(self, _default: T) -> T:
+    def unwrap_or(self, _default: U) -> T:
         """
         Return the value.
         """
@@ -190,7 +190,7 @@ class Err(Generic[E]):
         """
         return self._value
 
-    def unwrap_or(self, default: T) -> T:
+    def unwrap_or(self, default: U) -> U:
         """
         Return `default`.
         """
