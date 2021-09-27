@@ -15,6 +15,13 @@ Possible log types:
 
 - `[removed]` Drop support for Python 3.5 (#34)
 - `[added]` Add support for Python 3.9
+- `[changed]` Make the `Ok` type covariant in regard to its wrapped type `T`.
+  Likewise for `Err` in regard to `E`. This should result in more intuitive 
+  type checking behaviour. For instance, `Err[TypeError]` will get recognized 
+  as a subtype of `Err[Exception]` by type checkers. See [PEP 438] for a 
+  detailed explanation of covariance and its implications.
+
+[PEP 438]: https://www.python.org/dev/peps/pep-0483/#covariance-and-contravariance
 
 ## [0.6.0] - 2021-03-17
 
