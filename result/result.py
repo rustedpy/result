@@ -11,6 +11,8 @@ class Ok(Generic[T]):
     A value that indicates success and which stores arbitrary data for the return value.
     """
 
+    __match_args__ = ("value",)
+
     @overload
     def __init__(self) -> None:
         pass
@@ -89,7 +91,7 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
+    def map(self, op: Callable[[T], U]) -> "Result[U, E]":
         """
         The contained result is `Ok`, so return `Ok` with original value mapped to
         a new value using the passed in function.
@@ -103,18 +105,14 @@ class Ok(Generic[T]):
         """
         return op(self._value)
 
-    def map_or_else(
-        self,
-        default_op: Callable[[], U],
-        op: Callable[[T], U]
-    ) -> U:
+    def map_or_else(self, default_op: Callable[[], U], op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return original value mapped to
         a new value using the passed in `op` function.
         """
         return op(self._value)
 
-    def map_err(self, op: Callable[[E], F]) -> 'Result[T, F]':
+    def map_err(self, op: Callable[[E], F]) -> "Result[T, F]":
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
@@ -125,6 +123,8 @@ class Err(Generic[E]):
     """
     A value that signifies failure and which stores arbitrary data for the error.
     """
+
+    __match_args__ = ("value",)
 
     def __init__(self, value: E) -> None:
         self._value = value
@@ -196,7 +196,7 @@ class Err(Generic[E]):
         """
         return default
 
-    def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
+    def map(self, op: Callable[[T], U]) -> "Result[U, E]":
         """
         Return `Err` with the same value
         """
@@ -208,17 +208,13 @@ class Err(Generic[E]):
         """
         return default
 
-    def map_or_else(
-        self,
-        default_op: Callable[[], U],
-        op: Callable[[T], U]
-    ) -> U:
+    def map_or_else(self, default_op: Callable[[], U], op: Callable[[T], U]) -> U:
         """
         Return the result of the default operation
         """
         return default_op()
 
-    def map_err(self, op: Callable[[E], F]) -> 'Result[T, F]':
+    def map_err(self, op: Callable[[E], F]) -> "Result[T, F]":
         """
         The contained result is `Err`, so return `Err` with original error mapped to
         a new value using the passed in function.
