@@ -22,7 +22,7 @@ jobs:
     steps:
       # Python
       - name: Setup python ${{ matrix.python }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
 
