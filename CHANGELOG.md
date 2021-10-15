@@ -15,6 +15,7 @@ Possible log types:
 
 - `[removed]` Drop support for Python 3.5 (#34)
 - `[added]` Add support for Python 3.9
+- `[added]` Add support for Python 3.10 (#50)
 - `[changed]` Make the `Ok` type covariant in regard to its wrapped type `T`.
   Likewise for `Err` in regard to `E`. This should result in more intuitive 
   type checking behaviour. For instance, `Err[TypeError]` will get recognized 

@@ -1,5 +1,5 @@
-pytest==6.2.3
+pytest==6.2.5
 pytest-cov>=2.8,<3
 pytest-flake8>=1,<2
-mypy==0.812
-pytest-mypy-plugins==1.6.1
+mypy==0.910
+pytest-mypy-plugins==1.9.1
