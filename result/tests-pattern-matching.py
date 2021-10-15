@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # Pytest test suite
-from result import Ok, Err
+from result import Result, Ok, Err
 
 
 def test_pattern_matching_on_ok_type():
-    o = Ok('yay')
+    o: Result[str, int] = Ok('yay')
     match o:
         case Ok(f):
             assert True
@@ -13,7 +13,7 @@ def test_pattern_matching_on_ok_type():
 
 
 def test_pattern_matching_on_err_type():
-    e = Err('nay')
+    e: Result[int, str] = Err('nay')
     match e:
         case Ok(f):
             assert False
