@@ -45,7 +45,7 @@ jobs:
 
       # Tests
       - name: Run tests
-        run: pytest --cov-report term --cov-report xml:coverage.xml
+        run: pytest --cov-report term --cov-report xml:coverage.xml --ignore-glob=tests-pattern-matching.py
       - name: Run mypy on result.py
         run: mypy result/result.py
 
