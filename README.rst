@@ -61,9 +61,25 @@ To something like this:
         # type(user_result.value) == str
         raise RuntimeError('Could not fetch user: %s' % user_result.value)
 
-As this is Python and not Rust, you will lose some of the advantages that it
-brings, like elegant combinations with the ``match`` statement. On the other
-side, you don't have to return semantically unclear tuples anymore.
+And if you're using python version  ``3.10``, you can use the elegant ``match`` statement as well:
+
+.. sourcecode:: python
+
+    from rusty_results import Result, Ok, Err
+
+    def divide(a: int, b: int) -> Result[int, str]:
+        if b == 0:
+            return Err("Cannot divide by zero")
+        return Ok(a // b)
+
+    values = [(10, 0), (10, 5)]
+    for a, b in values:
+        divide_result = divide(a, b)
+        match divide_result:
+            case Ok(value):
+                print(f"{a} // {b} == {value}")
+            case Err(e):
+                print(e)
 
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html) have
 been implemented, only the ones that make sense in the Python context. By using
