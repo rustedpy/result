@@ -61,11 +61,11 @@ To something like this:
         # type(user_result.value) == str
         raise RuntimeError('Could not fetch user: %s' % user_result.value)
 
-And if you're using python version  ``3.10``, you can use the elegant ``match`` statement as well:
+And if you're using python version ``3.10`` or later, you can use the elegant ``match`` statement as well:
 
 .. sourcecode:: python
 
-    from rusty_results import Result, Ok, Err
+    from result import Result, Ok, Err
 
     def divide(a: int, b: int) -> Result[int, str]:
         if b == 0:
