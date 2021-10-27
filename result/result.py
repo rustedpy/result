@@ -12,6 +12,7 @@ class Ok(Generic[T]):
     """
 
     __match_args__ = ("value",)
+    __slots__ = ("_value",)
 
     @overload
     def __init__(self) -> None:
@@ -129,6 +130,7 @@ class Err(Generic[E]):
     """
 
     __match_args__ = ("value",)
+    __slots__ = ("_value",)
 
     def __init__(self, value: E) -> None:
         self._value = value

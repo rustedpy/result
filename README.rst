@@ -253,6 +253,10 @@ Values and errors can be mapped using ``map``, ``map_or``, ``map_or_else`` and
    >>> Err(1).map_err(lambda x: x + 1)
    Err(2)
 
+To save memory, both the ``Ok`` and ``Err`` classes are ‘slotted’,
+i.e. they define ``__slots__``. This means assigning arbitrary
+attributes to instances will raise ``AttributeError``.
+
 
 FAQ
 -------
