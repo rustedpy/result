@@ -169,3 +169,15 @@ def test_error_context():
     with pytest.raises(UnwrapError) as e:
         n.unwrap()
     assert e.value.result is n
+
+
+def test_slots() -> None:
+    """
+    Ok and Err have slots, so assigning arbitrary attributes fails.
+    """
+    o = Ok('yay')
+    n = Err('nay')
+    with pytest.raises(AttributeError):
+        o.some_arbitrary_attribute = 1  # type: ignore[attr-defined]
+    with pytest.raises(AttributeError):
+        n.some_arbitrary_attribute = 1  # type: ignore[attr-defined]
