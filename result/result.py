@@ -249,17 +249,17 @@ This is purely for convenience sake, as you could also just write `isinstance(re
 OkErr = (Ok, Err)
 
 
-class UnwrapError(Exception):
+class UnwrapError(Exception, Generic[T, E]):
     """
     Exception thrown upon `.unwrap_<...>` and `.expect_<...>` calls
     """
 
-    def __init__(self, result: Result, message: str) -> None:
+    def __init__(self, result: Result[T, E], message: str) -> None:
         self._result = result
         super().__init__(message)
 
     @property
-    def result(self) -> Result:
+    def result(self) -> Result[T, E]:
         """
         Returns the original result.
         """
