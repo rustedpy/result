@@ -1,4 +1,5 @@
-on:
+---
+on:  # yamllint disable-line rule:truthy
   push:
     branches:
       - master
@@ -37,7 +38,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-py${{ matrix.python }}-
       - name: Install dev dependencies
-        run: pip install --requirement requirements-dev.txt
+        run: >
+          pip install
+          --requirement requirements-dev.txt
 
       # Install library
       - name: Install result
@@ -45,12 +48,16 @@ jobs:
 
       # Tests
       - name: Run tests
-        run: pytest --cov-report term --cov-report xml:coverage.xml --ignore-glob=result/tests-pattern-matching.py
+        run: >
+          pytest
+          --ignore=tests/test_pattern_matching.py
       - name: Run tests (pattern matching)
-        run: pytest --cov-report term --cov-report xml:coverage.xml result/tests-pattern-matching.py
         if: matrix.python == '3.10'
+        run: >
+          pytest
+          tests/test_pattern_matching.py
       - name: Run mypy
-        run: mypy result/result.py result/tests.py
+        run: mypy result/result.py tests/test_result.py
 
       # Packaging
       - name: Build packages
@@ -61,6 +68,6 @@ jobs:
       # Coverage
       - name: Upload coverage to codecov.io
         uses: codecov/codecov-action@v1
-        if: matrix.python == '3.8'
+        if: matrix.python == '3.9'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
