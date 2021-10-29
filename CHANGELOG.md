@@ -31,7 +31,7 @@ safe. Unfortunately this means some breaking changes. Please check out
 [MIGRATING.md], it will guide you through the necessary changes in your
 codebase.
 
-[MIGRATING.md]: https://github.com/dbrgn/result/blob/master/MIGRATING.md
+[MIGRATING.md]: https://github.com/rustedpy/result/blob/master/MIGRATING.md
 
 - [changed] Split result type into `Ok` and `Err` classes (#17, #27)
 - [deprecated] Python 3.4 support is deprecated and will be removed in the next
@@ -76,14 +76,14 @@ codebase.
 
  - Initial version
 
-[Unreleased]: https://github.com/dbrgn/result/compare/v0.6.0...HEAD
-[0.6.0]: https://github.com/dbrgn/result/compare/v0.5.0...v0.6.0
-[0.5.0]: https://github.com/dbrgn/result/compare/v0.4.1...v0.5.0
-[0.4.1]: https://github.com/dbrgn/result/compare/v0.4.0...v0.4.1
-[0.4.0]: https://github.com/dbrgn/result/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/dbrgn/result/compare/v0.2.2...v0.3.0
-[0.2.2]: https://github.com/dbrgn/result/compare/v0.2.1...v0.2.2
-[0.2.1]: https://github.com/dbrgn/result/compare/v0.2.0...v0.2.1
-[0.2.0]: https://github.com/dbrgn/result/compare/v0.1.1...v0.2.0
-[0.1.1]: https://github.com/dbrgn/result/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/dbrgn/result/compare/3ca7d83...v0.1.0
+[Unreleased]: https://github.com/rustedpy/result/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/rustedpy/result/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/rustedpy/result/compare/v0.4.1...v0.5.0
+[0.4.1]: https://github.com/rustedpy/result/compare/v0.4.0...v0.4.1
+[0.4.0]: https://github.com/rustedpy/result/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/rustedpy/result/compare/v0.2.2...v0.3.0
+[0.2.2]: https://github.com/rustedpy/result/compare/v0.2.1...v0.2.2
+[0.2.1]: https://github.com/rustedpy/result/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/rustedpy/result/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/rustedpy/result/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/rustedpy/result/compare/3ca7d83...v0.1.0

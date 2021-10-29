@@ -1,13 +1,13 @@
 Result
 ======
 
-.. image:: https://img.shields.io/github/workflow/status/dbrgn/result/CI/master
+.. image:: https://img.shields.io/github/workflow/status/rustedpy/result/CI/master
     :alt: GitHub Workflow Status (branch)
-    :target: https://github.com/dbrgn/result/actions?query=workflow%3ACI+branch%3Amaster
+    :target: https://github.com/rustedpy/result/actions?query=workflow%3ACI+branch%3Amaster
 
-.. image:: https://codecov.io/gh/dbrgn/result/branch/master/graph/badge.svg
+.. image:: https://codecov.io/gh/rustedpy/result/branch/master/graph/badge.svg
     :alt: Coverage
-    :target: https://codecov.io/gh/dbrgn/result
+    :target: https://codecov.io/gh/rustedpy/result
 
 A simple Result type for Python 3 `inspired by Rust
 <https://doc.rust-lang.org/std/result/>`__, fully type annotated.
