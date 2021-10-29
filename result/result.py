@@ -11,16 +11,17 @@ class Ok(Generic[T]):
     A value that indicates success and which stores arbitrary data for the return value.
     """
 
+    _value: T
     __match_args__ = ("value",)
     __slots__ = ("_value",)
 
     @overload
     def __init__(self) -> None:
-        pass
+        ...
 
     @overload
     def __init__(self, value: T) -> None:
-        self._value = value
+        ...
 
     def __init__(self, value: Any = True) -> None:
         self._value = value
