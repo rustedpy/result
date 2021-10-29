@@ -20,6 +20,7 @@ Possible log types:
   type checking behaviour. For instance, `Err[TypeError]` will get recognized
   as a subtype of `Err[Exception]` by type checkers. See [PEP 438] for a
   detailed explanation of covariance and its implications.
+- `[added]` Add support for Python 3.10 pattern matching (#47)
 - `[changed]` `Ok` and `Err` now define `__slots__` to save memory (#55, #58)
 
 [PEP 438]: https://www.python.org/dev/peps/pep-0483/#covariance-and-contravariance
