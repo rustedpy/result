@@ -1,3 +1,38 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.mypy]
+python_version = "3.10"
+files = [
+  "result",
+  "tests",
+]
+# Exclude files with pattern matching syntax until Mypy supports it;
+# see https://github.com/python/mypy/issues/10201
+exclude = "tests/test_pattern_matching.py"
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
+show_none_errors = true
+strict_optional = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+addopts = [
+  "--flake8",
+  "--tb=short",
+  "--cov=.",
+  "--cov-report=term",
+  "--cov-report=xml",
+]
+testpaths = [
+  "result",
+  "tests",
+]

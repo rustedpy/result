@@ -1,3 +1,4 @@
+---
 # reveal_type(res3) # N: Revealed type is "result.result.Err[builtins.int]"
 - case: failure_lash
   disable_cache: false
