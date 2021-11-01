@@ -251,15 +251,23 @@ OkErr = (Ok, Err)
 
 class UnwrapError(Exception):
     """
-    Exception thrown upon `.unwrap_<...>` and `.expect_<...>` calls
+    Exception raised from ``.unwrap_<...>`` and ``.expect_<...>`` calls.
+
+    The original ``Result`` can be accessed via the ``.result`` attribute, but
+    this is not intended for regular use, as type information is lost:
+    ``UnwrapError`` doesn't know about both ``T`` and ``E``, since it's raised
+    from ``Ok()`` or ``Err()`` which only knows about either ``T`` or ``E``,
+    not both.
     """
 
-    def __init__(self, result: Result, message: str) -> None:
+    _result: Result[Any, Any]
+
+    def __init__(self, result: Result[Any, Any], message: str) -> None:
         self._result = result
         super().__init__(message)
 
     @property
-    def result(self) -> Result:
+    def result(self) -> Result[Any, Any]:
         """
         Returns the original result.
         """
