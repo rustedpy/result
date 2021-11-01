@@ -2,22 +2,26 @@ from result import Err, Ok, Result
 
 
 def test_pattern_matching_on_ok_type() -> None:
-    o: Result[str, int] = Ok('yay')
+    """
+    Pattern matching on ``Ok()`` matches the contained value.
+    """
+    o: Result[str, int] = Ok("yay")
     match o:
-        case Ok(f):
-            f  # Avoids flake8 F841 unused variable
-            assert True
-        case Err(e):
-            e
-            assert False
+        case Ok(value):
+            reached = True
+
+    assert value == "yay"
+    assert reached
 
 
 def test_pattern_matching_on_err_type() -> None:
-    n: Result[int, str] = Err('nay')
+    """
+    Pattern matching on ``Err()`` matches the contained value.
+    """
+    n: Result[int, str] = Err("nay")
     match n:
-        case Ok(f):
-            f
-            assert False
-        case Err(e):
-            e
-            assert True
+        case Err(value):
+            reached = True
+
+    assert value == "nay"
+    assert reached

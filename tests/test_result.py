@@ -33,8 +33,17 @@ def test_hash() -> None:
 
 
 def test_repr() -> None:
-    assert Ok(u"£10") == eval(repr(Ok(u"£10")))
-    assert Ok("£10") == eval(repr(Ok("£10")))
+    """
+    ``repr()`` returns valid code if the wrapped value's ``repr()`` does as well.
+    """
+    o = Ok(123)
+    n = Err(-1)
+
+    assert repr(o) == "Ok(123)"
+    assert o == eval(repr(o))
+
+    assert repr(n) == "Err(-1)"
+    assert n == eval(repr(n))
 
 
 def test_ok() -> None:

@@ -36,7 +36,8 @@ warn_unused_ignores = true
 addopts = [
   "--flake8",
   "--tb=short",
-  "--cov=.",
+  "--cov=result",
+  "--cov=tests",
   "--cov-report=term",
   "--cov-report=xml",
 ]

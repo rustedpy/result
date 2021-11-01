@@ -17,11 +17,11 @@ class Ok(Generic[T]):
 
     @overload
     def __init__(self) -> None:
-        ...
+        ...  # pragma: no cover
 
     @overload
     def __init__(self, value: T) -> None:
-        ...
+        ...  # pragma: no cover
 
     def __init__(self, value: Any = True) -> None:
         self._value = value
