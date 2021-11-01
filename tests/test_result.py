@@ -163,9 +163,10 @@ def test_isinstance_result_type() -> None:
 
 def test_error_context() -> None:
     n = Err('nay')
-    with pytest.raises(UnwrapError) as e:
+    with pytest.raises(UnwrapError) as exc_info:
         n.unwrap()
-    assert e.value.result is n
+    exc = exc_info.value
+    assert exc.result is n
 
 
 def test_slots() -> None:

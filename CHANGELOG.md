@@ -22,6 +22,7 @@ Possible log types:
   detailed explanation of covariance and its implications.
 - `[added]` Add support for Python 3.10 pattern matching (#47)
 - `[changed]` `Ok` and `Err` now define `__slots__` to save memory (#55, #58)
+- `[changed]` The generic type of `UnwrapError.result` now explicitly specifies `Any` (#67)
 
 [PEP 438]: https://www.python.org/dev/peps/pep-0483/#covariance-and-contravariance
 
