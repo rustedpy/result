@@ -11,7 +11,7 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
-## [0.7.0]
+## [0.7.0] - 2021-11-19
 
 - `[removed]` Drop support for Python 3.5 (#34)
 - `[added]` Add support for Python 3.9 and 3.10 (#50)
@@ -78,7 +78,8 @@ codebase.
 
  - Initial version
 
-[Unreleased]: https://github.com/rustedpy/result/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/rustedpy/result/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/rustedpy/result/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/rustedpy/result/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/rustedpy/result/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/rustedpy/result/compare/v0.4.0...v0.4.1
