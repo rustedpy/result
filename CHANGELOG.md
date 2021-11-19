@@ -11,7 +11,7 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
-## [Unreleased]
+## [0.7.0]
 
 - `[removed]` Drop support for Python 3.5 (#34)
 - `[added]` Add support for Python 3.9 and 3.10 (#50)
