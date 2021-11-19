@@ -13,7 +13,7 @@ Update version numbers:
 
 Update diff link in CHANGELOG.md ([see example][diff-link-update-pr-example]):
 
-    vim -p CHANGELOG.md
+    vim CHANGELOG.md
 
 Do a signed commit and signed tag of the release:
 
