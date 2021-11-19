@@ -7,4 +7,4 @@ __all__ = [
     "Result",
     "UnwrapError",
 ]
-__version__ = "0.7.0rc1"
+__version__ = "0.7.0"
