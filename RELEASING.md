@@ -23,7 +23,7 @@ Do a signed commit and signed tag of the release:
 
 Build source and binary distributions:
 
-    rm -rf dist/*
+    rm -rf ./dist
     python3 -m build
 
 Sign files:
