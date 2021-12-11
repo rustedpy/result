@@ -119,6 +119,13 @@ def test_unwrap_or() -> None:
     assert n.unwrap_or('another_default') == 'another_default'
 
 
+def test_unwrap_or_else() -> None:
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.unwrap_or_else(str.upper) == 'yay'
+    assert n.unwrap_or_else(str.upper) == 'NAY'
+
+
 def test_map() -> None:
     o = Ok('yay')
     n = Err('nay')

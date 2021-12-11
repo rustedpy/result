@@ -93,6 +93,10 @@ class Ok(Generic[T]):
         """
         return self._value
 
+    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+        """Returns the value."""
+        return self._value
+
     def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
         """
         The contained result is `Ok`, so return `Ok` with original value mapped to
@@ -202,6 +206,13 @@ class Err(Generic[E]):
         Return `default`.
         """
         return default
+
+    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+        """
+        The contained result is `Ok`, so return original value mapped to
+        a new value using the passed in `op` function.
+        """
+        return op(self._value)
 
     def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
         """
