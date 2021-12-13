@@ -220,7 +220,7 @@ A custom error message can be displayed instead by using ``expect`` and ``expect
     >>> res2.expect_err('not err')
     'nay'
 
-A default value can be returned instead by using ``unwrap_or``:
+A default value can be returned instead by using ``unwrap_or`` or ``unwrap_or_else``:
 
 .. sourcecode:: python
 
@@ -230,6 +230,10 @@ A default value can be returned instead by using ``unwrap_or``:
     'yay'
     >>> res2.unwrap_or('default')
     'default'
+    >>> res1.unwrap_or_else(str.upper)
+    'yay'
+    >>> res2.unwrap_or_else(str.upper)
+    'NAY'
 
 Values and errors can be mapped using ``map``, ``map_or``, ``map_or_else`` and
 ``map_err``:
