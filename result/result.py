@@ -211,8 +211,8 @@ class Err(Generic[E]):
 
     def unwrap_or_else(self, op: Callable[[E], T]) -> T:
         """
-        The contained result is `Ok`, so return original value mapped to
-        a new value using the passed in `op` function.
+        The contained result is ``Err``, so return the result of applying
+        ``op`` to the error value.
         """
         return op(self._value)
 
