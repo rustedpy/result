@@ -94,7 +94,9 @@ class Ok(Generic[T]):
         return self._value
 
     def unwrap_or_else(self, op: Callable[[E], T]) -> T:
-        """Returns the value."""
+        """
+        Return the value.
+        """
         return self._value
 
     def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
