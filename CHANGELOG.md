@@ -13,6 +13,7 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[removed]` Drop support for Python 3.6 (#49)
 - `[added]` Implement `unwrap_or_else` (#74)
 
 ## [0.7.0] - 2021-11-19
