@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [tool.mypy]
 python_version = "3.10"
 files = [
-  "result",
+  "src",
   "tests",
 ]
 # Exclude files with pattern matching syntax until Mypy supports it;
@@ -40,8 +40,10 @@ addopts = [
   "--cov=tests",
   "--cov-report=term",
   "--cov-report=xml",
+
+  # By default, ignore tests that only run on Python 3.10+
+  "--ignore=tests/test_pattern_matching.py",
 ]
 testpaths = [
-  "result",
   "tests",
 ]
