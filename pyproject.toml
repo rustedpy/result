@@ -40,6 +40,9 @@ addopts = [
   "--cov=tests",
   "--cov-report=term",
   "--cov-report=xml",
+
+  # By default, ignore tests that only run on Python 3.10+
+  "--ignore=tests/test_pattern_matching.py",
 ]
 testpaths = [
   "result",
