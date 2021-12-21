@@ -1,4 +1,6 @@
-from typing import Callable, Generic, TypeVar, Union, Any, cast, overload, NoReturn
+from __future__ import annotations
+
+from typing import Any, Callable, Generic, NoReturn, TypeVar, Union, cast, overload
 
 T = TypeVar("T", covariant=True)  # Success type
 E = TypeVar("E", covariant=True)  # Error type
@@ -99,7 +101,7 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
+    def map(self, op: Callable[[T], U]) -> Result[U, E]:
         """
         The contained result is `Ok`, so return `Ok` with original value mapped to
         a new value using the passed in function.
@@ -124,7 +126,7 @@ class Ok(Generic[T]):
         """
         return op(self._value)
 
-    def map_err(self, op: Callable[[E], F]) -> 'Result[T, F]':
+    def map_err(self, op: Callable[[E], F]) -> Result[T, F]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
@@ -216,7 +218,7 @@ class Err(Generic[E]):
         """
         return op(self._value)
 
-    def map(self, op: Callable[[T], U]) -> 'Result[U, E]':
+    def map(self, op: Callable[[T], U]) -> Result[U, E]:
         """
         Return `Err` with the same value
         """
@@ -238,7 +240,7 @@ class Err(Generic[E]):
         """
         return default_op()
 
-    def map_err(self, op: Callable[[E], F]) -> 'Result[T, F]':
+    def map_err(self, op: Callable[[E], F]) -> Result[T, F]:
         """
         The contained result is `Err`, so return `Err` with original error mapped to
         a new value using the passed in function.
