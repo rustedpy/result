@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from result import Err, Ok, OkErr, Result, UnwrapError
