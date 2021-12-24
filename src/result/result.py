@@ -1,11 +1,33 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Generic, NoReturn, TypeVar, Union, cast, overload
+import functools
+import inspect
+import sys
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    NoReturn,
+    Type,
+    TypeVar,
+    Union,
+    cast,
+    overload,
+)
+
+if sys.version_info[:2] >= (3, 10):
+    from typing import ParamSpec
+else:
+    from typing_extensions import ParamSpec
+
 
 T = TypeVar("T", covariant=True)  # Success type
 E = TypeVar("E", covariant=True)  # Error type
 U = TypeVar("U")
 F = TypeVar("F")
+P = ParamSpec("P")
+R = TypeVar("R")
+TBE = TypeVar("TBE", bound=BaseException)
 
 
 class Ok(Generic[T]):
@@ -287,3 +309,35 @@ class UnwrapError(Exception):
         Returns the original result.
         """
         return self._result
+
+
+def as_result(
+    *exceptions: Type[TBE],
+) -> Callable[[Callable[P, R]], Callable[P, Result[R, TBE]]]:
+    """
+    Make a decorator to turn a function into one that returns a ``Result``.
+
+    Regular return values are turned into ``Ok(return_value)``. Raised
+    exceptions of the specified exception type(s) are turned into ``Err(exc)``.
+    """
+    if not exceptions or not all(
+        inspect.isclass(exception) and issubclass(exception, BaseException)
+        for exception in exceptions
+    ):
+        raise TypeError("as_result() requires one or more exception types")
+
+    def decorator(f: Callable[P, R]) -> Callable[P, Result[R, TBE]]:
+        """
+        Decorator to turn a function into one that returns a ``Result``.
+        """
+
+        @functools.wraps(f)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> Result[R, TBE]:
+            try:
+                return Ok(f(*args, **kwargs))
+            except exceptions as exc:
+                return Err(exc)
+
+        return wrapper
+
+    return decorator
