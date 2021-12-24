@@ -13,6 +13,8 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[added]` `as_result` decorator to turn regular functions into
+  `Result` returning ones (#33, 71)
 - `[removed]` Drop support for Python 3.6 (#49)
 - `[added]` Implement `unwrap_or_else` (#74)
 

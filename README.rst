@@ -1,3 +1,4 @@
+======
 Result
 ======
 
@@ -90,7 +91,7 @@ be OK or not, without resorting to custom exceptions.
 
 
 API
----
+===
 
 Creating an instance:
 
@@ -199,7 +200,6 @@ returns the error value if ``Err``, otherwise it raises an ``UnwrapError``:
     >>>res2.unwrap_err()
     'nay'
 
-
 A custom error message can be displayed instead by using ``expect`` and ``expect_err``:
 
 .. sourcecode:: python
@@ -261,10 +261,51 @@ To save memory, both the ``Ok`` and ``Err`` classes are ‘slotted’,
 i.e. they define ``__slots__``. This means assigning arbitrary
 attributes to instances will raise ``AttributeError``.
 
+The ``as_result()`` decorator can be used to quickly turn ‘normal’
+functions into ``Result`` returning ones by specifying one or more
+exception types:
+
+.. sourcecode:: python
+
+    @as_result(ValueError, IndexError)
+    def f(value: int) -> int:
+        if value == 0:
+            raise ValueError  # becomes Err
+        elif value == 1:
+            raise IndexError  # becomes Err
+        elif value == 2:
+            raise KeyError  # raises Exception
+        else:
+            return value  # becomes Ok
+
+    res = f(0)  # Err[ValueError()]
+    res = f(1)  # Err[IndexError()]
+    res = f(2)  # raises KeyError
+    res = f(3)  # Ok[3]
+
+``Exception`` (or even ``BaseException``) can be specified to create a
+‘catch all’ ``Result`` return type. This is effectively the same as
+``try`` followed by ``except Exception``, which is not considered good
+practice in most scenarios, and hence this requires explicit opt-in.
+
+Since ``as_result`` is a regular decorator, it can be used to wrap
+existing functions (also from other libraries), albeit with a slightly
+unconventional syntax (without the usual ``@``):
+
+.. sourcecode:: python
+
+    import third_party
+
+    x = third_party.do_something(...)  # could raise; who knows?
+
+    safe_do_something = as_result(Exception)(third_party.do_something)
+
+    res = safe_do_something(...)  # Ok(...) or Err(...)
+    if isinstance(res, Ok):
+        print(res.value)
 
 FAQ
--------
-
+===
 
 - **Why do I get the "Cannot infer type argument" error with MyPy?**
 
@@ -274,9 +315,7 @@ Using ``if isinstance(res, Ok)`` instead of ``if res.is_ok()`` will help in some
 Otherwise using `one of these workarounds
 <https://github.com/python/mypy/issues/3889#issuecomment-325997911>`_ can help.
 
-
-
 License
--------
+=======
 
 MIT License
