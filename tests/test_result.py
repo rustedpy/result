@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Callable
+
 import pytest
 
 from result import Err, Ok, OkErr, Result, UnwrapError, as_result
@@ -171,6 +173,30 @@ def test_map_err() -> None:
     assert n.map_err(str.upper).err() == 'NAY'
 
 
+def test_and_then() -> None:
+    assert Ok(2).and_then(sq).and_then(sq).ok() == 16
+    assert Ok(2).and_then(sq).and_then(to_err).err() == 4
+    assert Ok(2).and_then(to_err).and_then(sq).err() == 2
+    assert Err(3).and_then(sq).and_then(sq).err() == 3
+
+    assert Ok(2).and_then(sq_lambda).and_then(sq_lambda).ok() == 16
+    assert Ok(2).and_then(sq_lambda).and_then(to_err_lambda).err() == 4
+    assert Ok(2).and_then(to_err_lambda).and_then(sq_lambda).err() == 2
+    assert Err(3).and_then(sq_lambda).and_then(sq_lambda).err() == 3
+
+
+def test_or_else() -> None:
+    assert Ok(2).or_else(sq).or_else(sq).ok() == 2
+    assert Ok(2).or_else(to_err).or_else(sq).ok() == 2
+    assert Err(3).or_else(sq).or_else(to_err).ok() == 9
+    assert Err(3).or_else(to_err).or_else(to_err).err() == 3
+
+    assert Ok(2).or_else(sq_lambda).or_else(sq).ok() == 2
+    assert Ok(2).or_else(to_err_lambda).or_else(sq_lambda).ok() == 2
+    assert Err(3).or_else(sq_lambda).or_else(to_err_lambda).ok() == 9
+    assert Err(3).or_else(to_err_lambda).or_else(to_err_lambda).err() == 3
+
+
 def test_isinstance_result_type() -> None:
     o = Ok('yay')
     n = Err('nay')
@@ -265,3 +291,16 @@ def test_as_result_type_checking() -> None:
     res: Result[int, ValueError]
     res = f(123)  # No mypy error here.
     assert res.ok() == 123
+
+
+def sq(i: int) -> Result[int, int]:
+    return Ok(i * i)
+
+
+def to_err(i: int) -> Result[int, int]:
+    return Err(i)
+
+
+# Lambda versions of the same functions, just for test/type coverage
+sq_lambda: Callable[[int], Result[int, int]] = lambda i: Ok(i * i)
+to_err_lambda: Callable[[int], Result[int, int]] = lambda i: Err(i)

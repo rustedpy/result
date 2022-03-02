@@ -16,7 +16,7 @@ Possible log types:
 - `[added]` `as_result` decorator to turn regular functions into
   `Result` returning ones (#33, 71)
 - `[removed]` Drop support for Python 3.6 (#49)
-- `[added]` Implement `unwrap_or_else` (#74)
+- `[added]` Implement `unwrap_or_else` (#74), `and_then` (#90) and `or_else` (#90)
 
 ## [0.7.0] - 2021-11-19
 
