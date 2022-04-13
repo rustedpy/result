@@ -9,3 +9,42 @@
 
 
     res1: Result[str, int] = Ok('hello')
+    reveal_type(res1) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.int]]"
+    if isinstance(res1, Ok):
+        ok: Ok[str] = res1
+        reveal_type(ok) # N: Revealed type is "result.result.Ok[builtins.str]"
+        okValue: str = res1.ok()
+        reveal_type(okValue) # N: Revealed type is "builtins.str"
+        mapped_to_float: float = res1.map_or(1.0, lambda s: len(s) * 1.5)
+        reveal_type(mapped_to_float) # N: Revealed type is "builtins.float"
+    else:
+        err: Err[int] = res1
+        reveal_type(err) # N: Revealed type is "result.result.Err[builtins.int]"
+        errValue: int = err.err()
+        reveal_type(errValue) # N: Revealed type is "builtins.int"
+        mapped_to_list: Optional[List[int]] = res1.map_err(lambda e: [e]).err()
+        reveal_type(mapped_to_list) # N: Revealed type is "Union[builtins.list[builtins.int], None]"
+
+    # Test constructor functions
+    res1 = Ok()
+    reveal_type(res1) # N: Revealed type is "result.result.Ok[builtins.str]"
+    res2 = Ok(42)
+    reveal_type(res2) # N: Revealed type is "result.result.Ok[builtins.int*]"
+    res3 = Err(1)
+    reveal_type(res3) # N: Revealed type is "result.result.Err[builtins.int*]"
+- case: covariance
+  disable_cache: false
+  main: |
+    from result import Result, Ok, Err
+
+    ok_int: Ok[int] = Ok(42)
+    ok_float: Ok[float] = ok_int
+    ok_int = ok_float  # E: Incompatible types in assignment (expression has type "Ok[float]", variable has type "Ok[int]")
+
+    err_type: Err[TypeError] = Err(TypeError("foo"))
+    err_exc: Err[Exception] = err_type
+    err_type = err_exc  # E: Incompatible types in assignment (expression has type "Err[Exception]", variable has type "Err[TypeError]")
+
+    result_int_type: Result[int, TypeError] = ok_int or err_type
+    result_float_exc: Result[float, Exception] = result_int_type
+    result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Union[Ok[float], Err[Exception]]", variable has type "Union[Ok[int], Err[TypeError]]")
