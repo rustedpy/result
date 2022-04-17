@@ -11,7 +11,7 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
-## [Unreleased]
+## [0.8.0] - 2022-04-17
 
 - `[added]` `as_result` decorator to turn regular functions into
   `Result` returning ones (#33, 71)
@@ -85,7 +85,8 @@ codebase.
 
  - Initial version
 
-[Unreleased]: https://github.com/rustedpy/result/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/rustedpy/result/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/rustedpy/result/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/rustedpy/result/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/rustedpy/result/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/rustedpy/result/compare/v0.4.1...v0.5.0
