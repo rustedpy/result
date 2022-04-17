@@ -1,40 +1,52 @@
 # Release process
 
-Signing key: https://dbrgn.ch/F2F3A5FA.asc
+1) Export the necessary environment variables:
+```
+# Examples: '0.8.0', '0.8.0rc1', '0.8.0b1'
+export VERSION={VERSION BEING RELEASED}
 
-Used variables:
+# See `gpg -k`
+export GPG={YOUR GPG}
+```
 
-    export VERSION={VERSION}
-    export GPG=F2F3A5FA
+2) Update version numbers:
+```
+vim -p result/__init__.py CHANGELOG.md
+```
 
-Update version numbers:
+3) Update diff link in CHANGELOG.md ([see example][diff-link-update-pr-example]):
+```
+vim CHANGELOG.md
+```
 
-    vim -p result/__init__.py CHANGELOG.md
+4) Do a signed commit and signed tag of the release:
+```
+git add result/__init__.py CHANGELOG.md
+git commit -S${GPG} -m "Release v${VERSION}"
+git tag -u ${GPG} -m "Release v${VERSION}" v${VERSION}
+```
 
-Update diff link in CHANGELOG.md ([see example][diff-link-update-pr-example]):
+5) Build source and binary distributions:
+```
+rm -rf ./dist
+python3 -m build
+```
 
-    vim CHANGELOG.md
+6) Sign files:
+```
+gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}.tar.gz
+gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}-py3-none-any.whl
+```
 
-Do a signed commit and signed tag of the release:
+7) Upload package to PyPI:
+```
+twine upload dist/result-${VERSION}*
+git push
+git push --tags
+```
 
-    git add result/__init__.py CHANGELOG.md
-    git commit -S${GPG} -m "Release v${VERSION}"
-    git tag -u ${GPG} -m "Release v${VERSION}" v${VERSION}
-
-Build source and binary distributions:
-
-    rm -rf ./dist
-    python3 -m build
-
-Sign files:
-
-    gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}.tar.gz
-    gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}-py3-none-any.whl
-
-Upload package to PyPI:
-
-    twine upload dist/result-${VERSION}*
-    git push
-    git push --tags
+8) Optionally check the new version is published correctly
+- https://github.com/rustedpy/result/tags
+- https://pypi.org/project/result/#history
 
 [diff-link-update-pr-example]: https://github.com/rustedpy/result/pull/77/files
