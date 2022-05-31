@@ -123,6 +123,12 @@ class Ok(Generic[T]):
         """
         return self._value
 
+    def unwrap_or_raise(self, e: Type[TBE]) -> T:
+        """
+        Return the value.
+        """
+        return self._value
+
     def map(self, op: Callable[[T], U]) -> Result[U, E]:
         """
         The contained result is `Ok`, so return `Ok` with original value mapped to
@@ -252,6 +258,12 @@ class Err(Generic[E]):
         ``op`` to the error value.
         """
         return op(self._value)
+
+    def unwrap_or_raise(self, e: Type[TBE]) -> NoReturn:
+        """
+        The contained result is ``Err``, so raise the exception with the value.
+        """
+        raise e(self._value)
 
     def map(self, op: Callable[[T], U]) -> Result[U, E]:
         """
