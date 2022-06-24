@@ -29,17 +29,17 @@
     res1 = Ok()
     reveal_type(res1) # N: Revealed type is "result.result.Ok[builtins.str]"
     res2 = Ok(42)
-    reveal_type(res2) # N: Revealed type is "result.result.Ok[builtins.int*]"
+    reveal_type(res2) # N: Revealed type is "result.result.Ok[builtins.int]"
     res3 = Err(1)
-    reveal_type(res3) # N: Revealed type is "result.result.Err[builtins.int*]"
+    reveal_type(res3) # N: Revealed type is "result.result.Err[builtins.int]"
 
     res4 = Ok(4)
     add1: Callable[[int], Result[int, str]] = lambda i: Ok(i + 1)
     toint: Callable[[str], Result[int, str]] = lambda i: Ok(int(i))
     res5 = res4.and_then(add1)
-    reveal_type(res5) # N: Revealed type is "Union[result.result.Ok[builtins.int*], result.result.Err[builtins.str*]]"
+    reveal_type(res5) # N: Revealed type is "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
     res6 = res4.or_else(toint)
-    reveal_type(res6) # N: Revealed type is "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str*]]"
+    reveal_type(res6) # N: Revealed type is "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
 
 - case: covariance
   disable_cache: false
