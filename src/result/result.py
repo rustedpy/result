@@ -86,6 +86,12 @@ class Ok(Generic[T]):
         Return the inner value.
         """
         return self._value
+    
+    def value_safe(self) -> T:
+        """
+        Return the inner value, method only exists on Ok types.
+        """
+        return self._value
 
     def expect(self, _message: str) -> T:
         """
