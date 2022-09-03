@@ -64,6 +64,21 @@ def test_err() -> None:
     assert res.value == ':('
 
 
+def test_err_value_is_exception() -> None:
+    res = Err(ValueError("Some Error"))
+    assert res.is_ok() is False
+    assert res.is_err() is True
+
+    with pytest.raises(UnwrapError):
+        res.unwrap()
+
+    try:
+        res.unwrap()
+    except UnwrapError as e:
+        cause = e.__cause__
+        assert isinstance(cause, ValueError)
+
+
 def test_ok_method() -> None:
     o = Ok('yay')
     n = Err('nay')
