@@ -232,7 +232,16 @@ class Err(Generic[E]):
         """
         Raises an `UnwrapError`.
         """
-        raise UnwrapError(self, "Called `Result.unwrap()` on an `Err` value")
+        if isinstance(self.value, Exception):
+            raise UnwrapError(
+                self,
+                f"Called `Result.unwrap()` on an `Err` value: {self.value.__repr__()}",
+            ) from self.value
+        else:
+            raise UnwrapError(
+                self,
+                f"Called `Result.unwrap()` on an `Err` value: {self.value.__repr__()}",
+            )
 
     def unwrap_err(self) -> E:
         """
