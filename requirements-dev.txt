@@ -1,7 +1,7 @@
 build~=0.7.0
+flake8
 twine~=3.6.0
 pytest==6.2.5
 pytest-cov>=2.8,<3
-pytest-flake8>=1,<2
 mypy>=0.910
 pytest-mypy-plugins>=1.9.1

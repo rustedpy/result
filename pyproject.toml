@@ -34,7 +34,6 @@ warn_unused_ignores = true
 
 [tool.pytest.ini_options]
 addopts = [
-  "--flake8",
   "--tb=short",
   "--cov=result",
   "--cov=tests",
