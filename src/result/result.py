@@ -20,6 +20,10 @@ if sys.version_info[:2] >= (3, 10):
 else:
     from typing_extensions import ParamSpec
 
+try:
+    from typing import TypeGuard
+except ImportError:
+    from typing_extensions import TypeGuard
 
 T = TypeVar("T", covariant=True)  # Success type
 E = TypeVar("E", covariant=True)  # Error type
@@ -367,3 +371,17 @@ def as_result(
         return wrapper
 
     return decorator
+
+
+def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
+    """
+    Return whether a ``Result`` is ``Ok``; usable as ``typing.TypeGuard``.
+    """
+    return isinstance(result, Ok)
+
+
+def is_err(result: Result[T, E]) -> TypeGuard[Err[E]]:
+    """
+    Return whether a ``Result`` is ``Err``; usable as ``typing.TypeGuard``.
+    """
+    return isinstance(result, Err)

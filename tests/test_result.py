@@ -3,8 +3,7 @@ from __future__ import annotations
 from typing import Callable
 
 import pytest
-
-from result import Err, Ok, OkErr, Result, UnwrapError, as_result
+from result import Err, Ok, OkErr, Result, UnwrapError, as_result, is_err, is_ok
 
 
 def test_ok_factories() -> None:
@@ -62,6 +61,29 @@ def test_err() -> None:
     assert res.is_ok() is False
     assert res.is_err() is True
     assert res.value == ':('
+
+
+def test_is_ok_is_err() -> None:
+    """The module-level check functions work."""
+    o: Result[str, int] = Ok('yay')
+    n: Result[str, int] = Err(100)
+
+    assert is_ok(o)
+    assert is_err(n)
+    assert not is_err(o)
+    assert not is_ok(n)
+
+
+def test_is_ok_is_err_type_guard() -> None:
+    """The module-level type guard shorthands work."""
+    o: Result[str, int] = Ok('yay')
+    n: Result[str, int] = Err(100)
+
+    # Type checkers supporting typing.TypeGuard should accept the code below:
+    if is_ok(o):
+        o.value + ""  # works only for str
+    if is_err(n):
+        n.value + 0  # works only for int
 
 
 def test_ok_method() -> None:

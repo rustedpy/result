@@ -11,6 +11,10 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
+## [0.x.y] – unreleased
+
+- `[added]` `is_ok()` and `is_err()` helpers that can be used as `typing.TypeGuard`
+
 ## [0.8.0] - 2022-04-17
 
 - `[added]` `as_result` decorator to turn regular functions into
