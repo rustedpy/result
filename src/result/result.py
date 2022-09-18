@@ -3,7 +3,9 @@ from __future__ import annotations
 import functools
 import inspect
 import sys
+from warnings import warn
 from typing import (
+    Annotated,
     Any,
     Callable,
     Generic,
@@ -28,6 +30,9 @@ F = TypeVar("F")
 P = ParamSpec("P")
 R = TypeVar("R")
 TBE = TypeVar("TBE", bound=BaseException)
+
+# https://github.com/python/typing/issues/609#issuecomment-503952387
+DeprecatedE = Annotated[E, "deprecated"]
 
 
 class Ok(Generic[T]):
@@ -84,12 +89,6 @@ class Ok(Generic[T]):
     def value(self) -> T:
         """
         Return the inner value.
-        """
-        return self._value
-    
-    def value_safe(self) -> T:
-        """
-        Return the inner value, method only exists on Ok types.
         """
         return self._value
 
@@ -216,9 +215,22 @@ class Err(Generic[E]):
         return self._value
 
     @property
-    def value(self) -> E:
+    def value(self) -> DeprecatedE:
         """
+        @deprecated
         Return the inner value.
+        """
+        warn(
+            "Accessing `.value` on an Err type is deprecated, please use `.err_value`",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._value
+
+    @property
+    def err_value(self) -> E:
+        """
+        Return the error value.
         """
         return self._value
 

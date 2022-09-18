@@ -11,7 +11,6 @@ def test_ok_factories() -> None:
     instance = Ok(1)
     assert instance._value == 1
     assert instance.is_ok() is True
-    assert instance.value_safe() == 1
 
 
 def test_err_factories() -> None:
@@ -63,8 +62,6 @@ def test_err() -> None:
     assert res.is_ok() is False
     assert res.is_err() is True
     assert res.value == ':('
-    with pytest.raises(AttributeError):
-        assert res.value_safe()  # type: ignore
 
 
 def test_ok_method() -> None:
