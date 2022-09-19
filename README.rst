@@ -13,6 +13,25 @@ Result
 A simple Result type for Python 3 `inspired by Rust
 <https://doc.rust-lang.org/std/result/>`__, fully type annotated.
 
+Installation
+============
+
+Latest release:
+
+.. sourcecode:: sh
+
+   $ pip install result
+
+
+Latest GitHub ``master`` branch version:
+
+.. sourcecode:: sh
+
+   $ pip install git+https://github.com/rustedpy/result
+
+Summary
+=======
+
 The idea is that a result value can be either ``Ok(value)`` or ``Err(error)``,
 with a way to differentiate between the two. ``Ok`` and ``Err`` are both classes
 encapsulating an arbitrary value. ``Result[T, E]`` is a generic type alias for
