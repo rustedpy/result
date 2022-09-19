@@ -235,8 +235,8 @@ A default value can be returned instead by using ``unwrap_or`` or ``unwrap_or_el
     >>> res2.unwrap_or_else(str.upper)
     'NAY'
 
-The unwrap method will raised a UnwrapError. A custom exception can be raised by
-using the unwrap_or_raise method in stead:
+The ``unwrap`` method will raised an ``UnwrapError``. A custom exception can be
+raised by using the ``unwrap_or_raise`` method instead:
 
 .. sourcecode:: python
 
