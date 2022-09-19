@@ -130,6 +130,15 @@ def test_unwrap_or_else() -> None:
     assert n.unwrap_or_else(str.upper) == 'NAY'
 
 
+def test_unwrap_or_raise() -> None:
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.unwrap_or_raise(ValueError) == 'yay'
+    with pytest.raises(ValueError) as exc_info:
+        n.unwrap_or_raise(ValueError)
+    assert exc_info.value.args == ('nay',)
+
+
 def test_map() -> None:
     o = Ok('yay')
     n = Err('nay')

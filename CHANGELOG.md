@@ -11,6 +11,10 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
+## [Unreleased]
+
+- `[added]` Implement `unwrap_or_raise` (#95)
+
 ## [0.8.0] - 2022-04-17
 
 - `[added]` `as_result` decorator to turn regular functions into

@@ -235,6 +235,18 @@ A default value can be returned instead by using ``unwrap_or`` or ``unwrap_or_el
     >>> res2.unwrap_or_else(str.upper)
     'NAY'
 
+The unwrap method will raised a UnwrapError. A custom exception can be raised by
+using the unwrap_or_raise method in stead:
+
+.. sourcecode:: python
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res1.unwrap_or_raise(ValueError)
+    'yay'
+    >>> res2.unwrap_or_raise(ValueError)
+    ValueError: nay
+
 Values and errors can be mapped using ``map``, ``map_or``, ``map_or_else`` and
 ``map_err``:
 
