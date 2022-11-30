@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         python:
+          - '3.11'
           - '3.10'
           - '3.9'
           - '3.8'
@@ -47,7 +48,7 @@ jobs:
       - name: Run tests
         run: pytest --ignore=tests/test_pattern_matching.py
       - name: Run tests (pattern matching)
-        if: matrix.python == '3.10'
+        if: matrix.python == '3.10' || matrix.python == '3.11'
         run: pytest tests/test_pattern_matching.py
 
       # Linters

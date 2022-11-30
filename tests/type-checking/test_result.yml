@@ -48,12 +48,12 @@
 
     ok_int: Ok[int] = Ok(42)
     ok_float: Ok[float] = ok_int
-    ok_int = ok_float  # E: Incompatible types in assignment (expression has type "Ok[float]", variable has type "Ok[int]")
+    ok_int = ok_float  # E: Incompatible types in assignment (expression has type "Ok[float]", variable has type "Ok[int]")  [assignment]
 
     err_type: Err[TypeError] = Err(TypeError("foo"))
     err_exc: Err[Exception] = err_type
-    err_type = err_exc  # E: Incompatible types in assignment (expression has type "Err[Exception]", variable has type "Err[TypeError]")
+    err_type = err_exc  # E: Incompatible types in assignment (expression has type "Err[Exception]", variable has type "Err[TypeError]")  [assignment]
 
     result_int_type: Result[int, TypeError] = ok_int or err_type
     result_float_exc: Result[float, Exception] = result_int_type
-    result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Union[Ok[float], Err[Exception]]", variable has type "Union[Ok[int], Err[TypeError]]")
+    result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Union[Ok[float], Err[Exception]]", variable has type "Union[Ok[int], Err[TypeError]]")  [assignment]

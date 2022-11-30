@@ -14,6 +14,7 @@ Possible log types:
 ## [Unreleased]
 
 - `[added]` Implement `unwrap_or_raise` (#95)
+- `[added]` Add support for Python 3.11 (#107)
 
 ## [0.8.0] - 2022-04-17
 
