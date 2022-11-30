@@ -15,6 +15,9 @@ Possible log types:
 
 - `[added]` Implement `unwrap_or_raise` (#95)
 - `[added]` Add support for Python 3.11 (#107)
+- `[changed]` Narrowing of return types on methods of `Err` and `Ok`. (#106)
+- `[fixed]` Fix failing type inference for `Result.map` and similar method
+  unions (#106)
 
 ## [0.8.0] - 2022-04-17
 

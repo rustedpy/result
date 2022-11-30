@@ -39,7 +39,7 @@
     res5 = res4.and_then(add1)
     reveal_type(res5) # N: Revealed type is "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
     res6 = res4.or_else(toint)
-    reveal_type(res6) # N: Revealed type is "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
+    reveal_type(res6) # N: Revealed type is "result.result.Ok[builtins.int]"
 
 - case: covariance
   disable_cache: false
@@ -57,3 +57,29 @@
     result_int_type: Result[int, TypeError] = ok_int or err_type
     result_float_exc: Result[float, Exception] = result_int_type
     result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Union[Ok[float], Err[Exception]]", variable has type "Union[Ok[int], Err[TypeError]]")  [assignment]
+
+- case: map_ok_err
+  disable_cache: false
+  main: |
+    from result import Err, Ok
+
+    o = Ok("42")
+    reveal_type(o.map(int))  # N: Revealed type is "result.result.Ok[builtins.int]"
+    reveal_type(o.map_err(int))  # N: Revealed type is "result.result.Ok[builtins.str]"
+
+    e = Err("42")
+    reveal_type(e.map(int))  # N: Revealed type is "result.result.Err[builtins.str]"
+    reveal_type(e.map_err(int))  # N: Revealed type is "result.result.Err[builtins.int]"
+
+- case: map_result
+  disable_cache: false
+  main: |
+    from result import Result, Ok
+
+    greeting_res: Result[str, ValueError] = Ok("Hello")
+
+    personalized_greeting_res = greeting_res.map(lambda g: f"{g}, John")
+    reveal_type(personalized_greeting_res) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.ValueError]]"
+
+    personalized_greeting = personalized_greeting_res.ok()
+    reveal_type(personalized_greeting) # N: Revealed type is "Union[builtins.str, None]"
