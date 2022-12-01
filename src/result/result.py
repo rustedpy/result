@@ -11,14 +11,13 @@ from typing import (
     Type,
     TypeVar,
     Union,
-    cast,
     overload,
 )
 
 if sys.version_info[:2] >= (3, 10):
-    from typing import ParamSpec
+    from typing import Final, Literal, ParamSpec, TypeAlias
 else:
-    from typing_extensions import ParamSpec
+    from typing_extensions import Final, Literal, ParamSpec, TypeAlias
 
 
 T = TypeVar("T", covariant=True)  # Success type
@@ -62,10 +61,10 @@ class Ok(Generic[T]):
     def __hash__(self) -> int:
         return hash((True, self._value))
 
-    def is_ok(self) -> bool:
+    def is_ok(self) -> Literal[True]:
         return True
 
-    def is_err(self) -> bool:
+    def is_err(self) -> Literal[False]:
         return False
 
     def ok(self) -> T:
@@ -117,48 +116,44 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+    def unwrap_or_else(self, op: object) -> T:
         """
         Return the value.
         """
         return self._value
 
-    def unwrap_or_raise(self, e: Type[TBE]) -> T:
+    def unwrap_or_raise(self, e: object) -> T:
         """
         Return the value.
         """
         return self._value
 
-    def map(self, op: Callable[[T], U]) -> Result[U, E]:
+    def map(self, op: Callable[[T], U]) -> Ok[U]:
         """
         The contained result is `Ok`, so return `Ok` with original value mapped to
         a new value using the passed in function.
         """
         return Ok(op(self._value))
 
-    def map_or(self, default: U, op: Callable[[T], U]) -> U:
+    def map_or(self, default: object, op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return the original value mapped to a new
         value using the passed in function.
         """
         return op(self._value)
 
-    def map_or_else(
-        self,
-        default_op: Callable[[], U],
-        op: Callable[[T], U]
-    ) -> U:
+    def map_or_else(self, default_op: object, op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return original value mapped to
         a new value using the passed in `op` function.
         """
         return op(self._value)
 
-    def map_err(self, op: Callable[[E], F]) -> Result[T, F]:
+    def map_err(self, op: object) -> Ok[T]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
-        return cast(Result[T, F], self)
+        return self
 
     def and_then(self, op: Callable[[T], Result[U, E]]) -> Result[U, E]:
         """
@@ -167,11 +162,11 @@ class Ok(Generic[T]):
         """
         return op(self._value)
 
-    def or_else(self, op: Callable[[E], Result[T, F]]) -> Result[T, F]:
+    def or_else(self, op: object) -> Ok[T]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
-        return cast(Result[T, F], self)
+        return self
 
 
 class Err(Generic[E]):
@@ -197,10 +192,10 @@ class Err(Generic[E]):
     def __hash__(self) -> int:
         return hash((False, self._value))
 
-    def is_ok(self) -> bool:
+    def is_ok(self) -> Literal[False]:
         return False
 
-    def is_err(self) -> bool:
+    def is_err(self) -> Literal[True]:
         return True
 
     def ok(self) -> None:
@@ -265,40 +260,36 @@ class Err(Generic[E]):
         """
         raise e(self._value)
 
-    def map(self, op: Callable[[T], U]) -> Result[U, E]:
+    def map(self, op: object) -> Err[E]:
         """
         Return `Err` with the same value
         """
-        return cast(Result[U, E], self)
+        return self
 
-    def map_or(self, default: U, op: Callable[[T], U]) -> U:
+    def map_or(self, default: U, op: object) -> U:
         """
         Return the default value
         """
         return default
 
-    def map_or_else(
-        self,
-        default_op: Callable[[], U],
-        op: Callable[[T], U]
-    ) -> U:
+    def map_or_else(self, default_op: Callable[[], U], op: object) -> U:
         """
         Return the result of the default operation
         """
         return default_op()
 
-    def map_err(self, op: Callable[[E], F]) -> Result[T, F]:
+    def map_err(self, op: Callable[[E], F]) -> Err[F]:
         """
         The contained result is `Err`, so return `Err` with original error mapped to
         a new value using the passed in function.
         """
         return Err(op(self._value))
 
-    def and_then(self, op: Callable[[T], Result[U, E]]) -> Result[U, E]:
+    def and_then(self, op: object) -> Err[E]:
         """
         The contained result is `Err`, so return `Err` with the original value
         """
-        return cast(Result[U, E], self)
+        return self
 
     def or_else(self, op: Callable[[E], Result[T, F]]) -> Result[T, F]:
         """
@@ -315,13 +306,13 @@ A simple `Result` type inspired by Rust.
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html)
 have been implemented, only the ones that make sense in the Python context.
 """
-Result = Union[Ok[T], Err[E]]
+Result: TypeAlias = Union[Ok[T], Err[E]]
 
 """
 A type to use in `isinstance` checks.
 This is purely for convenience sake, as you could also just write `isinstance(res, (Ok, Err))
 """
-OkErr = (Ok, Err)
+OkErr: Final = (Ok, Err)
 
 
 class UnwrapError(Exception):
@@ -335,9 +326,9 @@ class UnwrapError(Exception):
     not both.
     """
 
-    _result: Result[Any, Any]
+    _result: Result[object, object]
 
-    def __init__(self, result: Result[Any, Any], message: str) -> None:
+    def __init__(self, result: Result[object, object], message: str) -> None:
         self._result = result
         super().__init__(message)
 
