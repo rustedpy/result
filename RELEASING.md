@@ -9,7 +9,7 @@ export VERSION={VERSION BEING RELEASED}
 export GPG={YOUR GPG}
 ```
 
-2) Update version numbers:
+2) Update version numbers to match the version being released:
 ```
 vim -p src/result/__init__.py CHANGELOG.md
 ```
@@ -48,5 +48,10 @@ git push --tags
 8) Optionally check the new version is published correctly
 - https://github.com/rustedpy/result/tags
 - https://pypi.org/project/result/#history
+
+2) Update version number to next dev version (for example after `v0.9.0` this should be set to `0.10.0.dev0`:
+```
+vim -p src/result/__init__.py
+```
 
 [diff-link-update-pr-example]: https://github.com/rustedpy/result/pull/77/files
