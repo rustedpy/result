@@ -11,7 +11,7 @@ export GPG={YOUR GPG}
 
 2) Update version numbers:
 ```
-vim -p result/__init__.py CHANGELOG.md
+vim -p src/result/__init__.py CHANGELOG.md
 ```
 
 3) Update diff link in CHANGELOG.md ([see example][diff-link-update-pr-example]):
