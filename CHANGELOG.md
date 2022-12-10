@@ -11,7 +11,7 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
-## [Unreleased]
+## [0.9.0] - 2022-12-09
 
 - `[added]` Implement `unwrap_or_raise` (#95)
 - `[added]` Add support for Python 3.11 (#107)
