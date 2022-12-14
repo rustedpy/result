@@ -302,7 +302,7 @@ def test_as_result_type_checking() -> None:
     assert res.ok() == 123
 
 
-def test_do_ok():
+def test_do_ok() -> None:
     assert do(first + second for first in Ok(3) for second in Ok(2)) == Ok(5)
 
 
