@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-from result import Err, Ok, OkErr, Result, UnwrapError, as_result
+from result import Err, Ok, OkErr, Result, UnwrapError, as_result, do
 
 
 def test_ok_factories() -> None:
@@ -300,6 +300,14 @@ def test_as_result_type_checking() -> None:
     res: Result[int, ValueError]
     res = f(123)  # No mypy error here.
     assert res.ok() == 123
+
+
+def test_do_ok():
+    assert do(first + second for first in Ok(3) for second in Ok(2)) == Ok(5)
+
+
+def test_do_err() -> None:
+    assert do(first + second for first in Err('a') for second in Ok(3)) == Err('a')
 
 
 def sq(i: int) -> Result[int, int]:

@@ -7,6 +7,7 @@ from typing import (
     Any,
     Callable,
     Generic,
+    Iterator,
     NoReturn,
     Type,
     TypeVar,
@@ -60,6 +61,9 @@ class Ok(Generic[T]):
 
     def __hash__(self) -> int:
         return hash((True, self._value))
+
+    def __iter__(self) -> Iterator[T]:
+        yield self._value
 
     def is_ok(self) -> Literal[True]:
         return True
@@ -191,6 +195,9 @@ class Err(Generic[E]):
 
     def __hash__(self) -> int:
         return hash((False, self._value))
+
+    def __iter__(self) -> Iterator[NoReturn]:
+        yield self.unwrap()
 
     def is_ok(self) -> Literal[False]:
         return False
@@ -370,3 +377,10 @@ def as_result(
         return wrapper
 
     return decorator
+
+
+def do(generator: Iterator[T]) -> Result[T, E]:
+    try:
+        return Ok(next(generator))
+    except UnwrapError as e:
+        return e.result
