@@ -306,8 +306,12 @@ def test_do_ok() -> None:
     assert do(first + second for first in Ok(3) for second in Ok(2)) == Ok(5)
 
 
+def get_first_err() -> Result[int, str]:
+    return Err('a')
+
+
 def test_do_err() -> None:
-    assert do(first + second for first in Err('a') for second in Ok(3)) == Err('a')
+    assert do(first + second for first in get_first_err() for second in Ok(3)) == Err('a')
 
 
 def sq(i: int) -> Result[int, int]:
