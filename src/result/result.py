@@ -12,7 +12,7 @@ from typing import (
     Type,
     TypeVar,
     Union,
-    overload,
+    overload, AsyncGenerator,
 )
 
 if sys.version_info[:2] >= (3, 10):
@@ -382,5 +382,11 @@ def as_result(
 def do(generator: Iterator[T]) -> Result[T, E]:
     try:
         return Ok(next(generator))
+    except UnwrapError as e:
+        return e.result
+
+async def do_async(generator: AsyncGenerator[T, None]) -> Result[T, E]:
+    try:
+        return Ok(await anext(generator))
     except UnwrapError as e:
         return e.result
