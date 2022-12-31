@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-from result import Err, Ok, OkErr, Result, UnwrapError, as_result, do
+from result import Err, Ok, OkErr, Result, UnwrapError, as_result, do, do_async
 
 
 def test_ok_factories() -> None:
@@ -313,6 +313,74 @@ def get_first_err() -> Result[int, str]:
 def test_do_err() -> None:
     assert do(first + second for first in get_first_err() for second in Ok(3)) == Err('a')
 
+
+async def get_async_number(i: int) -> Result[int, str]:
+    return Ok(i)
+
+
+async def get_async_number_err(i: int) -> Result[int, str]:
+    return Err('a')
+
+
+@pytest.mark.asyncio
+async def test_do_async_ok() -> None:
+    assert await do_async(
+        first + second
+        for first in await get_async_number(1)
+        for second in await get_async_number(2)
+    ) == Ok(3)
+
+
+@pytest.mark.asyncio
+async def test_do_async_err() -> None:
+    assert await do_async(
+        first + second
+        for first in await get_async_number(1)
+        for second in await get_async_number_err(2)
+    ) == Err('a')
+
+
+@pytest.mark.asyncio
+async def test_do_async_with_sync_generator_ok() -> None:
+    assert await do_async(
+        first + second
+        for first in Ok(1)
+        for second in Ok(2)
+    ) == Ok(3)
+
+
+@pytest.mark.asyncio
+async def test_do_async_with_sync_generator_err() -> None:
+    assert await do_async(
+        first + second
+        for first in get_first_err()
+        for second in Ok(2)
+    ) == Err('a')
+
+@pytest.mark.asyncio
+async def test_do_async_with_mix_sync_generator_await_ok() -> None:
+    assert await do_async(
+        first + second
+        for first in await get_async_number(1)
+        for second in Ok(2)
+    ) == Ok(3)
+
+
+@pytest.mark.asyncio
+async def test_do_async_with_mix_sync_generator_await_err() -> None:
+    assert await do_async(
+        first + second
+        for first in await get_async_number_err(1)
+        for second in Ok(2)
+    ) == Err('a')
+
+@pytest.mark.asyncio
+async def test_do_async_with_mix_sync_generator_err() -> None:
+    assert await do_async(
+        first + second
+        for first in get_first_err()
+        for second in await get_async_number(2)
+    ) == Err('a')
 
 def sq(i: int) -> Result[int, int]:
     return Ok(i * i)

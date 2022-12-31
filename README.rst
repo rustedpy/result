@@ -335,6 +335,41 @@ unconventional syntax (without the usual ``@``):
     if isinstance(res, Ok):
         print(res.value)
 
+In case of multiple Result value to unwrap, you can use the ``do``.
+
+.. sourcecode:: python
+
+    import pandas as pd
+    def get_dataframe_from_database() -> Result[pd.DataFrame, str]:
+        ...
+    def get_dataframe_from_file() -> Result[pd.DataFrame, str]:
+        ...
+
+    merged_result: Result[pd.DataFrame, str] = do(
+        database_df.merge(file_df)
+        for database_df in get_dataframe_from_database()
+        for file_df in get_dataframe_from_file()
+    )
+
+
+When working with the Async IO, you can use the ``do_async``
+to keep the source code clean without using special Result type.
+
+.. sourcecode:: python
+
+    def get_machine_config() -> Result[MachineConfig, str]:
+        ...
+    async def watch_machine_directory(machine_config: MachineConfig) -> Result[WatchingResult, str]:
+        ...
+
+    async def main() -> None:
+        await do_async(
+            result
+            for machine_config in get_machine_config()
+            for result in await watch_machine_directory(machine_config)
+        )
+
+
 FAQ
 ===
 
