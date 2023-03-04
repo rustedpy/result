@@ -2,9 +2,9 @@
 Result
 ======
 
-.. image:: https://img.shields.io/github/workflow/status/rustedpy/result/CI/master
+.. image:: https://img.shields.io/github/actions/workflow/status/rustedpy/result/ci.yml?branch=master
     :alt: GitHub Workflow Status (branch)
-    :target: https://github.com/rustedpy/result/actions?query=workflow%3ACI+branch%3Amaster
+    :target: https://github.com/rustedpy/result/actions/workflows/ci.yml?query=branch%3Amaster
 
 .. image:: https://codecov.io/gh/rustedpy/result/branch/master/graph/badge.svg
     :alt: Coverage
