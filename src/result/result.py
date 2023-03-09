@@ -60,6 +60,9 @@ class Ok(Generic[T]):
 
     def __hash__(self) -> int:
         return hash((True, self._value))
+    
+    def __bool__(self) -> bool:
+        return True
 
     def is_ok(self) -> Literal[True]:
         return True
@@ -191,6 +194,9 @@ class Err(Generic[E]):
 
     def __hash__(self) -> int:
         return hash((False, self._value))
+
+    def __bool__(self) -> bool:
+        return False
 
     def is_ok(self) -> Literal[False]:
         return False
@@ -338,6 +344,9 @@ class UnwrapError(Exception):
         Returns the original result.
         """
         return self._result
+
+    def __bool__(self) -> bool:
+        return False
 
 
 def as_result(

@@ -302,6 +302,21 @@ def test_as_result_type_checking() -> None:
     assert res.ok() == 123
 
 
+def test_bool() -> None:
+    """
+    Ensure that types coerce to bool correctly
+    """
+    num = Ok(3)
+    errnum = Err(2)
+
+    assert bool(num) == True
+    assert bool(errnum) == False
+
+    with pytest.raises(UnwrapError) as exc_info:
+        errnum.expect("failure")
+    assert bool(exc_info.value) == False
+
+
 def sq(i: int) -> Result[int, int]:
     return Ok(i * i)
 
