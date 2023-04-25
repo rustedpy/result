@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-from result import Err, Ok, OkErr, Result, UnwrapError, as_result
+from result import Err, Ok, OkErr, Result, UnwrapError, as_async_result, as_result
 
 
 def test_ok_factories() -> None:
@@ -300,6 +300,29 @@ def test_as_result_type_checking() -> None:
     res: Result[int, ValueError]
     res = f(123)  # No mypy error here.
     assert res.ok() == 123
+
+
+@pytest.mark.asyncio
+async def test_as_async_result() -> None:
+    """
+    ``as_async_result()`` turns functions into ones that return a ``Result``.
+    """
+
+    @as_async_result(ValueError)
+    async def good(value: int) -> int:
+        return value
+
+    @as_async_result(IndexError, ValueError)
+    async def bad(value: int) -> int:
+        raise ValueError
+
+    good_result = await good(123)
+    bad_result = await bad(123)
+
+    assert isinstance(good_result, Ok)
+    assert good_result.unwrap() == 123
+    assert isinstance(bad_result, Err)
+    assert isinstance(bad_result.unwrap_err(), ValueError)
 
 
 def sq(i: int) -> Result[int, int]:

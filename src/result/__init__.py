@@ -1,4 +1,4 @@
-from .result import Err, Ok, OkErr, Result, UnwrapError, as_result
+from .result import Err, Ok, OkErr, Result, UnwrapError, as_async_result, as_result
 
 __all__ = [
     "Err",
@@ -6,6 +6,7 @@ __all__ = [
     "OkErr",
     "Result",
     "UnwrapError",
+    "as_async_result",
     "as_result",
 ]
 __version__ = "0.10.0.dev0"
