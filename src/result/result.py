@@ -14,7 +14,7 @@ from typing import (
     overload,
 )
 
-if sys.version_info[:2] >= (3, 10):
+if sys.version_info >= (3, 10):
     from typing import Final, Literal, ParamSpec, TypeAlias
 else:
     from typing_extensions import Final, Literal, ParamSpec, TypeAlias
