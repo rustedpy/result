@@ -377,7 +377,7 @@ def as_async_result(
     *exceptions: Type[TBE],
 ) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[Result[R, TBE]]]]:
     """
-    Make a decorator to turn a async function into one that returns a ``Result``.
+    Make a decorator to turn an async function into one that returns a ``Result``.
     Regular return values are turned into ``Ok(return_value)``. Raised
     exceptions of the specified exception type(s) are turned into ``Err(exc)``.
     """
