@@ -11,6 +11,13 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
+
+## [Unreleased]
+
+- `[fixed]` Make python version check PEP 484 compliant (#118)
+- `[added]` `as_async_result` decorator to turn regular async functions into
+  `Result` returning ones (#116)
+
 ## [0.9.0] - 2022-12-09
 
 - `[added]` Implement `unwrap_or_raise` (#95)
