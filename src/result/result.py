@@ -404,3 +404,26 @@ def as_async_result(
         return async_wrapper
 
     return decorator
+
+
+def return_on_unwrap_error(
+    func: Callable[..., Result[Any, Any]]
+) -> Callable[..., Result[Any, Any]]:
+    """
+    Make a decorator that returns the inner ``Err`` value on ``UnwrapError``.
+    This is ment to be used like the ? in Rust.
+    Example:
+    >>> @ReturnOnUnwrapError
+        def test() -> Result[bool, str]:
+            value = Err("test").unwrap() #error so it returns the original Err
+
+    return Ok(True)
+    """
+
+    def wrapper(*args, **kwargs) -> Result[Any, Any]:  # type: ignore
+        try:
+            return func(*args, **kwargs)
+        except UnwrapError as e:
+            return e.result
+
+    return wrapper
