@@ -299,9 +299,9 @@ It's similar to the ``?`` operator in Rust.
 
 .. sourcecode:: python
     @return_on_unwrap_error
-        def test_error_case() -> Result[int, str]:
-            value = Ok(123).unwrap()
-            no_value = Err("error").unwrap() # returns "error"
+    def test_error_case() -> Result[int, str]:
+        value = Ok(123).unwrap()
+        no_value = Err("error").unwrap() # returns "error"
 
 
 The ``as_result()`` decorator can be used to quickly turn ‘normal’
