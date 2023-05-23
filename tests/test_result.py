@@ -312,6 +312,10 @@ def test_as_result_type_checking() -> None:
 
 
 def test_return_on_unwrap_decorator() -> None:
+    """
+    Check that ``return_on_unwrap_error`` returns the internal Err type on unwrap.
+    """
+
     @return_on_unwrap_error
     def test_error_case() -> Result[int, str]:
         value = Ok(123).unwrap()

@@ -292,6 +292,18 @@ To save memory, both the ``Ok`` and ``Err`` classes are ‘slotted’,
 i.e. they define ``__slots__``. This means assigning arbitrary
 attributes to instances will raise ``AttributeError``.
 
+The ``return_on_unwrap_error()`` decorator can be used to return
+the original error on ``unwrap``.
+This is useful when you want to either get a value or return the error value.
+It's similar to the ``?`` operator in Rust.
+
+.. sourcecode:: python
+    @return_on_unwrap_error
+        def test_error_case() -> Result[int, str]:
+            value = Ok(123).unwrap()
+            no_value = Err("error").unwrap() # returns "error"
+
+
 The ``as_result()`` decorator can be used to quickly turn ‘normal’
 functions into ``Result`` returning ones by specifying one or more
 exception types:

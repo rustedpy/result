@@ -411,9 +411,9 @@ def return_on_unwrap_error(
 ) -> Callable[..., Result[Any, Any]]:
     """
     Make a decorator that returns the inner ``Err`` value on ``UnwrapError``.
-    This is ment to be used like the ? in Rust.
+    There isn't a way to have the ? operator like in Rust, but this provides similar semantics.
     Example:
-    >>> @ReturnOnUnwrapError
+    >>> @return_on_unwrap_error
         def test() -> Result[bool, str]:
             value = Err("test").unwrap() #error so it returns the original Err
 
