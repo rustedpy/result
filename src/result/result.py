@@ -90,7 +90,8 @@ class Ok(Generic[T]):
         removed in a future version.
         """
         warn(
-            "Accessing `.value` on Result type is deprecated, please use `.ok_value` or '.err_value' instead",
+            "Accessing `.value` on Result type is deprecated, please use " +
+            "`.ok_value` or '.err_value' instead",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -236,7 +237,8 @@ class Err(Generic[E]):
         removed in a future version.
         """
         warn(
-            "Accessing `.value` on Result type is deprecated, please use `.ok_value` or '.err_value' instead",
+            "Accessing `.value` on Result type is deprecated, please use " +
+            "`.ok_value` or '.err_value' instead",
             DeprecationWarning,
             stacklevel=2,
         )
