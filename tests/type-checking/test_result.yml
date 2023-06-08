@@ -26,8 +26,6 @@
         reveal_type(mapped_to_list) # N: Revealed type is "Union[builtins.list[builtins.int], None]"
 
     # Test constructor functions
-    res1 = Ok()
-    reveal_type(res1) # N: Revealed type is "result.result.Ok[builtins.str]"
     res2 = Ok(42)
     reveal_type(res2) # N: Revealed type is "result.result.Ok[builtins.int]"
     res3 = Err(1)

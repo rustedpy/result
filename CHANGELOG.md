@@ -12,6 +12,10 @@ Possible log types:
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
 
+## Unreleased
+
+- `[changed]` `Ok` now requires an explicit value during instantiation
+
 ## [0.10.0] - 2023-04-29
 
 - `[fixed]` Make python version check PEP 484 compliant (#118)

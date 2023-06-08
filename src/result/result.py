@@ -12,7 +12,6 @@ from typing import (
     Type,
     TypeVar,
     Union,
-    overload,
 )
 
 if sys.version_info >= (3, 10):
@@ -39,15 +38,7 @@ class Ok(Generic[T]):
     __match_args__ = ("value",)
     __slots__ = ("_value",)
 
-    @overload
-    def __init__(self) -> None:
-        ...  # pragma: no cover
-
-    @overload
     def __init__(self, value: T) -> None:
-        ...  # pragma: no cover
-
-    def __init__(self, value: Any = True) -> None:
         self._value = value
 
     def __repr__(self) -> str:
