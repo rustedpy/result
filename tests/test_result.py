@@ -50,6 +50,16 @@ def test_repr() -> None:
     assert n == eval(repr(n))
 
 
+def test_ok_value() -> None:
+    res = Ok('haha')
+    assert res.ok_value == 'haha'
+
+
+def test_err_value() -> None:
+    res = Err('haha')
+    assert res.err_value == 'haha'
+
+
 def test_ok() -> None:
     res = Ok('haha')
     assert res.is_ok() is True
