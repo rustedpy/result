@@ -12,6 +12,11 @@ Possible log types:
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
 
+## Unreleased
+
+- `[deprecated]` `value` property to access the inner value (#37, #121)
+- `[added]` `ok_value` and `err_value` to access the inner value more safely (#37, #121)
+
 ## [0.10.0] - 2023-04-29
 
 - `[fixed]` Make python version check PEP 484 compliant (#118)
