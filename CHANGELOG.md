@@ -14,6 +14,9 @@ Possible log types:
 
 ## Unreleased
 
+- `[changed]` `Ok` now requires an explicit value during instantiation. Please
+  check out [MIGRATING.md], it will guide you through the necessary change in
+  your codebase.
 - `[deprecated]` `value` property to access the inner value (#37, #121)
 - `[added]` `ok_value` and `err_value` to access the inner value more safely (#37, #121)
 
@@ -60,7 +63,6 @@ safe. Unfortunately this means some breaking changes. Please check out
 [MIGRATING.md], it will guide you through the necessary changes in your
 codebase.
 
-[MIGRATING.md]: https://github.com/rustedpy/result/blob/master/MIGRATING.md
 
 - [changed] Split result type into `Ok` and `Err` classes (#17, #27)
 - [deprecated] Python 3.4 support is deprecated and will be removed in the next
@@ -105,6 +107,7 @@ codebase.
 
  - Initial version
 
+[MIGRATING.md]: https://github.com/rustedpy/result/blob/master/MIGRATING.md
 [Unreleased]: https://github.com/rustedpy/result/compare/v0.10.0...HEAD
 [0.10.0]: https://github.com/rustedpy/result/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/rustedpy/result/compare/v0.8.0...v0.9.0
