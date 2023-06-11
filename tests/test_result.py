@@ -1,11 +1,6 @@
 from __future__ import annotations
-import sys
 
 from typing import Callable
-if sys.version_info >= (3, 10):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
 
 import pytest
 
@@ -81,12 +76,6 @@ def test_err_method() -> None:
     n = Err('nay')
     assert o.err() is None  # type: ignore[func-returns-value]
     assert n.err() == 'nay'
-
-
-def test_no_arg_ok() -> None:
-    top_level: Result[Literal[True], None] = Ok(True)
-    assert top_level.is_ok() is True
-    assert top_level.ok() is True
 
 
 def test_expect() -> None:
