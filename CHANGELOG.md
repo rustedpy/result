@@ -17,6 +17,8 @@ Possible log types:
 - `[changed]` `Ok` now requires an explicit value during instantiation. Please
   check out [MIGRATING.md], it will guide you through the necessary change in
   your codebase.
+- `[deprecated]` `value` property to access the inner value (#37, #121)
+- `[added]` `ok_value` and `err_value` to access the inner value more safely (#37, #121)
 
 ## [0.10.0] - 2023-04-29
 

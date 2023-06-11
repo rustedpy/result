@@ -3,6 +3,7 @@ from __future__ import annotations
 import functools
 import inspect
 import sys
+from warnings import warn
 from typing import (
     Any,
     Awaitable,
@@ -73,6 +74,22 @@ class Ok(Generic[T]):
 
     @property
     def value(self) -> T:
+        """
+        Return the inner value.
+
+        @deprecated Use `ok_value` or `err_value` instead. This method will be
+        removed in a future version.
+        """
+        warn(
+            "Accessing `.value` on Result type is deprecated, please use " +
+            "`.ok_value` or '.err_value' instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._value
+
+    @property
+    def ok_value(self) -> T:
         """
         Return the inner value.
         """
@@ -204,6 +221,22 @@ class Err(Generic[E]):
 
     @property
     def value(self) -> E:
+        """
+        Return the inner value.
+
+        @deprecated Use `ok_value` or `err_value` instead. This method will be
+        removed in a future version.
+        """
+        warn(
+            "Accessing `.value` on Result type is deprecated, please use " +
+            "`.ok_value` or '.err_value' instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._value
+
+    @property
+    def err_value(self) -> E:
         """
         Return the inner value.
         """
