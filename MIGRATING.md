@@ -1,5 +1,19 @@
 # Migration guides
 
+## 0.10 -> 0.11 migration
+
+The 0.11 migration includes one breaking change:
+
+`Ok` now requires an explicit value during instantiation. Previously, if no
+value was provides, a default value of `True` was implicitly used.
+
+To retain this behavior you can change any no-argument instantiations with:
+
+```diff
+- r = Ok()
++ r = Ok(True)
+```
+
 ## 0.5 -> 0.6 migration
 
 The 0.6 migration includes two breaking changes and some useful new functionality:

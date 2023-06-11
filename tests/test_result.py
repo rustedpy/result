@@ -78,12 +78,6 @@ def test_err_method() -> None:
     assert n.err() == 'nay'
 
 
-def test_no_arg_ok() -> None:
-    top_level: Result[None, None] = Ok()
-    assert top_level.is_ok() is True
-    assert top_level.ok() is True
-
-
 def test_expect() -> None:
     o = Ok('yay')
     n = Err('nay')
