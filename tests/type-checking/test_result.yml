@@ -54,7 +54,7 @@
 
     result_int_type: Result[int, TypeError] = ok_int or err_type
     result_float_exc: Result[float, Exception] = result_int_type
-    result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Union[Ok[float], Err[Exception]]", variable has type "Union[Ok[int], Err[TypeError]]")  [assignment]
+    result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Ok[float] | Err[Exception]", variable has type "Ok[int] | Err[TypeError]")  [assignment]
 
 - case: map_ok_err
   disable_cache: false
