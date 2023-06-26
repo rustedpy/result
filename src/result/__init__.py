@@ -9,4 +9,4 @@ __all__ = [
     "as_async_result",
     "as_result",
 ]
-__version__ = "0.11.0rc1"
+__version__ = "0.11.0"
