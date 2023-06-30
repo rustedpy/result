@@ -18,7 +18,6 @@ jobs:
           - '3.10'
           - '3.9'
           - '3.8'
-          - '3.7'
     name: Python ${{ matrix.python }}
     steps:
       # Python
@@ -48,7 +47,7 @@ jobs:
       - name: Run tests
         run: pytest --ignore=tests/test_pattern_matching.py --ignore=tests/type-checking/test_result.yml
       - name: Run tests (type checking)
-        if: matrix.python != '3.7' && matrix.python != '3.8' && matrix.python != '3.9'
+        if: matrix.python != '3.8' && matrix.python != '3.9'
         # These started breaking for <= 3.9, due to the type checker using a
         # '|' for unions rather than 'Union[...]', so it's not possible to run
         # the tests without maintaining two duplicate files (one for <= 3.9 and
@@ -61,10 +60,10 @@ jobs:
       # Linters
       - name: Run flake8 (Python >= 3.10)
         run: flake8
-        if: matrix.python != '3.9' && matrix.python != '3.8' && matrix.python != '3.7'
+        if: matrix.python != '3.9' && matrix.python != '3.8'
       - name: Run flake8 (Python < 3.10)
         run: flake8 --extend-exclude tests/test_pattern_matching.py
-        if: matrix.python == '3.9' || matrix.python == '3.8' || matrix.python == '3.7'
+        if: matrix.python == '3.9' || matrix.python == '3.8'
       - name: Run mypy
         run: mypy
 

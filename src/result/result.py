@@ -8,7 +8,9 @@ from typing import (
     Any,
     Awaitable,
     Callable,
+    Final,
     Generic,
+    Literal,
     NoReturn,
     Type,
     TypeVar,
@@ -16,9 +18,9 @@ from typing import (
 )
 
 if sys.version_info >= (3, 10):
-    from typing import Final, Literal, ParamSpec, TypeAlias
+    from typing import ParamSpec, TypeAlias
 else:
-    from typing_extensions import Final, Literal, ParamSpec, TypeAlias
+    from typing_extensions import ParamSpec, TypeAlias
 
 
 T = TypeVar("T", covariant=True)  # Success type
