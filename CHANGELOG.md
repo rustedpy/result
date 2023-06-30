@@ -12,6 +12,10 @@ Possible log types:
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
 
+## [Unreleased]
+
+- `[removed]` Drop support for Python 3.7 (#todo)
+
 ## [0.11.0] - 2023-06-11
 
 - `[changed]` `Ok` now requires an explicit value during instantiation. Please
