@@ -14,7 +14,7 @@ Possible log types:
 
 ## [Unreleased]
 
-- `[removed]` Drop support for Python 3.7 (#todo)
+- `[removed]` Drop support for Python 3.7 (#126)
 
 ## [0.11.0] - 2023-06-11
 
