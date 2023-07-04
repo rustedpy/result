@@ -38,7 +38,7 @@ class Ok(Generic[T]):
     """
 
     _value: T
-    __match_args__ = ("value",)
+    __match_args__ = ("ok_value",)
     __slots__ = ("_value",)
 
     def __init__(self, value: T) -> None:
@@ -185,7 +185,7 @@ class Err(Generic[E]):
     A value that signifies failure and which stores arbitrary data for the error.
     """
 
-    __match_args__ = ("value",)
+    __match_args__ = ("err_value",)
     __slots__ = ("_value",)
 
     def __init__(self, value: E) -> None:
