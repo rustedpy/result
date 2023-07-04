@@ -16,6 +16,7 @@ Possible log types:
 
 - `[removed]` Drop support for Python 3.7 (#126)
 - `[fixed]` Pattern matching deprecation warning (#128)
+- `[changed]` Minor internal implementation details (#129, #130)
 
 ## [0.11.0] - 2023-06-11
 
