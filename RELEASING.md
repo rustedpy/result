@@ -32,12 +32,6 @@ rm -rf ./dist
 python3 -m build
 ```
 
-6) Sign files:
-```
-gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}.tar.gz
-gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}-py3-none-any.whl
-```
-
 7) Upload package to PyPI:
 ```
 twine upload dist/result-${VERSION}*
