@@ -47,7 +47,7 @@ class Ok(Generic[T]):
         return "Ok({})".format(repr(self._value))
 
     def __eq__(self, other: Any) -> bool:
-        return isinstance(other, Ok) and self.value == other.value
+        return isinstance(other, Ok) and self._value == other._value
 
     def __ne__(self, other: Any) -> bool:
         return not (self == other)
@@ -194,7 +194,7 @@ class Err(Generic[E]):
         return "Err({})".format(repr(self._value))
 
     def __eq__(self, other: Any) -> bool:
-        return isinstance(other, Err) and self.value == other.value
+        return isinstance(other, Err) and self._value == other._value
 
     def __ne__(self, other: Any) -> bool:
         return not (self == other)
