@@ -37,7 +37,6 @@ class Ok(Generic[T]):
     A value that indicates success and which stores arbitrary data for the return value.
     """
 
-    _value: T
     __match_args__ = ("ok_value",)
     __slots__ = ("_value",)
 
