@@ -32,24 +32,18 @@ rm -rf ./dist
 python3 -m build
 ```
 
-6) Sign files:
-```
-gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}.tar.gz
-gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}-py3-none-any.whl
-```
-
-7) Upload package to PyPI:
+6) Upload package to PyPI:
 ```
 twine upload dist/result-${VERSION}*
 git push
 git push --tags
 ```
 
-8) Optionally check the new version is published correctly
+7) Optionally check the new version is published correctly
 - https://github.com/rustedpy/result/tags
 - https://pypi.org/project/result/#history
 
-2) Update version number to next dev version (for example after `v0.9.0` this should be set to `0.10.0.dev0`:
+8) Update version number to next dev version (for example after `v0.9.0` this should be set to `0.10.0.dev0`:
 ```
 vim -p src/result/__init__.py
 ```
