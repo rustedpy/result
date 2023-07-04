@@ -64,14 +64,14 @@ def test_ok() -> None:
     res = Ok('haha')
     assert res.is_ok() is True
     assert res.is_err() is False
-    assert res.value == 'haha'
+    assert res.ok_value == 'haha'
 
 
 def test_err() -> None:
     res = Err(':(')
     assert res.is_ok() is False
     assert res.is_err() is True
-    assert res.value == ':('
+    assert res.err_value == ':('
 
 
 def test_ok_method() -> None:
