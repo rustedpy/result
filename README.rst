@@ -2,9 +2,9 @@
 Result
 ======
 
-.. image:: https://img.shields.io/github/workflow/status/rustedpy/result/CI/master
+.. image:: https://img.shields.io/github/actions/workflow/status/rustedpy/result/ci.yml?branch=master
     :alt: GitHub Workflow Status (branch)
-    :target: https://github.com/rustedpy/result/actions?query=workflow%3ACI+branch%3Amaster
+    :target: https://github.com/rustedpy/result/actions/workflows/ci.yml?query=branch%3Amaster
 
 .. image:: https://codecov.io/gh/rustedpy/result/branch/master/graph/badge.svg
     :alt: Coverage
@@ -12,6 +12,25 @@ Result
 
 A simple Result type for Python 3 `inspired by Rust
 <https://doc.rust-lang.org/std/result/>`__, fully type annotated.
+
+Installation
+============
+
+Latest release:
+
+.. sourcecode:: sh
+
+   $ pip install result
+
+
+Latest GitHub ``master`` branch version:
+
+.. sourcecode:: sh
+
+   $ pip install git+https://github.com/rustedpy/result
+
+Summary
+=======
 
 The idea is that a result value can be either ``Ok(value)`` or ``Err(error)``,
 with a way to differentiate between the two. ``Ok`` and ``Err`` are both classes
@@ -234,6 +253,18 @@ A default value can be returned instead by using ``unwrap_or`` or ``unwrap_or_el
     'yay'
     >>> res2.unwrap_or_else(str.upper)
     'NAY'
+
+The ``unwrap`` method will raised an ``UnwrapError``. A custom exception can be
+raised by using the ``unwrap_or_raise`` method instead:
+
+.. sourcecode:: python
+
+    >>> res1 = Ok('yay')
+    >>> res2 = Err('nay')
+    >>> res1.unwrap_or_raise(ValueError)
+    'yay'
+    >>> res2.unwrap_or_raise(ValueError)
+    ValueError: nay
 
 Values and errors can be mapped using ``map``, ``map_or``, ``map_or_else`` and
 ``map_err``:

@@ -11,6 +11,36 @@ Possible log types:
 - `[fixed]` for any bug fixes.
 - `[security]` to invite users to upgrade in case of vulnerabilities.
 
+## [Unreleased]
+
+## [0.12.0] - 2023-06-11
+
+- `[removed]` Drop support for Python 3.7 (#126)
+- `[fixed]` Pattern matching deprecation warning (#128)
+- `[changed]` Minor internal implementation details (#129, #130)
+
+## [0.11.0] - 2023-06-11
+
+- `[changed]` `Ok` now requires an explicit value during instantiation. Please
+  check out [MIGRATING.md], it will guide you through the necessary change in
+  your codebase.
+- `[deprecated]` `value` property to access the inner value (#37, #121)
+- `[added]` `ok_value` and `err_value` to access the inner value more safely (#37, #121)
+
+## [0.10.0] - 2023-04-29
+
+- `[fixed]` Make python version check PEP 484 compliant (#118)
+- `[added]` `as_async_result` decorator to turn regular async functions into
+  `Result` returning ones (#116)
+
+## [0.9.0] - 2022-12-09
+
+- `[added]` Implement `unwrap_or_raise` (#95)
+- `[added]` Add support for Python 3.11 (#107)
+- `[changed]` Narrowing of return types on methods of `Err` and `Ok`. (#106)
+- `[fixed]` Fix failing type inference for `Result.map` and similar method
+  unions (#106)
+
 ## [0.8.0] - 2022-04-17
 
 - `[added]` `as_result` decorator to turn regular functions into
@@ -40,7 +70,6 @@ safe. Unfortunately this means some breaking changes. Please check out
 [MIGRATING.md], it will guide you through the necessary changes in your
 codebase.
 
-[MIGRATING.md]: https://github.com/rustedpy/result/blob/master/MIGRATING.md
 
 - [changed] Split result type into `Ok` and `Err` classes (#17, #27)
 - [deprecated] Python 3.4 support is deprecated and will be removed in the next
@@ -85,7 +114,12 @@ codebase.
 
  - Initial version
 
-[Unreleased]: https://github.com/rustedpy/result/compare/v0.8.0...HEAD
+[MIGRATING.md]: https://github.com/rustedpy/result/blob/master/MIGRATING.md
+[Unreleased]: https://github.com/rustedpy/result/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/rustedpy/result/compare/v0.11.0...v0.12.0
+[0.11.0]: https://github.com/rustedpy/result/compare/v0.10.0...v0.11.0
+[0.10.0]: https://github.com/rustedpy/result/compare/v0.9.0...v0.10.0
+[0.9.0]: https://github.com/rustedpy/result/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/rustedpy/result/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/rustedpy/result/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/rustedpy/result/compare/v0.5.0...v0.6.0

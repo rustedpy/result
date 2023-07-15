@@ -26,8 +26,6 @@
         reveal_type(mapped_to_list) # N: Revealed type is "Union[builtins.list[builtins.int], None]"
 
     # Test constructor functions
-    res1 = Ok()
-    reveal_type(res1) # N: Revealed type is "result.result.Ok[builtins.str]"
     res2 = Ok(42)
     reveal_type(res2) # N: Revealed type is "result.result.Ok[builtins.int]"
     res3 = Err(1)
@@ -39,7 +37,7 @@
     res5 = res4.and_then(add1)
     reveal_type(res5) # N: Revealed type is "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
     res6 = res4.or_else(toint)
-    reveal_type(res6) # N: Revealed type is "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
+    reveal_type(res6) # N: Revealed type is "result.result.Ok[builtins.int]"
 
 - case: covariance
   disable_cache: false
@@ -48,12 +46,38 @@
 
     ok_int: Ok[int] = Ok(42)
     ok_float: Ok[float] = ok_int
-    ok_int = ok_float  # E: Incompatible types in assignment (expression has type "Ok[float]", variable has type "Ok[int]")
+    ok_int = ok_float  # E: Incompatible types in assignment (expression has type "Ok[float]", variable has type "Ok[int]")  [assignment]
 
     err_type: Err[TypeError] = Err(TypeError("foo"))
     err_exc: Err[Exception] = err_type
-    err_type = err_exc  # E: Incompatible types in assignment (expression has type "Err[Exception]", variable has type "Err[TypeError]")
+    err_type = err_exc  # E: Incompatible types in assignment (expression has type "Err[Exception]", variable has type "Err[TypeError]")  [assignment]
 
     result_int_type: Result[int, TypeError] = ok_int or err_type
     result_float_exc: Result[float, Exception] = result_int_type
-    result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Union[Ok[float], Err[Exception]]", variable has type "Union[Ok[int], Err[TypeError]]")
+    result_int_type = result_float_exc  # E: Incompatible types in assignment (expression has type "Ok[float] | Err[Exception]", variable has type "Ok[int] | Err[TypeError]")  [assignment]
+
+- case: map_ok_err
+  disable_cache: false
+  main: |
+    from result import Err, Ok
+
+    o = Ok("42")
+    reveal_type(o.map(int))  # N: Revealed type is "result.result.Ok[builtins.int]"
+    reveal_type(o.map_err(int))  # N: Revealed type is "result.result.Ok[builtins.str]"
+
+    e = Err("42")
+    reveal_type(e.map(int))  # N: Revealed type is "result.result.Err[builtins.str]"
+    reveal_type(e.map_err(int))  # N: Revealed type is "result.result.Err[builtins.int]"
+
+- case: map_result
+  disable_cache: false
+  main: |
+    from result import Result, Ok
+
+    greeting_res: Result[str, ValueError] = Ok("Hello")
+
+    personalized_greeting_res = greeting_res.map(lambda g: f"{g}, John")
+    reveal_type(personalized_greeting_res) # N: Revealed type is "Union[result.result.Ok[builtins.str], result.result.Err[builtins.ValueError]]"
+
+    personalized_greeting = personalized_greeting_res.ok()
+    reveal_type(personalized_greeting) # N: Revealed type is "Union[builtins.str, None]"

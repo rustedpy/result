@@ -3,22 +3,24 @@ from __future__ import annotations
 import functools
 import inspect
 import sys
+from warnings import warn
 from typing import (
     Any,
+    Awaitable,
     Callable,
+    Final,
     Generic,
+    Literal,
     NoReturn,
     Type,
     TypeVar,
     Union,
-    cast,
-    overload,
 )
 
-if sys.version_info[:2] >= (3, 10):
-    from typing import ParamSpec
+if sys.version_info >= (3, 10):
+    from typing import ParamSpec, TypeAlias
 else:
-    from typing_extensions import ParamSpec
+    from typing_extensions import ParamSpec, TypeAlias
 
 
 T = TypeVar("T", covariant=True)  # Success type
@@ -35,26 +37,17 @@ class Ok(Generic[T]):
     A value that indicates success and which stores arbitrary data for the return value.
     """
 
-    _value: T
-    __match_args__ = ("value",)
+    __match_args__ = ("ok_value",)
     __slots__ = ("_value",)
 
-    @overload
-    def __init__(self) -> None:
-        ...  # pragma: no cover
-
-    @overload
     def __init__(self, value: T) -> None:
-        ...  # pragma: no cover
-
-    def __init__(self, value: Any = True) -> None:
         self._value = value
 
     def __repr__(self) -> str:
         return "Ok({})".format(repr(self._value))
 
     def __eq__(self, other: Any) -> bool:
-        return isinstance(other, Ok) and self.value == other.value
+        return isinstance(other, Ok) and self._value == other._value
 
     def __ne__(self, other: Any) -> bool:
         return not (self == other)
@@ -62,10 +55,10 @@ class Ok(Generic[T]):
     def __hash__(self) -> int:
         return hash((True, self._value))
 
-    def is_ok(self) -> bool:
+    def is_ok(self) -> Literal[True]:
         return True
 
-    def is_err(self) -> bool:
+    def is_err(self) -> Literal[False]:
         return False
 
     def ok(self) -> T:
@@ -82,6 +75,22 @@ class Ok(Generic[T]):
 
     @property
     def value(self) -> T:
+        """
+        Return the inner value.
+
+        @deprecated Use `ok_value` or `err_value` instead. This method will be
+        removed in a future version.
+        """
+        warn(
+            "Accessing `.value` on Result type is deprecated, please use " +
+            "`.ok_value` or '.err_value' instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._value
+
+    @property
+    def ok_value(self) -> T:
         """
         Return the inner value.
         """
@@ -117,42 +126,44 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def unwrap_or_else(self, op: Callable[[E], T]) -> T:
+    def unwrap_or_else(self, op: object) -> T:
         """
         Return the value.
         """
         return self._value
 
-    def map(self, op: Callable[[T], U]) -> Result[U, E]:
+    def unwrap_or_raise(self, e: object) -> T:
+        """
+        Return the value.
+        """
+        return self._value
+
+    def map(self, op: Callable[[T], U]) -> Ok[U]:
         """
         The contained result is `Ok`, so return `Ok` with original value mapped to
         a new value using the passed in function.
         """
         return Ok(op(self._value))
 
-    def map_or(self, default: U, op: Callable[[T], U]) -> U:
+    def map_or(self, default: object, op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return the original value mapped to a new
         value using the passed in function.
         """
         return op(self._value)
 
-    def map_or_else(
-        self,
-        default_op: Callable[[], U],
-        op: Callable[[T], U]
-    ) -> U:
+    def map_or_else(self, default_op: object, op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return original value mapped to
         a new value using the passed in `op` function.
         """
         return op(self._value)
 
-    def map_err(self, op: Callable[[E], F]) -> Result[T, F]:
+    def map_err(self, op: object) -> Ok[T]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
-        return cast(Result[T, F], self)
+        return self
 
     def and_then(self, op: Callable[[T], Result[U, E]]) -> Result[U, E]:
         """
@@ -161,11 +172,11 @@ class Ok(Generic[T]):
         """
         return op(self._value)
 
-    def or_else(self, op: Callable[[E], Result[T, F]]) -> Result[T, F]:
+    def or_else(self, op: object) -> Ok[T]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
         """
-        return cast(Result[T, F], self)
+        return self
 
 
 class Err(Generic[E]):
@@ -173,7 +184,7 @@ class Err(Generic[E]):
     A value that signifies failure and which stores arbitrary data for the error.
     """
 
-    __match_args__ = ("value",)
+    __match_args__ = ("err_value",)
     __slots__ = ("_value",)
 
     def __init__(self, value: E) -> None:
@@ -183,7 +194,7 @@ class Err(Generic[E]):
         return "Err({})".format(repr(self._value))
 
     def __eq__(self, other: Any) -> bool:
-        return isinstance(other, Err) and self.value == other.value
+        return isinstance(other, Err) and self._value == other._value
 
     def __ne__(self, other: Any) -> bool:
         return not (self == other)
@@ -191,10 +202,10 @@ class Err(Generic[E]):
     def __hash__(self) -> int:
         return hash((False, self._value))
 
-    def is_ok(self) -> bool:
+    def is_ok(self) -> Literal[False]:
         return False
 
-    def is_err(self) -> bool:
+    def is_err(self) -> Literal[True]:
         return True
 
     def ok(self) -> None:
@@ -211,6 +222,22 @@ class Err(Generic[E]):
 
     @property
     def value(self) -> E:
+        """
+        Return the inner value.
+
+        @deprecated Use `ok_value` or `err_value` instead. This method will be
+        removed in a future version.
+        """
+        warn(
+            "Accessing `.value` on Result type is deprecated, please use " +
+            "`.ok_value` or '.err_value' instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._value
+
+    @property
+    def err_value(self) -> E:
         """
         Return the inner value.
         """
@@ -265,40 +292,42 @@ class Err(Generic[E]):
         """
         return op(self._value)
 
-    def map(self, op: Callable[[T], U]) -> Result[U, E]:
+    def unwrap_or_raise(self, e: Type[TBE]) -> NoReturn:
+        """
+        The contained result is ``Err``, so raise the exception with the value.
+        """
+        raise e(self._value)
+
+    def map(self, op: object) -> Err[E]:
         """
         Return `Err` with the same value
         """
-        return cast(Result[U, E], self)
+        return self
 
-    def map_or(self, default: U, op: Callable[[T], U]) -> U:
+    def map_or(self, default: U, op: object) -> U:
         """
         Return the default value
         """
         return default
 
-    def map_or_else(
-        self,
-        default_op: Callable[[], U],
-        op: Callable[[T], U]
-    ) -> U:
+    def map_or_else(self, default_op: Callable[[], U], op: object) -> U:
         """
         Return the result of the default operation
         """
         return default_op()
 
-    def map_err(self, op: Callable[[E], F]) -> Result[T, F]:
+    def map_err(self, op: Callable[[E], F]) -> Err[F]:
         """
         The contained result is `Err`, so return `Err` with original error mapped to
         a new value using the passed in function.
         """
         return Err(op(self._value))
 
-    def and_then(self, op: Callable[[T], Result[U, E]]) -> Result[U, E]:
+    def and_then(self, op: object) -> Err[E]:
         """
         The contained result is `Err`, so return `Err` with the original value
         """
-        return cast(Result[U, E], self)
+        return self
 
     def or_else(self, op: Callable[[E], Result[T, F]]) -> Result[T, F]:
         """
@@ -315,13 +344,13 @@ A simple `Result` type inspired by Rust.
 Not all methods (https://doc.rust-lang.org/std/result/enum.Result.html)
 have been implemented, only the ones that make sense in the Python context.
 """
-Result = Union[Ok[T], Err[E]]
+Result: TypeAlias = Union[Ok[T], Err[E]]
 
 """
 A type to use in `isinstance` checks.
 This is purely for convenience sake, as you could also just write `isinstance(res, (Ok, Err))
 """
-OkErr = (Ok, Err)
+OkErr: Final = (Ok, Err)
 
 
 class UnwrapError(Exception):
@@ -335,9 +364,9 @@ class UnwrapError(Exception):
     not both.
     """
 
-    _result: Result[Any, Any]
+    _result: Result[object, object]
 
-    def __init__(self, result: Result[Any, Any], message: str) -> None:
+    def __init__(self, result: Result[object, object], message: str) -> None:
         self._result = result
         super().__init__(message)
 
@@ -377,5 +406,38 @@ def as_result(
                 return Err(exc)
 
         return wrapper
+
+    return decorator
+
+
+def as_async_result(
+    *exceptions: Type[TBE],
+) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[Result[R, TBE]]]]:
+    """
+    Make a decorator to turn an async function into one that returns a ``Result``.
+    Regular return values are turned into ``Ok(return_value)``. Raised
+    exceptions of the specified exception type(s) are turned into ``Err(exc)``.
+    """
+    if not exceptions or not all(
+        inspect.isclass(exception) and issubclass(exception, BaseException)
+        for exception in exceptions
+    ):
+        raise TypeError("as_result() requires one or more exception types")
+
+    def decorator(
+        f: Callable[P, Awaitable[R]]
+    ) -> Callable[P, Awaitable[Result[R, TBE]]]:
+        """
+        Decorator to turn a function into one that returns a ``Result``.
+        """
+
+        @functools.wraps(f)
+        async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> Result[R, TBE]:
+            try:
+                return Ok(await f(*args, **kwargs))
+            except exceptions as exc:
+                return Err(exc)
+
+        return async_wrapper
 
     return decorator

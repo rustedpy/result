@@ -9,9 +9,9 @@ export VERSION={VERSION BEING RELEASED}
 export GPG={YOUR GPG}
 ```
 
-2) Update version numbers:
+2) Update version numbers to match the version being released:
 ```
-vim -p result/__init__.py CHANGELOG.md
+vim -p src/result/__init__.py CHANGELOG.md
 ```
 
 3) Update diff link in CHANGELOG.md ([see example][diff-link-update-pr-example]):
@@ -32,21 +32,20 @@ rm -rf ./dist
 python3 -m build
 ```
 
-6) Sign files:
-```
-gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}.tar.gz
-gpg --detach-sign -u ${GPG} -a dist/result-${VERSION}-py3-none-any.whl
-```
-
-7) Upload package to PyPI:
+6) Upload package to PyPI:
 ```
 twine upload dist/result-${VERSION}*
 git push
 git push --tags
 ```
 
-8) Optionally check the new version is published correctly
+7) Optionally check the new version is published correctly
 - https://github.com/rustedpy/result/tags
 - https://pypi.org/project/result/#history
+
+8) Update version number to next dev version (for example after `v0.9.0` this should be set to `0.10.0.dev0`:
+```
+vim -p src/result/__init__.py
+```
 
 [diff-link-update-pr-example]: https://github.com/rustedpy/result/pull/77/files

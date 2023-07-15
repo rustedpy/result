@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-from result import Err, Ok, OkErr, Result, UnwrapError, as_result
+from result import Err, Ok, OkErr, Result, UnwrapError, as_async_result, as_result
 
 
 def test_ok_factories() -> None:
@@ -50,18 +50,28 @@ def test_repr() -> None:
     assert n == eval(repr(n))
 
 
+def test_ok_value() -> None:
+    res = Ok('haha')
+    assert res.ok_value == 'haha'
+
+
+def test_err_value() -> None:
+    res = Err('haha')
+    assert res.err_value == 'haha'
+
+
 def test_ok() -> None:
     res = Ok('haha')
     assert res.is_ok() is True
     assert res.is_err() is False
-    assert res.value == 'haha'
+    assert res.ok_value == 'haha'
 
 
 def test_err() -> None:
     res = Err(':(')
     assert res.is_ok() is False
     assert res.is_err() is True
-    assert res.value == ':('
+    assert res.err_value == ':('
 
 
 def test_err_value_is_exception() -> None:
@@ -91,12 +101,6 @@ def test_err_method() -> None:
     n = Err('nay')
     assert o.err() is None  # type: ignore[func-returns-value]
     assert n.err() == 'nay'
-
-
-def test_no_arg_ok() -> None:
-    top_level: Result[None, None] = Ok()
-    assert top_level.is_ok() is True
-    assert top_level.ok() is True
 
 
 def test_expect() -> None:
@@ -143,6 +147,15 @@ def test_unwrap_or_else() -> None:
     n = Err('nay')
     assert o.unwrap_or_else(str.upper) == 'yay'
     assert n.unwrap_or_else(str.upper) == 'NAY'
+
+
+def test_unwrap_or_raise() -> None:
+    o = Ok('yay')
+    n = Err('nay')
+    assert o.unwrap_or_raise(ValueError) == 'yay'
+    with pytest.raises(ValueError) as exc_info:
+        n.unwrap_or_raise(ValueError)
+    assert exc_info.value.args == ('nay',)
 
 
 def test_map() -> None:
@@ -306,6 +319,29 @@ def test_as_result_type_checking() -> None:
     res: Result[int, ValueError]
     res = f(123)  # No mypy error here.
     assert res.ok() == 123
+
+
+@pytest.mark.asyncio
+async def test_as_async_result() -> None:
+    """
+    ``as_async_result()`` turns functions into ones that return a ``Result``.
+    """
+
+    @as_async_result(ValueError)
+    async def good(value: int) -> int:
+        return value
+
+    @as_async_result(IndexError, ValueError)
+    async def bad(value: int) -> int:
+        raise ValueError
+
+    good_result = await good(123)
+    bad_result = await bad(123)
+
+    assert isinstance(good_result, Ok)
+    assert good_result.unwrap() == 123
+    assert isinstance(bad_result, Err)
+    assert isinstance(bad_result.unwrap_err(), ValueError)
 
 
 def sq(i: int) -> Result[int, int]:
