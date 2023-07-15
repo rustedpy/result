@@ -13,6 +13,8 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[changed]` Include captured `Err` value when `expect` and `unwrap` are called and an `UnwrapError` is raised (#98, #132)
+
 ## [0.12.0] - 2023-06-11
 
 - `[removed]` Drop support for Python 3.7 (#126)
