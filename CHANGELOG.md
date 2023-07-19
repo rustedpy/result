@@ -13,6 +13,10 @@ Possible log types:
 
 ## [Unreleased]
 
+## [0.13.1] - 2023-07-19
+
+- `[fixed]`  Use `self._value` instead of deprecated `self.value` in `Err.expect` and `Err.unwrap` to avoid raising a warning (#133)
+
 ## [0.13.0] - 2023-07-15
 
 - `[changed]` Include captured `Err` value when `expect` and `unwrap` are called and an `UnwrapError` is raised (#98, #132)
@@ -120,7 +124,8 @@ codebase.
 
 [MIGRATING.md]: https://github.com/rustedpy/result/blob/master/MIGRATING.md
 [Unreleased]: https://github.com/rustedpy/result/compare/v0.13.0...HEAD
-[0.12.0]: https://github.com/rustedpy/result/compare/v0.12.0...v0.13.0
+[0.13.1]: https://github.com/rustedpy/result/compare/v0.13.0...v0.13.1
+[0.13.0]: https://github.com/rustedpy/result/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/rustedpy/result/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/rustedpy/result/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/rustedpy/result/compare/v0.9.0...v0.10.0
