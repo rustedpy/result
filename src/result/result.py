@@ -249,10 +249,10 @@ class Err(Generic[E]):
         """
         exc = UnwrapError(
             self,
-            f"{message}: {self.value!r}",
+            f"{message}: {self._value!r}",
         )
-        if isinstance(self.value, BaseException):
-            raise exc from self.value
+        if isinstance(self._value, BaseException):
+            raise exc from self._value
         raise exc
 
     def expect_err(self, _message: str) -> E:
@@ -267,10 +267,10 @@ class Err(Generic[E]):
         """
         exc = UnwrapError(
             self,
-            f"Called `Result.unwrap()` on an `Err` value: {self.value!r}",
+            f"Called `Result.unwrap()` on an `Err` value: {self._value!r}",
         )
-        if isinstance(self.value, BaseException):
-            raise exc from self.value
+        if isinstance(self._value, BaseException):
+            raise exc from self._value
         raise exc
 
     def unwrap_err(self) -> E:
