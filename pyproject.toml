@@ -8,8 +8,9 @@ files = [
   "src",
   "tests",
 ]
-# Exclude files with pattern matching syntax until Mypy supports it;
-# see https://github.com/python/mypy/issues/10201
+# Exclude files with pattern matching syntax until we drop support for Python
+# versions that don't support pattern matching. Trying to use with an older
+# Python version results in a "invalid syntax" error from mypy
 exclude = "tests/test_pattern_matching.py"
 check_untyped_defs = true
 disallow_incomplete_defs = true
