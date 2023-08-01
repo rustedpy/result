@@ -60,7 +60,7 @@ To something like this:
 
 .. sourcecode:: python
 
-    from result import Ok, Err, Result
+    from result import Ok, Err, Result, is_ok, is_err
 
     def get_user_by_email(email: str) -> Result[User, str]:
         """
@@ -74,10 +74,10 @@ To something like this:
         return Ok(user)
 
     user_result = get_user_by_email(email)
-    if isinstance(user_result, Ok):
+    if isinstance(user_result, Ok): # or `is_ok(user_result)`
         # type(user_result.value) == User
         do_something(user_result.value)
-    else:
+    else: # or `elif is_err(user_result)`
         # type(user_result.value) == str
         raise RuntimeError('Could not fetch user: %s' % user_result.value)
 
@@ -120,7 +120,8 @@ Creating an instance:
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
 
-Checking whether a result is ``Ok`` or ``Err``. With ``isinstance`` you get type safe
+Checking whether a result is ``Ok`` or ``Err``. You can either use ``is_ok`` and ``is_err`` functions
+or ``isinstance``. This way you get type safe.
 access that can be checked with MyPy. The ``is_ok()`` or ``is_err()`` methods can be
 used if you don't need the type safety with MyPy:
 
@@ -129,7 +130,11 @@ used if you don't need the type safety with MyPy:
     >>> res = Ok('yay')
     >>> isinstance(res, Ok)
     True
+    >>> is_ok(res)
+    True
     >>> isinstance(res, Err)
+    False
+    >>> is_err(res)
     False
     >>> res.is_ok()
     True

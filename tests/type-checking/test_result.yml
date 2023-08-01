@@ -81,3 +81,15 @@
 
     personalized_greeting = personalized_greeting_res.ok()
     reveal_type(personalized_greeting) # N: Revealed type is "Union[builtins.str, None]"
+
+- case: map_result
+  disable_cache: false
+  main: |
+    from result import Ok, Err, is_ok, is_err
+
+    result = Ok(1)
+    err = Err("error")
+    if is_ok(result):
+        reveal_type(result)  # N: Revealed type is "result.result.Ok[builtins.int]"
+    elif is_err(err):
+        reveal_type(err)  # N: Revealed type is "result.result.Err[builtins.str]"

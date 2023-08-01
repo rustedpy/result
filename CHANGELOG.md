@@ -13,6 +13,8 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[added]` `is_ok` and `is_err` type guard functions. A faster alternative to `isinstance` checks (#69)
+
 ## [0.13.1] - 2023-07-19
 
 - `[fixed]`  Use `self._value` instead of deprecated `self.value` in `Err.expect` and `Err.unwrap` to avoid raising a warning (#133)

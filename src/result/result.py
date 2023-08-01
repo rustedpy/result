@@ -18,9 +18,9 @@ from typing import (
 )
 
 if sys.version_info >= (3, 10):
-    from typing import ParamSpec, TypeAlias
+    from typing import ParamSpec, TypeAlias, TypeGuard
 else:
-    from typing_extensions import ParamSpec, TypeAlias
+    from typing_extensions import ParamSpec, TypeAlias, TypeGuard
 
 
 T = TypeVar("T", covariant=True)  # Success type
@@ -82,8 +82,8 @@ class Ok(Generic[T]):
         removed in a future version.
         """
         warn(
-            "Accessing `.value` on Result type is deprecated, please use " +
-            "`.ok_value` or '.err_value' instead",
+            "Accessing `.value` on Result type is deprecated, please use "
+            + "`.ok_value` or '.err_value' instead",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -229,8 +229,8 @@ class Err(Generic[E]):
         removed in a future version.
         """
         warn(
-            "Accessing `.value` on Result type is deprecated, please use " +
-            "`.ok_value` or '.err_value' instead",
+            "Accessing `.value` on Result type is deprecated, please use "
+            + "`.ok_value` or '.err_value' instead",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -441,3 +441,31 @@ def as_async_result(
         return async_wrapper
 
     return decorator
+
+
+def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
+    """A typeguard to check if a result is an Ok
+
+    Usage:
+    >>> result = Ok(1)
+    >>> err = Err("error")
+    >>> if is_ok(result):
+    >>>     reveal_type(result)  # Revealed type is 'Ok[builtins.int*]'
+    >>> elif is_err(err):
+    >>>     reveal_type(err)  # Revealed type is 'Err[builtins.str*]'
+    """
+    return result.is_ok()
+
+
+def is_err(result: Result[T, E]) -> TypeGuard[Err[E]]:
+    """A typeguard to check if a result is an Err
+
+    Usage:
+    >>> result = Ok(1)
+    >>> err = Err("error")
+    >>> if is_ok(result):
+    >>>     reveal_type(result)  # Revealed type is 'Ok[builtins.int*]'
+    >>> elif is_err(err):
+    >>>     reveal_type(err)  # Revealed type is 'Err[builtins.str*]'
+    """
+    return result.is_err()
