@@ -120,10 +120,10 @@ Creating an instance:
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
 
-Checking whether a result is ``Ok`` or ``Err``. You can either use ``is_ok`` and ``is_err`` functions
-or ``isinstance``. This way you get type safe.
-access that can be checked with MyPy. The ``is_ok()`` or ``is_err()`` methods can be
-used if you don't need the type safety with MyPy:
+Checking whether a result is ``Ok`` or ``Err``. You can either use ``is_ok``
+and ``is_err`` type guard **functions** or ``isinstance``. This way you get
+type safe access that can be checked with MyPy. The ``is_ok()`` or ``is_err()``
+**methods** can be used if you don't need the type safety with MyPy:
 
 .. sourcecode:: python
 
