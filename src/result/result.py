@@ -447,12 +447,11 @@ def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
     """A typeguard to check if a result is an Ok
 
     Usage:
-    >>> result = Ok(1)
-    >>> err = Err("error")
-    >>> if is_ok(result):
-    >>>     reveal_type(result)  # Revealed type is 'Ok[builtins.int*]'
-    >>> elif is_err(err):
-    >>>     reveal_type(err)  # Revealed type is 'Err[builtins.str*]'
+    >>> r: Result[int, str] = get_a_result()
+    >>> if is_ok(r):
+    >>>     r   # r is of type Ok[int]
+    >>> elif is_err(r):
+    >>>     r   # r is of type Err[str]
     """
     return result.is_ok()
 
@@ -461,11 +460,10 @@ def is_err(result: Result[T, E]) -> TypeGuard[Err[E]]:
     """A typeguard to check if a result is an Err
 
     Usage:
-    >>> result = Ok(1)
-    >>> err = Err("error")
-    >>> if is_ok(result):
-    >>>     reveal_type(result)  # Revealed type is 'Ok[builtins.int*]'
-    >>> elif is_err(err):
-    >>>     reveal_type(err)  # Revealed type is 'Err[builtins.str*]'
+    >>> r: Result[int, str] = get_a_result()
+    >>> if is_ok(r):
+    >>>     r   # r is of type Ok[int]
+    >>> elif is_err(r):
+    >>>     r   # r is of type Err[str]
     """
     return result.is_err()
