@@ -13,7 +13,7 @@ Possible log types:
 
 ## [Unreleased]
 
--- `[added]` `is_ok` and `is_err` type guard functions as alternatives to `isinstance` checks (#69)
+- `[added]` `is_ok` and `is_err` type guard functions as alternatives to `isinstance` checks (#69)
 
 ## [0.13.1] - 2023-07-19
 
