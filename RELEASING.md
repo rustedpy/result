@@ -21,7 +21,7 @@ vim CHANGELOG.md
 
 4) Do a signed commit and signed tag of the release:
 ```
-git add result/__init__.py CHANGELOG.md
+git add src/result/__init__.py CHANGELOG.md
 git commit -S${GPG} -m "Release v${VERSION}"
 git tag -u ${GPG} -m "Release v${VERSION}" v${VERSION}
 ```

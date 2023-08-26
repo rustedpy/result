@@ -1,1 +1,1 @@
-include result/py.typed
+include src/result/py.typed
