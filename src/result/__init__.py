@@ -8,6 +8,8 @@ from .result import (
     as_result,
     is_ok,
     is_err,
+    MultiResult,
+    FilterException,
 )
 
 __all__ = [
@@ -20,5 +22,7 @@ __all__ = [
     "as_result",
     "is_ok",
     "is_err",
+    "MultiResult",
+    "FilterException",
 ]
 __version__ = "0.14.0.dev0"
