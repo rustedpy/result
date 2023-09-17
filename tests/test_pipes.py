@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Sequence, Any
+from typing import Callable, Sequence, Any, Union
 
 import pytest
 
@@ -428,7 +428,7 @@ async def test_async_multivar_pipe() -> None:
     assert isinstance(res, Ok)
     assert isclose(res.ok(), 15)
 
-Number = float | int
+Number = Union[float,int]
 
 ##############################################################
 ## function declarations for mypy testing
