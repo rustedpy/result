@@ -253,9 +253,7 @@ class Ok(Generic[T]):
         if op(self._value):
             return self
         else:
-            value = self.ok_value
-            filterFnc = op.__name__
-            err = FilterException(self, "filtered out", f"{value=}", f"{filterFnc=}")
+            err = FilterException(self, op.__name__)
             return Err(err)
 
     def __or__(self, other: Result[Any, Any]) -> MultiResult:
@@ -789,6 +787,7 @@ class UnwrapError(Exception):
 class FilterException(Exception):
     """
     Exception raised from filter pipe.
+    `function` > the name of the filter function
 
     The original ``Result`` can be accessed via the ``.result`` attribute, but
     this is not intended for regular use, as type information is lost:
@@ -797,11 +796,16 @@ class FilterException(Exception):
     not both.
     """
 
-    _result: Result[object, object]
+    __match_args__ = ("function",)
+    __slots__ = ("function",)
 
-    def __init__(self, result: Result[object, object], *message: str) -> None:
+    _result: Result[object, object]
+    function: str
+
+    def __init__(self, result: Result[object, object], function_name: str, *message: str) -> None:
+        super().__init__(f"Filtered out by `{function_name}` function.", *message)
         self._result = result
-        super().__init__(*message)
+        self.function = function_name
 
     @property
     def result(self) -> Result[Any, Any]:
@@ -809,6 +813,9 @@ class FilterException(Exception):
         Returns the original result.
         """
         return self._result
+
+    def __repr__(self) -> str:
+        return f"Filtered by `{self.function}` function."
 
 
 # wrappers

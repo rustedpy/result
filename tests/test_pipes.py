@@ -11,6 +11,7 @@ from result import (
     Result,
     UnwrapError,
     MultiResult,
+    FilterException,
 )
 
 
@@ -101,6 +102,20 @@ def test_err_value_is_exception() -> None:
     except UnwrapError as e:
         cause = e.__cause__
         assert isinstance(cause, ValueError)
+
+
+def test_filterexception_traceback() -> None:
+    def foofilter(x: int) -> bool:
+        return x > 0
+
+    err = Ok(0) % foofilter
+
+    assert err.is_err()
+    exc = err.err()
+    assert isinstance(exc, FilterException)
+
+    fname = exc.function
+    assert fname == "foofilter"
 
 
 def test_unwrap() -> None:
