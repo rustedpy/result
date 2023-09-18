@@ -67,13 +67,6 @@ class Ok(Generic[T]):
     def is_err(self) -> Literal[False]:
         return False
 
-    def __bool__(self) -> bool:
-        """
-        Ok is considered valid only if its non-None
-        it's the same as a return of Err.ok()
-        """
-        return self._value is not None
-
     def ok(self) -> T:
         """
         Return the value.
@@ -297,12 +290,6 @@ class Err(Generic[E]):
     def is_err(self) -> Literal[True]:
         return True
 
-    def __bool__(self) -> bool:
-        """
-        Error is considered invalid.
-        """
-        return False
-
     def ok(self) -> None:
         """
         Return `None`.
@@ -506,7 +493,7 @@ class MultiResult:
         return (
             isinstance(other, MultiResult)
             and (n := len(self.results)) == len(other.results)
-            and all([self.results[i] == other.results[i] for i in range(n)])
+            and all(self.results[i] == other.results[i] for i in range(n))
         )
 
     def __ne__(self, other: Any) -> bool:
@@ -526,12 +513,6 @@ class MultiResult:
 
     def is_err(self) -> bool:
         return not self.is_ok()
-
-    def __bool__(self) -> bool:
-        """
-        the list is valid if all are valid
-        """
-        return all(self.results)
 
     def ok(self) -> tuple[Any, ...]:
         """

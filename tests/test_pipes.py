@@ -35,20 +35,6 @@ def test_eq() -> None:
     )
 
 
-def test_validity_checking() -> None:
-    assert Ok(1)
-    assert Ok([])
-    assert Ok(0)
-    assert not Ok(None)
-    assert not Err(1)
-    assert not Err(None)
-
-    assert (mrvalid := Ok(1) | Ok(2))
-    assert mrvalid.is_ok()
-    assert not (mrinvalid := Ok(1) | Ok(None))
-    assert mrinvalid.is_ok()
-
-
 def test_hash() -> None:
     # lists, sets, dicts ... are unhashable!
     hash1 = hash(MultiResult(Ok(1), Ok(1.1), Err("foo")))
