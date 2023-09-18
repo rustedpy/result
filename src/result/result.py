@@ -547,7 +547,7 @@ class MultiResult:
         returns the error values or Nones for oks.
 
         Example:
-            assert ( Ok(2) | Ok('foobar') | Err('magnets')  ).ok() == (None,None,'magnets')
+            assert ( Ok(2) | Ok('foobar') | Err('magnets')  ).err() == (None,None,'magnets')
         """
         return tuple(res.err() for res in self.results)
 
