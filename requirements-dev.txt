@@ -1,3 +1,4 @@
+pre-commit
 build
 ruff
 twine
