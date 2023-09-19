@@ -77,3 +77,13 @@ addopts = [
   "--ignore=tests/test_pattern_matching.py",
 ]
 testpaths = ["tests"]
+
+[tool.ruff]
+select = [
+  # pycodestyle
+  "E",
+  # pyflakes
+  "F",
+]
+extend-exclude = [".direnv"]
+line-length = 99

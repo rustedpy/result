@@ -1,5 +1,5 @@
 build
-flake8
+ruff
 twine
 pytest
 pytest-cov

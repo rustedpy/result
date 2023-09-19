@@ -58,11 +58,11 @@ jobs:
         run: pytest tests/test_pattern_matching.py
 
       # Linters
-      - name: Run flake8 (Python >= 3.10)
-        run: flake8
+      - name: Run Ruff (Python >= 3.10)
+        run: ruff check .
         if: matrix.python != '3.9' && matrix.python != '3.8'
-      - name: Run flake8 (Python < 3.10)
-        run: flake8 --extend-exclude tests/test_pattern_matching.py
+      - name: Run Ruff (Python < 3.10)
+        run: ruff check --extend-exclude tests/test_pattern_matching.py .
         if: matrix.python == '3.9' || matrix.python == '3.8'
       - name: Run mypy
         run: mypy
