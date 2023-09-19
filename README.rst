@@ -351,6 +351,18 @@ Using ``if isinstance(res, Ok)`` instead of ``if res.is_ok()`` will help in some
 Otherwise using `one of these workarounds
 <https://github.com/python/mypy/issues/3889#issuecomment-325997911>`_ can help.
 
+Contributing
+============
+
+In order to install all development dependencies, run the following command:
+
+.. sourcecode:: shell
+   pip install -e ".[dev]"
+
+To ensure that you follow the development workflow, please setup the pre-commit hooks:
+.. sourcecode:: shell
+   pre-commit install
+
 License
 =======
 
