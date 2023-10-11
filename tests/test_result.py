@@ -11,12 +11,14 @@ def test_ok_factories() -> None:
     instance = Ok(1)
     assert instance._value == 1
     assert instance.is_ok() is True
+    assert bool(instance) is True
 
 
 def test_err_factories() -> None:
     instance = Err(2)
     assert instance._value == 2
     assert instance.is_err() is True
+    assert bool(instance) is False
 
 
 def test_eq() -> None:

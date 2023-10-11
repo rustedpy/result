@@ -3,7 +3,6 @@ from __future__ import annotations
 import functools
 import inspect
 import sys
-from warnings import warn
 from typing import (
     Any,
     Awaitable,
@@ -16,6 +15,7 @@ from typing import (
     TypeVar,
     Union,
 )
+from warnings import warn
 
 if sys.version_info >= (3, 10):
     from typing import ParamSpec, TypeAlias, TypeGuard
@@ -54,6 +54,9 @@ class Ok(Generic[T]):
 
     def __hash__(self) -> int:
         return hash((True, self._value))
+
+    def __bool__(self) -> Literal[True]:
+        return True
 
     def is_ok(self) -> Literal[True]:
         return True
@@ -201,6 +204,9 @@ class Err(Generic[E]):
 
     def __hash__(self) -> int:
         return hash((False, self._value))
+
+    def __bool__(self) -> Literal[False]:
+        return False
 
     def is_ok(self) -> Literal[False]:
         return False

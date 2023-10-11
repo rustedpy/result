@@ -91,5 +91,9 @@
     err = Err("error")
     if is_ok(result):
         reveal_type(result)  # N: Revealed type is "result.result.Ok[builtins.int]"
-    elif is_err(err):
+    if result:
+        reveal_type(result)  # N: Revealed type is "result.result.Ok[builtins.int]"
+    if is_err(err):
+        reveal_type(err)  # N: Revealed type is "result.result.Err[builtins.str]"
+    if not err:
         reveal_type(err)  # N: Revealed type is "result.result.Err[builtins.str]"
