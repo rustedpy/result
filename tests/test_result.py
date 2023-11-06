@@ -213,6 +213,18 @@ def test_and_then() -> None:
     assert Err(3).and_then(sq_lambda).and_then(sq_lambda).err() == 3
 
 
+@pytest.mark.asyncio
+async def test_and_then_async() -> None:
+    assert (await (await Ok(2).and_then_async(sq_async)).and_then_async(sq_async)).ok() == 16
+    assert (await (await Ok(2).and_then_async(sq_async)).and_then_async(to_err_async)).err() == 4
+    assert (
+        await (await Ok(2).and_then_async(to_err_async)).and_then_async(to_err_async)
+    ).err() == 2
+    assert (
+        await (await Err(3).and_then_async(sq_async)).and_then_async(sq_async)
+    ).err() == 3
+
+
 def test_or_else() -> None:
     assert Ok(2).or_else(sq).or_else(sq).ok() == 2
     assert Ok(2).or_else(to_err).or_else(sq).ok() == 2
@@ -348,7 +360,15 @@ def sq(i: int) -> Result[int, int]:
     return Ok(i * i)
 
 
+async def sq_async(i: int) -> Result[int, int]:
+    return Ok(i * i)
+
+
 def to_err(i: int) -> Result[int, int]:
+    return Err(i)
+
+
+async def to_err_async(i: int) -> Result[int, int]:
     return Err(i)
 
 
