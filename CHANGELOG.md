@@ -14,6 +14,7 @@ Possible log types:
 ## [Unreleased]
 
 - `[added]` `is_ok` and `is_err` type guard functions as alternatives to `isinstance` checks (#69)
+- `[added]` New variant of and_then combinator for async functions (#148)
 
 ## [0.13.1] - 2023-07-19
 
