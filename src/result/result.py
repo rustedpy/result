@@ -172,6 +172,15 @@ class Ok(Generic[T]):
         """
         return op(self._value)
 
+    async def and_then_async(
+            self,
+            op: Callable[[T], Awaitable[Result[U, E]]]) -> Result[U, E]:
+        """
+        The contained result is `Ok`, so return the result of `op` with the
+        original value passed in
+        """
+        return await op(self._value)
+
     def or_else(self, op: object) -> Ok[T]:
         """
         The contained result is `Ok`, so return `Ok` with the original value
@@ -324,6 +333,12 @@ class Err(Generic[E]):
         return Err(op(self._value))
 
     def and_then(self, op: object) -> Err[E]:
+        """
+        The contained result is `Err`, so return `Err` with the original value
+        """
+        return self
+
+    async def and_then_async(self, op: object) -> Err[E]:
         """
         The contained result is `Err`, so return `Err` with the original value
         """
