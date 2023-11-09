@@ -8,6 +8,7 @@ from .result import (
     as_result,
     is_ok,
     is_err,
+    do,
 )
 
 __all__ = [
@@ -20,5 +21,6 @@ __all__ = [
     "as_result",
     "is_ok",
     "is_err",
+    "do",
 ]
 __version__ = "0.15.0.dev0"
