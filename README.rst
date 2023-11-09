@@ -381,17 +381,44 @@ This is similar to Rust's  `m! macro <https://docs.rs/do-notation/latest/do_nota
     };
 
 
-You can also ``await`` Awaitables like async function calls. See example:
+You can use ``do()`` with awaited values as follows:
+
 
 .. sourcecode:: python
 
     async def process_data(data) -> Result[float, int]:
-        out: Result[float, int] = do(
+        res1 = await get_result_1(data)
+        res2 = await get_result_2(data)
+        return do(
+            Ok(len(x) + int(y) + 0.5)
+            for x in res1
+            for y in res2
+        )
+
+However, if you want to await something inside the expression,
+use ``do_async()``:
+
+.. sourcecode:: python
+
+
+    async def process_data(data) -> Result[float, int]:
+        return do_async(
             Ok(len(x) + int(y) + 0.5)
             for x in await get_result_1(data)
             for y in await get_result_2(data)
         )
-        return out
+
+Troubleshooting ``do()`` calls:
+
+.. sourcecode:: python
+
+
+    TypeError("Got async_generator but expected generator")
+
+
+Sometimes regular ``do()`` can handle async values, but this error means
+you have hit a case where it does not.
+You should use ``do_async()`` here instead.
 
 
 Development
