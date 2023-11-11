@@ -13,6 +13,9 @@ Possible log types:
 
 ## [Unreleased]
 
+
+## [0.14.0] - 2023-11-10
+
 - `[added]` `is_ok` and `is_err` type guard functions as alternatives to `isinstance` checks (#69)
 - `[added]` Add `and_then_async` for async functions (#148)
 
@@ -126,7 +129,8 @@ codebase.
  - Initial version
 
 [MIGRATING.md]: https://github.com/rustedpy/result/blob/master/MIGRATING.md
-[Unreleased]: https://github.com/rustedpy/result/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/rustedpy/result/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/rustedpy/result/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/rustedpy/result/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/rustedpy/result/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/rustedpy/result/compare/v0.11.0...v0.12.0
