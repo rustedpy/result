@@ -18,6 +18,8 @@ Possible log types:
 
 - `[added]` `is_ok` and `is_err` type guard functions as alternatives to `isinstance` checks (#69)
 - `[added]` Add `and_then_async` for async functions (#148)
+- `[added]` Support do notation (#149)
+
 
 ## [0.13.1] - 2023-07-19
 

@@ -11,3 +11,5 @@ build/
 .mypy_cache/
 venv/
 /.tox/
+.vscode
+pyrightconfig.json

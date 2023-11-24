@@ -9,7 +9,9 @@ from typing import (
     Awaitable,
     Callable,
     Final,
+    Generator,
     Generic,
+    Iterator,
     Literal,
     NoReturn,
     Type,
@@ -39,6 +41,9 @@ class Ok(Generic[T]):
 
     __match_args__ = ("ok_value",)
     __slots__ = ("_value",)
+
+    def __iter__(self) -> Iterator[T]:
+        yield self._value
 
     def __init__(self, value: T) -> None:
         self._value = value
@@ -173,8 +178,8 @@ class Ok(Generic[T]):
         return op(self._value)
 
     async def and_then_async(
-            self,
-            op: Callable[[T], Awaitable[Result[U, E]]]) -> Result[U, E]:
+        self, op: Callable[[T], Awaitable[Result[U, E]]]
+    ) -> Result[U, E]:
         """
         The contained result is `Ok`, so return the result of `op` with the
         original value passed in
@@ -188,6 +193,18 @@ class Ok(Generic[T]):
         return self
 
 
+class DoException(Exception):
+    """
+    This is used to signal to `do()` that the result is an `Err`,
+    which short-circuits the generator and returns that Err.
+    Using this exception for control flow in `do()` allows us
+    to simulate `and_then()` in the Err case: namely, we don't call `op`,
+    we just return `self` (the Err).
+    """
+    def __init__(self, err: Err[E]) -> None:
+        self.err = err
+
+
 class Err(Generic[E]):
     """
     A value that signifies failure and which stores arbitrary data for the error.
@@ -195,6 +212,14 @@ class Err(Generic[E]):
 
     __match_args__ = ("err_value",)
     __slots__ = ("_value",)
+
+    def __iter__(self) -> Iterator[NoReturn]:
+        def _iter() -> Iterator[NoReturn]:
+            # Exception will be raised when the iterator is advanced, not when it's created
+            raise DoException(self)
+            yield  # This yield will never be reached, but is necessary to create a generator
+
+        return _iter()
 
     def __init__(self, value: E) -> None:
         self._value = value
@@ -482,3 +507,33 @@ def is_err(result: Result[T, E]) -> TypeGuard[Err[E]]:
     >>>     r   # r is of type Err[str]
     """
     return result.is_err()
+
+
+def do(gen: Generator[Result[T, E], None, None]) -> Result[T, E]:
+    """Do notation for Result (syntactic sugar for sequence of `and_then()` calls).
+
+
+    Usage:
+    >>> # This is similar to
+    use do_notation::m;
+    let final_result = m! {
+        x <- Ok("hello");
+        y <- Ok(True);
+        Ok(len(x) + int(y) + 0.5)
+    };
+
+    >>> final_result: Result[float, int] = do(
+            Ok(len(x) + int(y) + 0.5)
+            for x in Ok("hello")
+            for y in Ok(True)
+        )
+
+    NOTE: If you exclude the type annotation e.g. `Result[float, int]`
+    your type checker might be unable to infer the return type.
+    To avoid an error, you might need to help it with the type hint.
+    """
+    try:
+        return next(gen)
+    except DoException as e:
+        out: Err[E] = e.err  # type: ignore
+        return out

@@ -340,6 +340,61 @@ unconventional syntax (without the usual ``@``):
     if isinstance(res, Ok):
         print(res.value)
 
+
+Do notation: syntactic sugar for a sequence of ``and_then()`` calls.
+Much like the equivalent in Rust or Haskell, but with different syntax.
+Instead of ``x <- Ok(1)`` we write ``for x in Ok(1)``.
+Since the syntax is generator-based, the final result must be the first line,
+not the last.
+
+.. sourcecode:: python
+
+
+    >>> final_result: Result[float, int] = do(
+            Ok(len(x) + int(y) + 0.5)
+            for x in Ok("hello")
+            for y in Ok(True)
+        )
+
+NOTE: If you exclude the type annotation e.g. ``Result[float, int]``
+your type checker might be unable to infer the return type.
+To avoid an error, you might need to help it with the type hint.
+
+This is similar to Rust's  `m! macro <https://docs.rs/do-notation/latest/do_notation/>`_:
+
+.. sourcecode:: rust
+
+    use do_notation::m;
+    let r = m! {
+        x <- Some("Hello, world!");
+        y <- Some(3);
+        Some(x.len() * y)
+    };
+
+
+You can also ``await`` Awaitables like async function calls. See example:
+
+.. sourcecode:: python
+
+    async def process_data(data) -> Result[float, int]:
+        out: Result[float, int] = do(
+            Ok(len(x) + int(y) + 0.5)
+            for x in await get_result_1(data)
+            for y in await get_result_2(data)
+        )
+        return out
+
+
+Development
+===========
+
+* Set up: ``pip install -e .``
+
+* Test your changes: ``flake8 src tests; mypy; pytest``
+
+* Remember to test in Python 3.8 - 3.11.
+
+
 FAQ
 ===
 
