@@ -13,8 +13,6 @@ Possible log types:
 
 ## [Unreleased]
 
-## [0.15.0] - 2023-11-24
-
 - `[added]` Add `do` function to support Haskell-style do-notation (#149)
 
 ## [0.14.0] - 2023-11-10
