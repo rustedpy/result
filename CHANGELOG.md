@@ -13,13 +13,14 @@ Possible log types:
 
 ## [Unreleased]
 
+## [0.15.0] - 2023-11-24
+
+- `[added]` Add `do` function to support Haskell-style do-notation (#149)
 
 ## [0.14.0] - 2023-11-10
 
 - `[added]` `is_ok` and `is_err` type guard functions as alternatives to `isinstance` checks (#69)
 - `[added]` Add `and_then_async` for async functions (#148)
-- `[added]` Support do notation (#149)
-
 
 ## [0.13.1] - 2023-07-19
 
