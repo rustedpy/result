@@ -361,10 +361,10 @@ generator-based, the final result must be the first line, not the last.
         for y in Ok(True)
     )
 
-Note that if you exclude the type annotation, ``final_result: Result[float,
-int] = ...``, your type checker may be unable to infer the return type. To
-avoid an errors or warnings from your type checker, you should add a type hint
-when using the ``do`` function.
+Note that if you exclude the type annotation,
+``final_result: Result[float, int] = ...``, your type checker may be unable to
+infer the return type. To avoid an errors or warnings from your type checker,
+you should add a type hint when using the ``do`` function.
 
 This is similar to Rust's  `m! macro <https://docs.rs/do-notation/latest/do_notation/>`_:
 
