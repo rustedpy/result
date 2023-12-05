@@ -193,13 +193,12 @@ Access the value directly, without any other checks:
 
 Note that this is a property, you cannot assign to it. Results are immutable.
 
-For your convenience, simply creating an ``Ok`` result without value is the same as using ``True``:
-
-.. sourcecode:: python
-
-    >>> res1 = Ok()
-    >>> res1.value
-    True
+When the value inside is irrelevant, we suggest using ``None`` or a ``bool``,
+but you're free to use any value you think works best. An instance of a
+``Result`` (``Ok`` or ``Err``) must always contain something. If you're looking for a
+type that might contain a value you may be interested in
+a `maybe
+<https://github.com/rustedpy/maybe>`__.
 
 The ``unwrap`` method returns the value if ``Ok`` and ``unwrap_err`` method
 returns the error value if ``Err``, otherwise it raises an ``UnwrapError``:
