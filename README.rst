@@ -297,6 +297,10 @@ To save memory, both the ``Ok`` and ``Err`` classes are ‘slotted’,
 i.e. they define ``__slots__``. This means assigning arbitrary
 attributes to instances will raise ``AttributeError``.
 
+
+``as_result`` Decorator
+-----------------------
+
 The ``as_result()`` decorator can be used to quickly turn ‘normal’
 functions into ``Result`` returning ones by specifying one or more
 exception types:
@@ -341,24 +345,27 @@ unconventional syntax (without the usual ``@``):
         print(res.value)
 
 
-Do notation: syntactic sugar for a sequence of ``and_then()`` calls.
-Much like the equivalent in Rust or Haskell, but with different syntax.
-Instead of ``x <- Ok(1)`` we write ``for x in Ok(1)``.
-Since the syntax is generator-based, the final result must be the first line,
-not the last.
+Do notation
+-----------
+
+Do notation is syntactic sugar for a sequence of ``and_then()`` calls. Much
+like the equivalent in Rust or Haskell, but with different syntax. Instead of
+``x <- Ok(1)`` we write ``for x in Ok(1)``. Since the syntax is
+generator-based, the final result must be the first line, not the last.
 
 .. sourcecode:: python
 
 
-    >>> final_result: Result[float, int] = do(
-            Ok(len(x) + int(y) + 0.5)
-            for x in Ok("hello")
-            for y in Ok(True)
-        )
+    final_result: Result[float, int] = do(
+        Ok(len(x) + int(y) + 0.5)
+        for x in Ok("hello")
+        for y in Ok(True)
+    )
 
-NOTE: If you exclude the type annotation e.g. ``Result[float, int]``
-your type checker might be unable to infer the return type.
-To avoid an error, you might need to help it with the type hint.
+Note that if you exclude the type annotation, ``final_result: Result[float,
+int] = ...``, your type checker may be unable to infer the return type. To
+avoid an errors or warnings from your type checker, you should add a type hint
+when using the ``do`` function.
 
 This is similar to Rust's  `m! macro <https://docs.rs/do-notation/latest/do_notation/>`_:
 
