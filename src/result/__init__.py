@@ -23,4 +23,4 @@ __all__ = [
     "is_err",
     "do",
 ]
-__version__ = "0.15.0"
+__version__ = "0.16.0.dev0"
