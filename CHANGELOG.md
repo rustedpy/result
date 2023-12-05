@@ -13,6 +13,8 @@ Possible log types:
 
 ## [Unreleased]
 
+## [0.15.0] - 2023-12-04
+
 - `[added]` Add `do` function to support Haskell-style do-notation (#149)
 
 ## [0.14.0] - 2023-11-10
@@ -130,7 +132,8 @@ codebase.
  - Initial version
 
 [MIGRATING.md]: https://github.com/rustedpy/result/blob/master/MIGRATING.md
-[Unreleased]: https://github.com/rustedpy/result/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/rustedpy/result/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/rustedpy/result/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/rustedpy/result/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/rustedpy/result/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/rustedpy/result/compare/v0.12.0...v0.13.0
