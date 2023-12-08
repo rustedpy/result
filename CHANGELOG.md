@@ -13,6 +13,8 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[added]` Add support for Python 3.12 (#157)
+
 ## [0.15.0] - 2023-12-04
 
 - `[added]` Add `do` function to support Haskell-style do-notation (#149)

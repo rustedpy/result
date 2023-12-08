@@ -398,7 +398,7 @@ Development
 
 * Test your changes: ``flake8 src tests; mypy; pytest``
 
-* Remember to test in Python 3.8 - 3.11.
+* Remember to test in Python 3.8 - 3.12.
 
 
 FAQ
