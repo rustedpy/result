@@ -88,7 +88,7 @@ class Ok(Generic[T]):
         """
         warn(
             "Accessing `.value` on Result type is deprecated, please use "
-            + "`.ok_value` or '.err_value' instead",
+            + "`.ok_value` or `.err_value` instead",
             DeprecationWarning,
             stacklevel=2,
         )
