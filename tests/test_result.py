@@ -225,6 +225,25 @@ async def test_and_then_async() -> None:
     ).err() == 3
 
 
+@pytest.mark.asyncio
+async def test_map_async() -> None:
+    async def str_upper_async(s: str) -> str:
+        return s.upper()
+
+    async def str_async(x: int) -> str:
+        return str(x)
+
+    o = Ok('yay')
+    n = Err('nay')
+    assert (await o.map_async(str_upper_async)).ok() == 'YAY'
+    assert (await n.map_async(str_upper_async)).err() == 'nay'
+
+    num = Ok(3)
+    errnum = Err(2)
+    assert (await num.map_async(str_async)).ok() == '3'
+    assert (await errnum.map_async(str_async)).err() == 2
+
+
 def test_or_else() -> None:
     assert Ok(2).or_else(sq).or_else(sq).ok() == 2
     assert Ok(2).or_else(to_err).or_else(sq).ok() == 2

@@ -13,6 +13,8 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[added]` Add `map_async` for async functions
+
 - `[fixed]` Add `do_async()` to handle edge case in `do()` involving multiple inlined awaits (#149)
 
 - `[added]` Add support for Python 3.12 (#157)
