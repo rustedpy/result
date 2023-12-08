@@ -75,11 +75,14 @@ To something like this:
 
     user_result = get_user_by_email(email)
     if isinstance(user_result, Ok): # or `is_ok(user_result)`
-        # type(user_result.value) == User
-        do_something(user_result.value)
+        # type(user_result.ok_value) == User
+        do_something(user_result.ok_value)
     else: # or `elif is_err(user_result)`
-        # type(user_result.value) == str
-        raise RuntimeError('Could not fetch user: %s' % user_result.value)
+        # type(user_result.err_value) == str
+        raise RuntimeError('Could not fetch user: %s' % user_result.err_value)
+
+Note that ``.ok_value`` exists only on an instance of ``Ok`` and ``.err_value``
+exists only on an instance of ``Err``.
 
 And if you're using python version ``3.10`` or later, you can use the elegant ``match`` statement as well:
 
@@ -186,9 +189,9 @@ Access the value directly, without any other checks:
 
     >>> res1 = Ok('yay')
     >>> res2 = Err('nay')
-    >>> res1.value
+    >>> res1.ok_value
     'yay'
-    >>> res2.value
+    >>> res2.err_value
     'nay'
 
 Note that this is a property, you cannot assign to it. Results are immutable.
@@ -341,7 +344,7 @@ unconventional syntax (without the usual ``@``):
 
     res = safe_do_something(...)  # Ok(...) or Err(...)
     if isinstance(res, Ok):
-        print(res.value)
+        print(res.ok_value)
 
 
 Do notation

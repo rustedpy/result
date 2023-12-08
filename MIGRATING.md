@@ -1,5 +1,13 @@
 # Migration guides
 
+## 0.11.0 -> 0.12 migration
+
+``.value`` is now deprecated. New code should use ``.ok_value`` on instances of
+``Ok`` and ``.err_value`` on instances of ``Err``. Existing code using
+``.value`` will continue to work, but will result in a deprecation warning being
+logged. Users of this library are encouraged to migrate away from ``.value``
+before it is removed in a future version.
+
 ## 0.10 -> 0.11 migration
 
 The 0.11 migration includes one breaking change:
