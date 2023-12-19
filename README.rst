@@ -97,8 +97,7 @@ And if you're using python version ``3.10`` or later, you can use the elegant ``
 
     values = [(10, 0), (10, 5)]
     for a, b in values:
-        divide_result = divide(a, b)
-        match divide_result:
+        match divide(a, b):
             case Ok(value):
                 print(f"{a} // {b} == {value}")
             case Err(e):
