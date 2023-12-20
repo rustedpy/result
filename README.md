@@ -371,17 +371,53 @@ let r = m! {
 };
 ```
 
-You can also `await` Awaitables like async function calls. See example:
+Note that if your do statement has multiple <span
+class="title-ref">for\`s, you can access an identifier bound in a
+previous \`for</span>. Example:
+
+``` python
+my_result: Result[int, str] = do(
+    f(x, y, z)
+    for x in get_x()
+    for y in calculate_y_from_x(x)
+    for z in calculate_z_from_x_y(x, y)
+)
+```
+
+You can use `do()` with awaited values as follows:
 
 ``` python
 async def process_data(data) -> Result[float, int]:
-    out: Result[float, int] = do(
+    res1 = await get_result_1(data)
+    res2 = await get_result_2(data)
+    return do(
+        Ok(len(x) + int(y) + 0.5)
+        for x in res1
+        for y in res2
+    )
+```
+
+However, if you want to await something inside the expression, use
+`do_async()`:
+
+``` python
+async def process_data(data) -> Result[float, int]:
+    return do_async(
         Ok(len(x) + int(y) + 0.5)
         for x in await get_result_1(data)
         for y in await get_result_2(data)
     )
-    return out
 ```
+
+Troubleshooting `do()` calls:
+
+``` python
+TypeError("Got async_generator but expected generator")
+```
+
+Sometimes regular `do()` can handle async values, but this error means
+you have hit a case where it does not. You should use `do_async()` here
+instead.
 
 ## Development
 
