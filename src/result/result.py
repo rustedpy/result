@@ -6,6 +6,7 @@ import sys
 from warnings import warn
 from typing import (
     Any,
+    AsyncGenerator,
     Awaitable,
     Callable,
     Final,
@@ -201,6 +202,7 @@ class DoException(Exception):
     to simulate `and_then()` in the Err case: namely, we don't call `op`,
     we just return `self` (the Err).
     """
+
     def __init__(self, err: Err[E]) -> None:
         self.err = err
 
@@ -534,6 +536,68 @@ def do(gen: Generator[Result[T, E], None, None]) -> Result[T, E]:
     """
     try:
         return next(gen)
+    except DoException as e:
+        out: Err[E] = e.err  # type: ignore
+        return out
+    except TypeError as te:
+        # Turn this into a more helpful error message.
+        # Python has strange rules involving turning generators involving `await`
+        # into async generators, so we want to make sure to help the user clearly.
+        if "'async_generator' object is not an iterator" in str(te):
+            raise TypeError(
+                "Got async_generator but expected generator."
+                "See the section on do notation in the README."
+            )
+        raise te
+
+
+async def do_async(
+    gen: Union[Generator[Result[T, E], None, None], AsyncGenerator[Result[T, E], None]]
+) -> Result[T, E]:
+    """Async version of do. Example:
+
+    >>> final_result: Result[float, int] = await do_async(
+        Ok(len(x) + int(y) + z)
+            for x in await get_async_result_1()
+            for y in await get_async_result_2()
+            for z in get_sync_result_3()
+        )
+
+    NOTE: Python makes generators async in a counter-intuitive way.
+    This is a regular generator:
+        async def foo(): ...
+        do(Ok(1) for x in await foo())
+
+    But this is an async generator:
+        async def foo(): ...
+        async def bar(): ...
+        do(
+            Ok(1)
+            for x in await foo()
+            for y in await bar()
+        )
+
+    We let users try to use regular `do()`, which works in some cases
+    of awaiting async values. If we hit a case like above, we raise
+    an exception telling the user to use `do_async()` instead.
+    See `do()`.
+
+    However, for better usability, it's better for `do_async()` to also accept
+    regular generators, as you get in the first case:
+
+    async def foo(): ...
+        do(Ok(1) for x in await foo())
+
+    Furthermore, neither mypy nor pyright can infer that the second case is
+    actually an async generator, so we cannot annotate `do_async()`
+    as accepting only an async generator. This is additional motivation
+    to accept either.
+    """
+    try:
+        if isinstance(gen, AsyncGenerator):
+            return await gen.__anext__()
+        else:
+            return next(gen)
     except DoException as e:
         out: Err[E] = e.err  # type: ignore
         return out
