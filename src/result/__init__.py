@@ -9,6 +9,7 @@ from .result import (
     is_ok,
     is_err,
     do,
+    do_async,
 )
 
 __all__ = [
@@ -22,5 +23,6 @@ __all__ = [
     "is_ok",
     "is_err",
     "do",
+    "do_async",
 ]
 __version__ = "0.16.0.dev0"
