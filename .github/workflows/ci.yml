@@ -38,7 +38,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-py${{ matrix.python }}-
       - name: Install dev dependencies
-        run: make install
+        # There's no virtual env in CI environment, just bypass it with a dummy
+        # env var value
+        run: VIRTUAL_ENV=none make install
 
       # Tests
       - name: Run tests
