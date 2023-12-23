@@ -15,6 +15,7 @@ lint-flake: phony
 	flake8
 
 lint-flake-pre310: phony
+	# Python <3.10 doesn't support pattern matching.
 	flake8 --extend-exclude tests/test_pattern_matching.py
 
 lint-mypy: phony
