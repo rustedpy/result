@@ -427,7 +427,7 @@ the `Makefile` for commands to run from the non-unix shell you're using on
 Windows.
 
 1. Setup and activate a virtual environment. See [Python docs][pydocs-venv] for more
-   information about Virtual environment and setup.
+   information about virtual environments and setup.
 2. With the Run `make install`
 3. Switch to a new git branch and make your changes
 4. Test your changes: `make test` and `make lint`
