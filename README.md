@@ -349,10 +349,10 @@ Instead of `x <- Ok(1)` we write `for x in Ok(1)`. Since the syntax is
 generator-based, the final result must be the first line, not the last.
 
 ``` python
-final_result: Result[float, int] = do(
-    Ok(len(x) + int(y) + 0.5)
-    for x in Ok("hello")
-    for y in Ok(True)
+final_result: Result[int, str] = do(
+    Ok(x + y)
+    for x in Ok(1)
+    for y in Ok(2)
 )
 ```
 
@@ -368,9 +368,9 @@ macro](https://docs.rs/do-notation/latest/do_notation/):
 ``` rust
 use do_notation::m;
 let r = m! {
-    x <- Some("Hello, world!");
-    y <- Some(3);
-    Some(x.len() * y)
+    x <- Some(1);
+    y <- Some(2);
+    Some(x + y)
 };
 ```
 
@@ -390,11 +390,11 @@ my_result: Result[int, str] = do(
 You can use `do()` with awaited values as follows:
 
 ``` python
-async def process_data(data) -> Result[float, int]:
+async def process_data(data) -> Result[int, str]:
     res1 = await get_result_1(data)
     res2 = await get_result_2(data)
     return do(
-        Ok(len(x) + int(y) + 0.5)
+        Ok(x + y)
         for x in res1
         for y in res2
     )
@@ -404,9 +404,9 @@ However, if you want to await something inside the expression, use
 `do_async()`:
 
 ``` python
-async def process_data(data) -> Result[float, int]:
+async def process_data(data) -> Result[int, str]:
     return do_async(
-        Ok(len(x) + int(y) + 0.5)
+        Ok(x + y)
         for x in await get_result_1(data)
         for y in await get_result_2(data)
     )
