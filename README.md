@@ -421,16 +421,19 @@ instead.
 
 ## Contributing
 
-These steps should work on a Unix-based system (Linux, macOS, etc). On Windows,
-you will need to refer to the Python documentation (linked below) and reference
-the `Makefile` for commands to run from the non-unix shell you're using on
-Windows.
+These steps should work on any Unix-based system (Linux, macOS, etc) with Python
+and `make` installed. On Windows, you will need to refer to the Python
+documentation (linked below) and reference the `Makefile` for commands to run
+from the non-unix shell you're using on Windows.
 
 1. Setup and activate a virtual environment. See [Python docs][pydocs-venv] for more
    information about virtual environments and setup.
-2. With the Run `make install`
+2. Run `make install` to install dependencies
 3. Switch to a new git branch and make your changes
-4. Test your changes: `make test` and `make lint`
+4. Test your changes:
+  - `make test`
+  - `make lint`
+  - You can also start a Python REPL and import `result`
 5. Git commit and create a new PR.
 
 [pydocs-venv]: https://docs.python.org/3/library/venv.html
