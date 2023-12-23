@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../src/result/result.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `result`
 
@@ -13,7 +13,7 @@
 
 ---
 
-<a href="../src/result/result.py#L439"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L439"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `as_result`
 
@@ -30,7 +30,7 @@ Regular return values are turned into ``Ok(return_value)``. Raised exceptions of
 
 ---
 
-<a href="../src/result/result.py#L471"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L471"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `as_async_result`
 
@@ -45,7 +45,7 @@ Make a decorator to turn an async function into one that returns a ``Result``. R
 
 ---
 
-<a href="../src/result/result.py#L504"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L504"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_ok`
 
@@ -63,7 +63,7 @@ Usage: ``` r: Result[int, str] = get_a_result()```
 
 ---
 
-<a href="../src/result/result.py#L517"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L517"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_err`
 
@@ -81,7 +81,7 @@ Usage: ``` r: Result[int, str] = get_a_result()```
 
 ---
 
-<a href="../src/result/result.py#L530"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L530"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `do`
 
@@ -108,7 +108,7 @@ NOTE: If you exclude the type annotation e.g. `Result[float, int]` your type che
 
 ---
 
-<a href="../src/result/result.py#L570"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L570"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `do_async`
 
@@ -161,12 +161,12 @@ to accept either.
 
 ---
 
-<a href="../src/result/result.py#L38"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L38"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Ok`
 A value that indicates success and which stores arbitrary data for the return value. 
 
-<a href="../src/result/result.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -197,7 +197,7 @@ Return the inner value.
 
 ---
 
-<a href="../src/result/result.py#L183"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L183"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `and_then`
 
@@ -209,7 +209,7 @@ The contained result is `Ok`, so return the result of `op` with the original val
 
 ---
 
-<a href="../src/result/result.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `and_then_async`
 
@@ -221,7 +221,7 @@ The contained result is `Ok`, so return the result of `op` with the original val
 
 ---
 
-<a href="../src/result/result.py#L76"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L76"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `err`
 
@@ -233,7 +233,7 @@ Return `None`.
 
 ---
 
-<a href="../src/result/result.py#L105"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L105"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `expect`
 
@@ -245,7 +245,7 @@ Return the value.
 
 ---
 
-<a href="../src/result/result.py#L111"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L111"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `expect_err`
 
@@ -257,7 +257,7 @@ Raise an UnwrapError since this type is `Ok`
 
 ---
 
-<a href="../src/result/result.py#L67"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L67"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `is_err`
 
@@ -271,7 +271,7 @@ is_err() → Literal[False]
 
 ---
 
-<a href="../src/result/result.py#L64"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L64"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `is_ok`
 
@@ -285,7 +285,7 @@ is_ok() → Literal[True]
 
 ---
 
-<a href="../src/result/result.py#L147"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L147"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map`
 
@@ -297,7 +297,7 @@ The contained result is `Ok`, so return `Ok` with original value mapped to a new
 
 ---
 
-<a href="../src/result/result.py#L154"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L154"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_async`
 
@@ -309,7 +309,7 @@ The contained result is `Ok`, so return the result of `op` with the original val
 
 ---
 
-<a href="../src/result/result.py#L177"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L177"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_err`
 
@@ -321,7 +321,7 @@ The contained result is `Ok`, so return `Ok` with the original value
 
 ---
 
-<a href="../src/result/result.py#L163"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L163"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_or`
 
@@ -333,7 +333,7 @@ The contained result is `Ok`, so return the original value mapped to a new value
 
 ---
 
-<a href="../src/result/result.py#L170"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L170"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_or_else`
 
@@ -345,7 +345,7 @@ The contained result is `Ok`, so return original value mapped to a new value usi
 
 ---
 
-<a href="../src/result/result.py#L70"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L70"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `ok`
 
@@ -357,7 +357,7 @@ Return the value.
 
 ---
 
-<a href="../src/result/result.py#L199"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L199"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `or_else`
 
@@ -369,7 +369,7 @@ The contained result is `Ok`, so return `Ok` with the original value
 
 ---
 
-<a href="../src/result/result.py#L117"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L117"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap`
 
@@ -381,7 +381,7 @@ Return the value.
 
 ---
 
-<a href="../src/result/result.py#L123"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L123"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_err`
 
@@ -393,7 +393,7 @@ Raise an UnwrapError since this type is `Ok`
 
 ---
 
-<a href="../src/result/result.py#L129"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L129"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or`
 
@@ -405,7 +405,7 @@ Return the value.
 
 ---
 
-<a href="../src/result/result.py#L135"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L135"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or_else`
 
@@ -417,7 +417,7 @@ Return the value.
 
 ---
 
-<a href="../src/result/result.py#L141"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L141"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or_raise`
 
@@ -430,12 +430,12 @@ Return the value.
 
 ---
 
-<a href="../src/result/result.py#L206"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L206"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `DoException`
 This is used to signal to `do()` that the result is an `Err`, which short-circuits the generator and returns that Err. Using this exception for control flow in `do()` allows us to simulate `and_then()` in the Err case: namely, we don't call `op`, we just return `self` (the Err). 
 
-<a href="../src/result/result.py#L215"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L215"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -453,12 +453,12 @@ __init__(err: 'Err[E]') → None
 
 ---
 
-<a href="../src/result/result.py#L219"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L219"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Err`
 A value that signifies failure and which stores arbitrary data for the error. 
 
-<a href="../src/result/result.py#L235"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L235"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -489,7 +489,7 @@ Return the inner value.
 
 ---
 
-<a href="../src/result/result.py#L378"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L378"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `and_then`
 
@@ -501,7 +501,7 @@ The contained result is `Err`, so return `Err` with the original value
 
 ---
 
-<a href="../src/result/result.py#L384"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L384"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `and_then_async`
 
@@ -513,7 +513,7 @@ The contained result is `Err`, so return `Err` with the original value
 
 ---
 
-<a href="../src/result/result.py#L262"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L262"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `err`
 
@@ -525,7 +525,7 @@ Return the error.
 
 ---
 
-<a href="../src/result/result.py#L291"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L291"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `expect`
 
@@ -537,7 +537,7 @@ Raises an `UnwrapError`.
 
 ---
 
-<a href="../src/result/result.py#L303"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L303"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `expect_err`
 
@@ -549,7 +549,7 @@ Return the inner value
 
 ---
 
-<a href="../src/result/result.py#L253"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L253"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `is_err`
 
@@ -563,7 +563,7 @@ is_err() → Literal[True]
 
 ---
 
-<a href="../src/result/result.py#L250"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L250"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `is_ok`
 
@@ -577,7 +577,7 @@ is_ok() → Literal[False]
 
 ---
 
-<a href="../src/result/result.py#L346"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L346"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map`
 
@@ -589,7 +589,7 @@ Return `Err` with the same value
 
 ---
 
-<a href="../src/result/result.py#L352"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L352"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_async`
 
@@ -601,7 +601,7 @@ The contained result is `Ok`, so return the result of `op` with the original val
 
 ---
 
-<a href="../src/result/result.py#L371"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L371"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_err`
 
@@ -613,7 +613,7 @@ The contained result is `Err`, so return `Err` with original error mapped to a n
 
 ---
 
-<a href="../src/result/result.py#L359"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L359"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_or`
 
@@ -625,7 +625,7 @@ Return the default value
 
 ---
 
-<a href="../src/result/result.py#L365"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L365"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `map_or_else`
 
@@ -637,7 +637,7 @@ Return the result of the default operation
 
 ---
 
-<a href="../src/result/result.py#L256"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L256"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `ok`
 
@@ -649,7 +649,7 @@ Return `None`.
 
 ---
 
-<a href="../src/result/result.py#L390"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L390"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `or_else`
 
@@ -661,7 +661,7 @@ The contained result is `Err`, so return the result of `op` with the original va
 
 ---
 
-<a href="../src/result/result.py#L309"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L309"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap`
 
@@ -673,7 +673,7 @@ Raises an `UnwrapError`.
 
 ---
 
-<a href="../src/result/result.py#L321"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L321"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_err`
 
@@ -685,7 +685,7 @@ Return the inner value
 
 ---
 
-<a href="../src/result/result.py#L327"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L327"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or`
 
@@ -697,7 +697,7 @@ Return `default`.
 
 ---
 
-<a href="../src/result/result.py#L333"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L333"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or_else`
 
@@ -709,7 +709,7 @@ The contained result is ``Err``, so return the result of applying ``op`` to the 
 
 ---
 
-<a href="../src/result/result.py#L340"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L340"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `unwrap_or_raise`
 
@@ -722,14 +722,14 @@ The contained result is ``Err``, so raise the exception with the value.
 
 ---
 
-<a href="../src/result/result.py#L414"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L414"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `UnwrapError`
 Exception raised from ``.unwrap_<...>`` and ``.expect_<...>`` calls. 
 
 The original ``Result`` can be accessed via the ``.result`` attribute, but this is not intended for regular use, as type information is lost: ``UnwrapError`` doesn't know about both ``T`` and ``E``, since it's raised from ``Ok()`` or ``Err()`` which only knows about either ``T`` or ``E``, not both. 
 
-<a href="../src/result/result.py#L427"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L427"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 

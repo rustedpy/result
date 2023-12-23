@@ -25,4 +25,7 @@ test: phony
 	pytest
 
 docs: phony
-	lazydocs ./src/result
+	lazydocs \
+		--overview-file README.md \
+		--src-base-url https://github.com/rustedpy/result/blob/master/ \
+		./src/result
