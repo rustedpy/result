@@ -38,11 +38,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-py${{ matrix.python }}-
       - name: Install dev dependencies
-        run: pip install --requirement requirements-dev.txt
-
-      # Install library
-      - name: Install result
-        run: pip install --editable .
+        # There's no virtual env in CI environment, just bypass it with a dummy
+        # env var value
+        run: VIRTUAL_ENV=none make install
 
       # Tests
       - name: Run tests
@@ -60,13 +58,13 @@ jobs:
 
       # Linters
       - name: Run flake8 (Python >= 3.10)
-        run: flake8
+        run: make lint-flake
         if: matrix.python != '3.9' && matrix.python != '3.8'
       - name: Run flake8 (Python < 3.10)
-        run: flake8 --extend-exclude tests/test_pattern_matching.py
+        run: make lint-flake-pre310
         if: matrix.python == '3.9' || matrix.python == '3.8'
       - name: Run mypy
-        run: mypy
+        run: make lint-mypy
 
       # Packaging
       - name: Build packages
