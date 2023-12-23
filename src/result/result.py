@@ -151,6 +151,15 @@ class Ok(Generic[T]):
         """
         return Ok(op(self._value))
 
+    async def map_async(
+        self, op: Callable[[T], Awaitable[U]]
+    ) -> Ok[U]:
+        """
+        The contained result is `Ok`, so return the result of `op` with the
+        original value passed in
+        """
+        return Ok(await op(self._value))
+
     def map_or(self, default: object, op: Callable[[T], U]) -> U:
         """
         The contained result is `Ok`, so return the original value mapped to a new
@@ -337,6 +346,13 @@ class Err(Generic[E]):
     def map(self, op: object) -> Err[E]:
         """
         Return `Err` with the same value
+        """
+        return self
+
+    async def map_async(self, op: object) -> Err[E]:
+        """
+        The contained result is `Ok`, so return the result of `op` with the
+        original value passed in
         """
         return self
 
