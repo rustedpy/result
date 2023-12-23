@@ -74,9 +74,7 @@ async def test_result_do_async_one_value() -> None:
     assert await do_async(Ok(len(x)) for x in await aget_resx(True)) == Ok(5)
     assert await do_async(Ok(len(x)) for x in await aget_resx(False)) == Err(1)
 
-    async def _aget_output(
-        is_suc1: bool, is_suc3: bool
-    ) -> Result[float, int]:
+    async def _aget_output(is_suc1: bool, is_suc3: bool) -> Result[float, int]:
         return await do_async(
             Ok(len(x) + z) for x in await aget_resx(is_suc1) for z in get_resz(is_suc3)
         )
@@ -200,3 +198,30 @@ async def test_result_do_general_with_async_values_inline_error() -> None:
     assert (
         "Got async_generator but expected generator.See the section on do notation in the README."
     ) in excinfo.value.args[0]
+
+
+@pytest.mark.asyncio
+async def test_result_do_async_swap_order() -> None:
+    def foo() -> Result[int, str]:
+        return Ok(1)
+
+    async def bar() -> Result[int, str]:
+        return Ok(2)
+
+    result1: Result[int, str] = await do_async(
+        Ok(x + y)
+        # x first
+        for x in foo()
+        # then y
+        for y in await bar()
+    )
+
+    result2: Result[int, str] = await do_async(
+        Ok(x + y)
+        # y first
+        for y in await bar()
+        # then x
+        for x in foo()
+    )
+
+    assert result1 == result2 == Ok(3)
