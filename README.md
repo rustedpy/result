@@ -106,6 +106,9 @@ exceptions.
 
 ## API
 
+Auto generated API docs are also available at
+[./docs/README.md](./docs/README.md).
+
 Creating an instance:
 
 ``` python
@@ -434,7 +437,11 @@ from the non-unix shell you're using on Windows.
   - `make test`
   - `make lint`
   - You can also start a Python REPL and import `result`
-5. Git commit and create a new PR.
+5. Update documentation
+  - Edit any relevant docstrings, markdown files
+  - Run `make docs`
+6. Add an entry to the [changelog](./CHANGELOG.md)
+5. Git commit all your changes and create a new PR.
 
 [pydocs-venv]: https://docs.python.org/3/library/venv.html
 

@@ -23,3 +23,9 @@ lint-mypy: phony
 
 test: phony
 	pytest
+
+docs: phony
+	lazydocs \
+		--overview-file README.md \
+		--src-base-url https://github.com/rustedpy/result/blob/master/ \
+		./src/result
