@@ -23,3 +23,6 @@ lint-mypy: phony
 
 test: phony
 	pytest
+
+docs: phony
+	lazydocs ./src/result
