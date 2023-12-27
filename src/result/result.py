@@ -503,13 +503,19 @@ def as_async_result(
 
 def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
     """A typeguard to check if a result is an Ok
-
+    
     Usage:
-    >>> r: Result[int, str] = get_a_result()
-    >>> if is_ok(r):
-    >>>     r   # r is of type Ok[int]
-    >>> elif is_err(r):
-    >>>     r   # r is of type Err[str]
+
+    ```python
+
+    r: Result[int, str] = get_a_result()
+    if is_ok(r):
+        r   # r is of type Ok[int]
+    elif is_err(r):
+        r   # r is of type Err[str]
+    
+    ```
+    
     """
     return result.is_ok()
 
@@ -518,11 +524,17 @@ def is_err(result: Result[T, E]) -> TypeGuard[Err[E]]:
     """A typeguard to check if a result is an Err
 
     Usage:
-    >>> r: Result[int, str] = get_a_result()
-    >>> if is_ok(r):
-    >>>     r   # r is of type Ok[int]
-    >>> elif is_err(r):
-    >>>     r   # r is of type Err[str]
+
+    ```python 
+
+    r: Result[int, str] = get_a_result()
+    if is_ok(r):
+        r   # r is of type Ok[int]
+    elif is_err(r):
+        r   # r is of type Err[str]
+    
+    ```
+
     """
     return result.is_err()
 
@@ -532,7 +544,10 @@ def do(gen: Generator[Result[T, E], None, None]) -> Result[T, E]:
 
 
     Usage:
-    >>> # This is similar to
+    
+    ``` rust
+
+    // This is similar to
     use do_notation::m;
     let final_result = m! {
         x <- Ok("hello");
@@ -540,11 +555,17 @@ def do(gen: Generator[Result[T, E], None, None]) -> Result[T, E]:
         Ok(len(x) + int(y) + 0.5)
     };
 
-    >>> final_result: Result[float, int] = do(
+    ```
+
+    ``` rust
+
+    final_result: Result[float, int] = do(
             Ok(len(x) + int(y) + 0.5)
             for x in Ok("hello")
             for y in Ok(True)
         )
+
+    ```
 
     NOTE: If you exclude the type annotation e.g. `Result[float, int]`
     your type checker might be unable to infer the return type.
@@ -572,19 +593,30 @@ async def do_async(
 ) -> Result[T, E]:
     """Async version of do. Example:
 
-    >>> final_result: Result[float, int] = await do_async(
+    ``` python
+
+    final_result: Result[float, int] = await do_async(
         Ok(len(x) + int(y) + z)
             for x in await get_async_result_1()
             for y in await get_async_result_2()
             for z in get_sync_result_3()
         )
 
+    ```
+
     NOTE: Python makes generators async in a counter-intuitive way.
-    This is a regular generator:
+
+    ``` python
+
+    # This is a regular generator:
         async def foo(): ...
         do(Ok(1) for x in await foo())
 
-    But this is an async generator:
+    ```
+
+    ``` python
+
+    # But this is an async generator:
         async def foo(): ...
         async def bar(): ...
         do(
@@ -592,6 +624,8 @@ async def do_async(
             for x in await foo()
             for y in await bar()
         )
+
+    ```
 
     We let users try to use regular `do()`, which works in some cases
     of awaiting async values. If we hit a case like above, we raise
@@ -601,8 +635,12 @@ async def do_async(
     However, for better usability, it's better for `do_async()` to also accept
     regular generators, as you get in the first case:
 
+    ``` python
+
     async def foo(): ...
         do(Ok(1) for x in await foo())
+
+    ```
 
     Furthermore, neither mypy nor pyright can infer that the second case is
     actually an async generator, so we cannot annotate `do_async()`
