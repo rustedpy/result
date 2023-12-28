@@ -503,7 +503,7 @@ def as_async_result(
 
 def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
     """A typeguard to check if a result is an Ok
-    
+
     Usage:
 
     ```python
@@ -513,9 +513,9 @@ def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
         r   # r is of type Ok[int]
     elif is_err(r):
         r   # r is of type Err[str]
-    
+
     ```
-    
+
     """
     return result.is_ok()
 
@@ -525,14 +525,14 @@ def is_err(result: Result[T, E]) -> TypeGuard[Err[E]]:
 
     Usage:
 
-    ```python 
+    ```python
 
     r: Result[int, str] = get_a_result()
     if is_ok(r):
         r   # r is of type Ok[int]
     elif is_err(r):
         r   # r is of type Err[str]
-    
+
     ```
 
     """
@@ -544,7 +544,7 @@ def do(gen: Generator[Result[T, E], None, None]) -> Result[T, E]:
 
 
     Usage:
-    
+
     ``` rust
 
     // This is similar to
