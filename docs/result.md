@@ -57,20 +57,18 @@ A typeguard to check if a result is an Ok
 
 Usage: 
 
-```python
-
+``` python
 r: Result[int, str] = get_a_result()
 if is_ok(r):
      r   # r is of type Ok[int]
 elif is_err(r):
      r   # r is of type Err[str]
-
 ``` 
 
 
 ---
 
-<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L523"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L521"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `is_err`
 
@@ -82,20 +80,18 @@ A typeguard to check if a result is an Err
 
 Usage: 
 
-```python
-
+``` python
 r: Result[int, str] = get_a_result()
 if is_ok(r):
      r   # r is of type Ok[int]
 elif is_err(r):
      r   # r is of type Err[str]
-
 ``` 
 
 
 ---
 
-<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L542"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L538"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `do`
 
@@ -110,7 +106,6 @@ Do notation for Result (syntactic sugar for sequence of `and_then()` calls).
 Usage: 
 
 ``` rust
-
 // This is similar to
 use do_notation::m;
 let final_result = m! {
@@ -118,17 +113,14 @@ let final_result = m! {
      y <- Ok(True);
      Ok(len(x) + int(y) + 0.5)
 };
-
 ``` 
 
 ``` rust
-
 final_result: Result[float, int] = do(
          Ok(len(x) + int(y) + 0.5)
          for x in Ok("hello")
          for y in Ok(True)
      )
-
 ``` 
 
 NOTE: If you exclude the type annotation e.g. `Result[float, int]` your type checker might be unable to infer the return type. To avoid an error, you might need to help it with the type hint. 
@@ -136,7 +128,7 @@ NOTE: If you exclude the type annotation e.g. `Result[float, int]` your type che
 
 ---
 
-<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L591"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/rustedpy/result/blob/master/src/result/result.py#L583"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `do_async`
 
@@ -146,47 +138,46 @@ do_async(
 ) → Result[T, E]
 ```
 
-Async version of do. Example: ```
-``` python 
+Async version of do. Example: 
 
-final_result: Result[float, int] = await do_async(  Ok(len(x) + int(y) + z)  for x in await get_async_result_1()  for y in await get_async_result_2()  for z in get_sync_result_3()  ) 
-
-```
-
-NOTE: Python makes generators async in a counter-intuitive way.
-
-``` python 
-
-# This is a regular generator:  async def foo(): ...  do(Ok(1) for x in await foo()) 
-
-```
-
-``` python 
-
-# But this is an async generator:  async def foo(): ...  async def bar(): ...  do(  Ok(1)  for x in await foo()  for y in await bar()  ) 
-
-```
-
-We let users try to use regular `do()`, which works in some cases
-of awaiting async values. If we hit a case like above, we raise
-an exception telling the user to use `do_async()` instead.
-See `do()`.
-
-However, for better usability, it's better for `do_async()` to also accept
-regular generators, as you get in the first case:
-
-``` python 
-
-async def foo(): ...  do(Ok(1) for x in await foo()) 
-
-```
-
-Furthermore, neither mypy nor pyright can infer that the second case is
-actually an async generator, so we cannot annotate `do_async()`
-as accepting only an async generator. This is additional motivation
-to accept either.
-
+``` python
+final_result: Result[float, int] = await do_async(
+     Ok(len(x) + int(y) + z)
+         for x in await get_async_result_1()
+         for y in await get_async_result_2()
+         for z in get_sync_result_3()
+     )
 ``` 
+
+NOTE: Python makes generators async in a counter-intuitive way. 
+
+``` python
+# This is a regular generator:
+     async def foo(): ...
+     do(Ok(1) for x in await foo())
+``` 
+
+``` python
+# But this is an async generator:
+     async def foo(): ...
+     async def bar(): ...
+     do(
+         Ok(1)
+         for x in await foo()
+         for y in await bar()
+     )
+``` 
+
+We let users try to use regular `do()`, which works in some cases of awaiting async values. If we hit a case like above, we raise an exception telling the user to use `do_async()` instead. See `do()`. 
+
+However, for better usability, it's better for `do_async()` to also accept regular generators, as you get in the first case: 
+
+``` python
+async def foo(): ...
+     do(Ok(1) for x in await foo())
+``` 
+
+Furthermore, neither mypy nor pyright can infer that the second case is actually an async generator, so we cannot annotate `do_async()` as accepting only an async generator. This is additional motivation to accept either. 
 
 
 ---
