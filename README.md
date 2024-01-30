@@ -156,6 +156,27 @@ False
 True
 ```
 
+The benefit of `isinstance` is better type checking that type guards currently
+do not offer,
+
+```python
+res1: Result[int, str] = some_result()
+if isinstance(res1, Err):
+    print("Error...:", res1.err_value) # res1 is narrowed to an Err
+    return
+res1.ok()
+
+res2: Result[int, str] = some_result()
+if res1.is_err():
+    print("Error...:", res2.err_value) # res1 is NOT narrowed to an Err here
+    return
+res1.ok()
+```
+
+There is a proposed [PEP 724 – Stricter Type Guards](https://peps.python.org/pep-0724/)
+which may allow the `is_ok` and `is_err` type guards to work as expected in
+future versions of Python.
+
 Convert a `Result` to the value or `None`:
 
 ``` python
