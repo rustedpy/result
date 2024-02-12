@@ -1,7 +1,7 @@
 # Result
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/rustedpy/result/ci.yml?branch=master)](https://github.com/rustedpy/result/actions/workflows/ci.yml?query=branch%3Amaster)
-[![Coverage](https://codecov.io/gh/rustedpy/result/branch/master/graph/badge.svg)](https://codecov.io/gh/rustedpy/result)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/rustedpy/result/ci.yml?branch=main)](https://github.com/rustedpy/result/actions/workflows/ci.yml?query=branch%3Amaster)
+[![Coverage](https://codecov.io/gh/rustedpy/result/branch/main/graph/badge.svg)](https://codecov.io/gh/rustedpy/result)
 
 A simple Result type for Python 3 [inspired by
 Rust](https://doc.rust-lang.org/std/result/), fully type annotated.
@@ -14,7 +14,7 @@ Latest release:
 $ pip install result
 ```
 
-Latest GitHub `master` branch version:
+Latest GitHub `main` branch version:
 
 ``` sh
 $ pip install git+https://github.com/rustedpy/result

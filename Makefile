@@ -27,5 +27,5 @@ test: phony
 docs: phony
 	lazydocs \
 		--overview-file README.md \
-		--src-base-url https://github.com/rustedpy/result/blob/master/ \
+		--src-base-url https://github.com/rustedpy/result/blob/main/ \
 		./src/result
