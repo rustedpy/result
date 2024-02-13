@@ -1,6 +1,6 @@
 # Result
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/rustedpy/result/ci.yml?branch=main)](https://github.com/rustedpy/result/actions/workflows/ci.yml?query=branch%3Amaster)
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/rustedpy/result/ci.yml?branch=main)](https://github.com/rustedpy/result/actions/workflows/ci.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/rustedpy/result/branch/main/graph/badge.svg)](https://codecov.io/gh/rustedpy/result)
 
 A simple Result type for Python 3 [inspired by
