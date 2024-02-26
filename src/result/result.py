@@ -247,15 +247,16 @@ class Err(Generic[E]):
         return "Err({})".format(repr(self._value))
 
     def __eq__(self, other: Any) -> bool:
+        """
+        Due to the nature of exception comparison, errors containing 
+        exception would not compare, e.g:
+        Err(ValueError("")) != Err(ValueError(""))
+        The extra code will handle exception comparison
+        """
         if isinstance(other, Err):
             other_err = cast(Err, other)
             self_is_xcpt = isinstance(self._value, BaseException)
             other_is_xcpt = isinstance(other_err._value, BaseException)
-            """
-            Due to the nature of exception comparison, errors containing 
-            exception would not compare, e.g:
-            Err(ValueError("")) != Err(ValueError(""))
-            """
             if self_is_xcpt and other_is_xcpt:
                 return (
                     type(self._value) is type(other_err._value)
@@ -313,6 +314,11 @@ class Err(Generic[E]):
     
     @property
     def branch(self) -> NoReturn:
+        """
+        Branching operator raises a special excpetion on the error path.
+        This exception will then be caugh by @branching decorator for the
+        error to be passed by value to the caller.
+        """
         raise _BranchOperatorShortCircuit[E](self)
 
     def expect(self, message: str) -> NoReturn:
