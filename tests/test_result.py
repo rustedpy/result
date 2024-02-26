@@ -28,6 +28,9 @@ def test_eq() -> None:
     assert not (Ok(1) != Ok(1))
     assert Ok(1) != "abc"
     assert Ok("0") != Ok(0)
+    assert Err(ValueError("invalid value")) == Err(ValueError("invalid value"))
+    assert Err(ValueError("abc")) != Err(ValueError("def"))
+    assert Err(ValueError()) != Err(IndexError())
 
 
 def test_hash() -> None:

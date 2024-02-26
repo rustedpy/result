@@ -18,6 +18,7 @@ from typing import (
     Type,
     TypeVar,
     Union,
+    cast,
 )
 
 if sys.version_info >= (3, 10):
@@ -101,6 +102,13 @@ class Ok(Generic[T]):
         Return the inner value.
         """
         return self._value
+    
+    @property
+    def branch(self) -> T:
+        """
+        Branching operator returns underlying value on the happy path.
+        """
+        return self.ok()
 
     def expect(self, _message: str) -> T:
         """
@@ -239,7 +247,22 @@ class Err(Generic[E]):
         return "Err({})".format(repr(self._value))
 
     def __eq__(self, other: Any) -> bool:
-        return isinstance(other, Err) and self._value == other._value
+        if isinstance(other, Err):
+            other_err = cast(Err, other)
+            self_is_xcpt = isinstance(self._value, BaseException)
+            other_is_xcpt = isinstance(other_err._value, BaseException)
+            """
+            Due to the nature of exception comparison, errors containing 
+            exception would not compare, e.g:
+            Err(ValueError("")) != Err(ValueError(""))
+            """
+            if self_is_xcpt and other_is_xcpt:
+                return (
+                    type(self._value) is type(other_err._value)
+                    and self._value.args == other_err._value.args
+                )
+            return self._value == other_err._value
+        return False
 
     def __ne__(self, other: Any) -> bool:
         return not (self == other)
@@ -287,6 +310,10 @@ class Err(Generic[E]):
         Return the inner value.
         """
         return self._value
+    
+    @property
+    def branch(self) -> NoReturn:
+        raise _BranchOperatorShortCircuit[E](self)
 
     def expect(self, message: str) -> NoReturn:
         """
@@ -501,6 +528,25 @@ def as_async_result(
     return decorator
 
 
+def branching(
+    func: Callable[P, Result[T, E]]
+) -> Callable[P, Result[T, E]]:
+    """
+    Make a decorator to enable function support branching.
+    This decorator will either unrwap the Ok() on happy path, or will catch
+    the _BranchOperatorShortCircuit exception generated on the error path
+    and return the Err to the caller by value. 
+    """
+    @functools.wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> Result[T, E]:
+        try:
+            return func(*args, **kwargs)
+        except _BranchOperatorShortCircuit[E] as error:
+            return error.err
+
+    return wrapper
+
+
 def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
     """A typeguard to check if a result is an Ok
 
@@ -639,3 +685,13 @@ async def do_async(
     except DoException as e:
         out: Err[E] = e.err  # type: ignore
         return out
+
+
+class _BranchOperatorShortCircuit(Exception, Generic[E]):
+    def __init__(self, err: Err[E]) -> None:
+        self.err = err
+
+    def __class_getitem__(cls, _: Any) -> type[_BranchOperatorShortCircuit[E]]:
+        # enables applying a type parameter for generic Exception class, e.g:
+        # except _BranchOperatorShortCircuit[E] as err: ...
+        return cls
