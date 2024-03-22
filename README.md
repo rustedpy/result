@@ -477,6 +477,11 @@ instead of `if res.is_ok()` will help in some cases. Otherwise using
 workarounds](https://github.com/python/mypy/issues/3889#issuecomment-325997911)
 can help.
 
+## Related Projects
+
+- [dry-python/returns: Make your functions return something meaningful, typed, and safe!](https://github.com/dry-python/returns)
+- [alexandermalyga/poltergeist: Rust-like error handling in Python, with type-safety in mind.](https://github.com/alexandermalyga/poltergeist)
+
 ## License
 
 MIT License
