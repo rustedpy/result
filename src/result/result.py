@@ -202,6 +202,19 @@ class Ok(Generic[T]):
         """
         return self
 
+    def inspect(self, op: Callable[[T], Any]) -> Result[T, E]:
+        """
+        Calls a function with the contained value if `Ok`. Returns the original result.
+        """
+        op(self._value)
+        return self
+
+    def inspect_err(self, op: Callable[[E], Any]) -> Result[T, E]:
+        """
+        Calls a function with the contained value if `Err`. Returns the original result.
+        """
+        return self
+
 
 class DoException(Exception):
     """
@@ -393,6 +406,19 @@ class Err(Generic[E]):
         original value passed in
         """
         return op(self._value)
+
+    def inspect(self, op: Callable[[T], Any]) -> Result[T, E]:
+        """
+        Calls a function with the contained value if `Ok`. Returns the original result.
+        """
+        return self
+
+    def inspect_err(self, op: Callable[[E], Any]) -> Result[T, E]:
+        """
+        Calls a function with the contained value if `Err`. Returns the original result.
+        """
+        op(self._value)
+        return self
 
 
 # define Result as a generic type alias for use
