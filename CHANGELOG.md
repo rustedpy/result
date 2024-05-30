@@ -13,6 +13,9 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[changed]` changed `as_result` so it can work with both generators and functions
+- `[changed]` changed `as_async_result` so it can work with both async generators and async functions
+
 ## [0.16.1] - 2024-02-29
 
 - `[fixed]` PyPI not showing description (#176)
