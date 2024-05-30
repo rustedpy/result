@@ -437,42 +437,15 @@ class UnwrapError(Exception):
 
 
 def as_result(
-    *exceptions: Type[TBE],
-) -> Callable[[Callable[P, R]], Callable[P, Result[R, TBE]]]:
+    *exceptions: Type[TBE]
+) -> Callable[
+    [Callable[P, R] | Callable[P, Generator[R, Any, Any]]],
+    Callable[P, Result[R, TBE]] | Callable[P, Generator[Result[R, TBE], Any, Any]]
+]:
     """
-    Make a decorator to turn a function into one that returns a ``Result``.
+    Make a decorator to turn a function or generator into one that returns a ``Result``
+    or Generator yielding ``Result``.
 
-    Regular return values are turned into ``Ok(return_value)``. Raised
-    exceptions of the specified exception type(s) are turned into ``Err(exc)``.
-    """
-    if not exceptions or not all(
-        inspect.isclass(exception) and issubclass(exception, BaseException)
-        for exception in exceptions
-    ):
-        raise TypeError("as_result() requires one or more exception types")
-
-    def decorator(f: Callable[P, R]) -> Callable[P, Result[R, TBE]]:
-        """
-        Decorator to turn a function into one that returns a ``Result``.
-        """
-
-        @functools.wraps(f)
-        def wrapper(*args: P.args, **kwargs: P.kwargs) -> Result[R, TBE]:
-            try:
-                return Ok(f(*args, **kwargs))
-            except exceptions as exc:
-                return Err(exc)
-
-        return wrapper
-
-    return decorator
-
-
-def as_async_result(
-    *exceptions: Type[TBE],
-) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[Result[R, TBE]]]]:
-    """
-    Make a decorator to turn an async function into one that returns a ``Result``.
     Regular return values are turned into ``Ok(return_value)``. Raised
     exceptions of the specified exception type(s) are turned into ``Err(exc)``.
     """
@@ -483,20 +456,79 @@ def as_async_result(
         raise TypeError("as_result() requires one or more exception types")
 
     def decorator(
-        f: Callable[P, Awaitable[R]]
-    ) -> Callable[P, Awaitable[Result[R, TBE]]]:
+        f: Callable[P, R] | Callable[P, Generator[R, Any, Any]]
+    ) -> Callable[P, Result[R, TBE]] | Callable[P, Generator[Result[R, TBE], Any, Any]]:
         """
-        Decorator to turn a function into one that returns a ``Result``.
+        Decorator to turn a function or generator into one that returns a ``Result``.
         """
 
         @functools.wraps(f)
-        async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> Result[R, TBE]:
+        def wrapper_function(*args: P.args, **kwargs: P.kwargs) -> Result[R, TBE]:
+            assert inspect.isfunction(f)
+            try:
+                return Ok(f(*args, **kwargs))
+            except exceptions as exc:
+                return Err(exc)
+
+        @functools.wraps(f)
+        def wrapper_generator(*args: P.args, **kwargs: P.kwargs) -> Generator[Result[R, TBE], Any, Any]:
+            assert inspect.isgeneratorfunction(f)
+            try:
+                for value in f(*args, **kwargs):
+                    yield Ok(value)
+            except exceptions as exc:
+                yield Err(exc)
+
+        if inspect.isgeneratorfunction(f):
+            return wrapper_generator
+        return wrapper_function
+
+    return decorator
+
+
+def as_async_result(*exceptions: Type[TBE]) -> Callable[
+    [Callable[P, Awaitable[R]] | Callable[P, AsyncGenerator[R, Any]]],
+    Callable[P, Awaitable[Result[R, TBE]]] | Callable[P, AsyncGenerator[Result[R, TBE], Any,]]
+]:
+    """
+    Make a decorator to turn an async function or async generator into one that returns a ``Result``.
+
+    Regular return values are turned into ``Ok(return_value)``. Raised
+    exceptions of the specified exception type(s) are turned into ``Err(exc)``.
+    """
+    if not exceptions or not all(
+        inspect.isclass(exception) and issubclass(exception, BaseException)
+        for exception in exceptions
+    ):
+        raise TypeError("as_async_result() requires one or more exception types")
+
+    def decorator(
+        f: Callable[P, Awaitable[R]] | Callable[P, AsyncGenerator[R, Any]]
+    ) -> Callable[P, Awaitable[Result[R, TBE]]] | Callable[P, AsyncGenerator[Result[R, TBE], Any]]:
+        """
+        Decorator to turn an async function into one that returns a ``Result``.
+        """
+
+        @functools.wraps(f)
+        async def async_wrapper_function(*args: P.args, **kwargs: P.kwargs) -> Result[R, TBE]:
+            assert inspect.iscoroutinefunction(f)
             try:
                 return Ok(await f(*args, **kwargs))
             except exceptions as exc:
                 return Err(exc)
 
-        return async_wrapper
+        @functools.wraps(f)
+        async def async_wrapper_generator(*args: P.args, **kwargs: P.kwargs) -> AsyncGenerator[Result[R, TBE], Any]:
+            assert inspect.isasyncgenfunction(f)
+            try:
+                async for value in f(*args, **kwargs):
+                    yield Ok(value)
+            except exceptions as exc:
+                yield Err(exc)
+
+        if inspect.isasyncgenfunction(f):
+            return async_wrapper_generator
+        return async_wrapper_function
 
     return decorator
 

@@ -306,6 +306,38 @@ def test_as_result() -> None:
     assert isinstance(bad_result.unwrap_err(), ValueError)
 
 
+def test_as_result_with_generator() -> None:
+    """
+    ``as_result()`` works with generators.
+    """
+
+    @as_result(ValueError)
+    def random_generator():
+        yield 1
+        yield 2
+        yield 3
+
+    for i in random_generator():
+        assert i in (Ok(1), Ok(2), Ok(3))
+
+
+def test_as_result_with_generator_and_exception() -> None:
+    """
+    ``as_result()`` works with generators that raise exceptions.
+    """
+
+    @as_result(ValueError)
+    def random_generator():
+        yield 1
+        yield 2
+        raise ValueError
+
+    result = [i for i in random_generator()]
+    assert result[:2] == [Ok(1), Ok(2)]
+    assert result[-1].is_err()
+    assert isinstance(result[-1].unwrap_err(), ValueError)
+
+
 def test_as_result_other_exception() -> None:
     """
     ``as_result()`` only catches the specified exceptions.
@@ -373,6 +405,40 @@ async def test_as_async_result() -> None:
     assert good_result.unwrap() == 123
     assert isinstance(bad_result, Err)
     assert isinstance(bad_result.unwrap_err(), ValueError)
+
+
+@pytest.mark.asyncio
+async def test_as_async_result_with_generator() -> None:
+    """
+    ``as_result()`` works with async generators.
+    """
+
+    @as_async_result(ValueError)
+    async def random_generator():
+        yield 1
+        yield 2
+        yield 3
+
+    async for i in random_generator():
+        assert i in (Ok(1), Ok(2), Ok(3))
+
+
+@pytest.mark.asyncio
+async def test_as_async_result_with_generator_and_exception() -> None:
+    """
+    ``as_result()`` works with async generators that raise exceptions.
+    """
+
+    @as_async_result(ValueError)
+    async def random_generator():
+        yield 1
+        yield 2
+        raise ValueError
+
+    result = [i async for i in random_generator()]
+    assert result[:2] == [Ok(1), Ok(2)]
+    assert result[-1].is_err()
+    assert isinstance(result[-1].unwrap_err(), ValueError)
 
 
 def sq(i: int) -> Result[int, int]:
