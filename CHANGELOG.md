@@ -13,6 +13,8 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[added]` Add `inspect()` and `inspect_err()` methods (#185)
+
 ## [0.16.1] - 2024-02-29
 
 - `[fixed]` PyPI not showing description (#176)

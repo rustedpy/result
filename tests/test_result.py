@@ -213,6 +213,36 @@ def test_and_then() -> None:
     assert Err(3).and_then(sq_lambda).and_then(sq_lambda).err() == 3
 
 
+def test_inspect() -> None:
+    oks: list[int] = []
+    add_to_oks: Callable[[int], None] = lambda x: oks.append(x)
+
+    assert Ok(2).inspect(add_to_oks) == Ok(2)
+    assert Err("e").inspect(add_to_oks) == Err("e")
+    assert oks == [2]
+
+
+def test_inspect_err() -> None:
+    errs: list[str] = []
+    add_to_errs: Callable[[str], None] = lambda x: errs.append(x)
+
+    assert Ok(2).inspect_err(add_to_errs) == Ok(2)
+    assert Err("e").inspect_err(add_to_errs) == Err("e")
+    assert errs == ["e"]
+
+
+def test_inspect_regular_fn() -> None:
+    oks: list[str] = []
+
+    def _add_to_oks(x: str) -> str:
+        oks.append(x)
+        return x + x
+
+    assert Ok("hello").inspect(_add_to_oks) == Ok("hello")
+    assert Err("error").inspect(_add_to_oks) == Err("error")
+    assert oks == ["hello"]
+
+
 @pytest.mark.asyncio
 async def test_and_then_async() -> None:
     assert (await (await Ok(2).and_then_async(sq_async)).and_then_async(sq_async)).ok() == 16
