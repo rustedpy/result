@@ -15,9 +15,11 @@ from typing import (
     Iterator,
     Literal,
     NoReturn,
+    Optional,
     Type,
     TypeVar,
     Union,
+    overload,
 )
 
 if sys.version_info >= (3, 10):
@@ -138,7 +140,13 @@ class Ok(Generic[T]):
         """
         return self._value
 
-    def unwrap_or_raise(self, e: object) -> T:
+    @overload
+    def unwrap_or_raise(self) -> T:
+        ...
+    @overload
+    def unwrap_or_raise(self, e: Type[TBE]) -> T:
+        ...
+    def unwrap_or_raise(self, e: Optional[Type[TBE]] = None) -> T:
         """
         Return the value.
         """
@@ -350,11 +358,22 @@ class Err(Generic[E]):
         """
         return op(self._value)
 
+
+    @overload
+    def unwrap_or_raise(self) -> NoReturn:
+        ...
+    @overload
     def unwrap_or_raise(self, e: Type[TBE]) -> NoReturn:
+        ...
+    def unwrap_or_raise(self, e: Optional[Type[TBE]] = None) -> NoReturn:
         """
         The contained result is ``Err``, so raise the exception with the value.
         """
-        raise e(self._value)
+        if e is not None:
+            raise e(self._value)
+        if isinstance(self._value, BaseException):
+            raise self._value
+        self.unwrap()
 
     def map(self, op: object) -> Err[E]:
         """
