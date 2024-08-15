@@ -85,11 +85,16 @@
 - case: map_result
   disable_cache: false
   main: |
-    from result import Ok, Err, is_ok, is_err
+    from result import Result, Ok, Err, is_ok, is_err
 
-    result = Ok(1)
-    err = Err("error")
-    if is_ok(result):
-        reveal_type(result)  # N: Revealed type is "result.result.Ok[builtins.int]"
-    elif is_err(err):
-        reveal_type(err)  # N: Revealed type is "result.result.Err[builtins.str]"
+    res1: Result[int, str] = Ok(1)
+    if is_ok(res1):
+        reveal_type(res1)  # N: Revealed type is "result.result.Ok[builtins.int]"
+    else:
+        reveal_type(res1)  # N: Revealed type is "result.result.Err[builtins.str]"
+
+    res2: Result[int, str] = Err("error")
+    if is_err(res2):
+        reveal_type(res2)  # N: Revealed type is "result.result.Err[builtins.str]"
+    else:
+        reveal_type(res2)  # N: Revealed type is "result.result.Ok[builtins.int]"

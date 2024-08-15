@@ -20,10 +20,12 @@ from typing import (
     Union,
 )
 
+from typing_extensions import TypeIs
+
 if sys.version_info >= (3, 10):
-    from typing import ParamSpec, TypeAlias, TypeGuard
+    from typing import ParamSpec, TypeAlias
 else:
-    from typing_extensions import ParamSpec, TypeAlias, TypeGuard
+    from typing_extensions import ParamSpec, TypeAlias
 
 
 T = TypeVar("T", covariant=True)  # Success type
@@ -527,8 +529,8 @@ def as_async_result(
     return decorator
 
 
-def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
-    """A typeguard to check if a result is an Ok
+def is_ok(result: Result[T, E]) -> TypeIs[Ok[T]]:
+    """A type guard to check if a result is an Ok
 
     Usage:
 
@@ -544,8 +546,8 @@ def is_ok(result: Result[T, E]) -> TypeGuard[Ok[T]]:
     return result.is_ok()
 
 
-def is_err(result: Result[T, E]) -> TypeGuard[Err[E]]:
-    """A typeguard to check if a result is an Err
+def is_err(result: Result[T, E]) -> TypeIs[Err[E]]:
+    """A type guard to check if a result is an Err
 
     Usage:
 

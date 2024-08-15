@@ -19,8 +19,8 @@
 - [`result.as_result`](./result.md#function-as_result): Make a decorator to turn a function into one that returns a ``Result``.
 - [`result.do`](./result.md#function-do): Do notation for Result (syntactic sugar for sequence of `and_then()` calls).
 - [`result.do_async`](./result.md#function-do_async): Async version of do. Example:
-- [`result.is_err`](./result.md#function-is_err): A typeguard to check if a result is an Err
-- [`result.is_ok`](./result.md#function-is_ok): A typeguard to check if a result is an Ok
+- [`result.is_err`](./result.md#function-is_err): A type guard to check if a result is an Err
+- [`result.is_ok`](./result.md#function-is_ok): A type guard to check if a result is an Ok
 
 
 ---
