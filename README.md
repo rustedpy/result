@@ -64,10 +64,10 @@ def get_user_by_email(email: str) -> Result[User, str]:
     return Ok(user)
 
 user_result = get_user_by_email(email)
-if isinstance(user_result, Ok): # or `is_ok(user_result)`
+if is_ok(user_result): # or `isinstance(user_result, Ok)`
     # type(user_result.ok_value) == User
     do_something(user_result.ok_value)
-else: # or `elif is_err(user_result)`
+else:
     # type(user_result.err_value) == str
     raise RuntimeError('Could not fetch user: %s' % user_result.err_value)
 ```
@@ -97,12 +97,9 @@ for a, b in values:
 
 Not all methods
 (<https://doc.rust-lang.org/std/result/enum.Result.html>) have been
-implemented, only the ones that make sense in the Python context. By
-using `isinstance` to check for `Ok` or `Err` you get type safe access
-to the contained value when using [MyPy](https://mypy.readthedocs.io/)
-to typecheck your code. All of this in a package allowing easier
-handling of values that can be OK or not, without resorting to custom
-exceptions.
+implemented, only the ones that make sense in the Python context.
+All of this in a package allowing easier handling of values that can
+be OK or not, without resorting to custom exceptions.
 
 ## API
 
@@ -119,19 +116,18 @@ Creating an instance:
 
 Checking whether a result is `Ok` or `Err`. You can either use `is_ok`
 and `is_err` type guard **functions** or `isinstance`. This way you get
-type safe access that can be checked with MyPy. The `is_ok()` or
-`is_err()` **methods** can be used if you don't need the type safety
-with MyPy:
+type safe access that can be checked with MyPy (compared to the `is_ok`
+and `is_err` **methods**).
 
 ``` python
 >>> res = Ok('yay')
->>> isinstance(res, Ok)
-True
 >>> is_ok(res)
 True
->>> isinstance(res, Err)
-False
+>>> isinstance(res, Ok)
+True
 >>> is_err(res)
+False
+>>> isinstance(res, Err)
 False
 >>> res.is_ok()
 True
