@@ -13,6 +13,9 @@ Possible log types:
 
 ## [Unreleased]
 
+- `[changed]` Improve type narrowing for `is_ok` and `is_err` type guards by
+  replacing `typing.TypeGuard` with `typing.TypeIs` (#193)
+
 ## [0.17.0] - 2024-06-02
 
 - `[added]` Add `inspect()` and `inspect_err()` methods (#185)

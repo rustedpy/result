@@ -64,10 +64,10 @@ def get_user_by_email(email: str) -> Result[User, str]:
     return Ok(user)
 
 user_result = get_user_by_email(email)
-if isinstance(user_result, Ok): # or `is_ok(user_result)`
+if is_ok(user_result):
     # type(user_result.ok_value) == User
     do_something(user_result.ok_value)
-else: # or `elif is_err(user_result)`
+else:
     # type(user_result.err_value) == str
     raise RuntimeError('Could not fetch user: %s' % user_result.err_value)
 ```
@@ -97,12 +97,9 @@ for a, b in values:
 
 Not all methods
 (<https://doc.rust-lang.org/std/result/enum.Result.html>) have been
-implemented, only the ones that make sense in the Python context. By
-using `isinstance` to check for `Ok` or `Err` you get type safe access
-to the contained value when using [MyPy](https://mypy.readthedocs.io/)
-to typecheck your code. All of this in a package allowing easier
-handling of values that can be OK or not, without resorting to custom
-exceptions.
+implemented, only the ones that make sense in the Python context.
+All of this in a package allowing easier handling of values that can
+be OK or not, without resorting to custom exceptions.
 
 ## API
 
@@ -117,26 +114,29 @@ Creating an instance:
 >>> res2 = Err('nay')
 ```
 
-Checking whether a result is `Ok` or `Err`. You can either use `is_ok`
-and `is_err` type guard **functions** or `isinstance`. This way you get
-type safe access that can be checked with MyPy. The `is_ok()` or
-`is_err()` **methods** can be used if you don't need the type safety
-with MyPy:
+Checking whether a result is `Ok` or `Err`:
 
 ``` python
->>> res = Ok('yay')
->>> isinstance(res, Ok)
-True
->>> is_ok(res)
-True
->>> isinstance(res, Err)
-False
->>> is_err(res)
-False
->>> res.is_ok()
-True
->>> res.is_err()
-False
+if is_err(result):
+    raise RuntimeError(result.err_value)
+do_something(result.ok_value)
+```
+or
+``` python
+if is_ok(result):
+    do_something(result.ok_value)
+else:
+    raise RuntimeError(result.err_value)
+```
+
+Alternatively, `isinstance` can be used (interchangeably to type guard functions
+`is_ok` and `is_err`). However, relying on `isinstance` may result in code that
+is slightly less readable and less concise:
+
+``` python
+if isinstance(result, Err):
+    raise RuntimeError(result.err_value)
+do_something(result.ok_value)
 ```
 
 You can also check if an object is `Ok` or `Err` by using the `OkErr`
@@ -155,27 +155,6 @@ False
 >>> isinstance(res1, (Ok, Err))
 True
 ```
-
-The benefit of `isinstance` is better type checking that type guards currently
-do not offer,
-
-```python
-res1: Result[int, str] = some_result()
-if isinstance(res1, Err):
-    print("Error...:", res1.err_value) # res1 is narrowed to an Err
-    return
-res1.ok()
-
-res2: Result[int, str] = some_result()
-if res1.is_err():
-    print("Error...:", res2.err_value) # res1 is NOT narrowed to an Err here
-    return
-res1.ok()
-```
-
-There is a proposed [PEP 724 – Stricter Type Guards](https://peps.python.org/pep-0724/)
-which may allow the `is_ok` and `is_err` type guards to work as expected in
-future versions of Python.
 
 Convert a `Result` to the value or `None`:
 
@@ -358,7 +337,7 @@ x = third_party.do_something(...)  # could raise; who knows?
 safe_do_something = as_result(Exception)(third_party.do_something)
 
 res = safe_do_something(...)  # Ok(...) or Err(...)
-if isinstance(res, Ok):
+if is_ok(res):
     print(res.ok_value)
 ```
 
@@ -467,6 +446,24 @@ from the non-unix shell you're using on Windows.
 [pydocs-venv]: https://docs.python.org/3/library/venv.html
 
 ## FAQ
+
+-   **Why should I use the `is_ok` (`is_err`) type guard function over the `is_ok` (`is_err`) method?**
+
+As you can see in the following example, MyPy can only narrow the type correctly
+while using the type guard **functions**:
+```python
+result: Result[int, str]
+
+if is_ok(result):
+    reveal_type(result)  # "result.result.Ok[builtins.int]"
+else:
+    reveal_type(result)  # "result.result.Err[builtins.str]"
+
+if result.is_ok():
+    reveal_type(result)  # "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
+else:
+    reveal_type(result)  # "Union[result.result.Ok[builtins.int], result.result.Err[builtins.str]]"
+```
 
 -   **Why do I get the "Cannot infer type argument" error with MyPy?**
 
