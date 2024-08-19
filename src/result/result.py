@@ -20,12 +20,15 @@ from typing import (
     Union,
 )
 
-from typing_extensions import TypeIs
-
 if sys.version_info >= (3, 10):
     from typing import ParamSpec, TypeAlias
 else:
     from typing_extensions import ParamSpec, TypeAlias
+
+if sys.version_info >= (3, 13):
+    from typing import TypeIs
+else:
+    from typing_extensions import TypeIs
 
 
 T = TypeVar("T", covariant=True)  # Success type

@@ -13,8 +13,10 @@ Possible log types:
 
 ## [Unreleased]
 
+
 - `[changed]` Improve type narrowing for `is_ok` and `is_err` type guards by
   replacing `typing.TypeGuard` with `typing.TypeIs` (#193)
+- `[added]` Add support for Python 3.13 (#181)
 
 ## [0.17.0] - 2024-06-02
 
