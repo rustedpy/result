@@ -15,6 +15,7 @@ Possible log types:
 
 - `[changed]` Improve type narrowing for `is_ok` and `is_err` type guards by
   replacing `typing.TypeGuard` with `typing.TypeIs` (#193)
+- `[removed]` Drop support for Python 3.8 (#180)
 
 ## [0.17.0] - 2024-06-02
 
