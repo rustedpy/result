@@ -6,19 +6,15 @@ import sys
 from warnings import warn
 from typing import (
     Any,
-    AsyncGenerator,
-    Awaitable,
     Callable,
     Final,
-    Generator,
     Generic,
-    Iterator,
     Literal,
     NoReturn,
-    Type,
     TypeVar,
     Union,
 )
+from collections.abc import AsyncGenerator, Awaitable, Generator, Iterator
 
 from typing_extensions import TypeIs
 
@@ -52,7 +48,7 @@ class Ok(Generic[T]):
         self._value = value
 
     def __repr__(self) -> str:
-        return "Ok({})".format(repr(self._value))
+        return f"Ok({repr(self._value)})"
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, Ok) and self._value == other._value
@@ -251,7 +247,7 @@ class Err(Generic[E]):
         self._value = value
 
     def __repr__(self) -> str:
-        return "Err({})".format(repr(self._value))
+        return f"Err({repr(self._value)})"
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, Err) and self._value == other._value
@@ -352,7 +348,7 @@ class Err(Generic[E]):
         """
         return op(self._value)
 
-    def unwrap_or_raise(self, e: Type[TBE]) -> NoReturn:
+    def unwrap_or_raise(self, e: type[TBE]) -> NoReturn:
         """
         The contained result is ``Err``, so raise the exception with the value.
         """
@@ -465,7 +461,7 @@ class UnwrapError(Exception):
 
 
 def as_result(
-    *exceptions: Type[TBE],
+    *exceptions: type[TBE],
 ) -> Callable[[Callable[P, R]], Callable[P, Result[R, TBE]]]:
     """
     Make a decorator to turn a function into one that returns a ``Result``.
@@ -497,7 +493,7 @@ def as_result(
 
 
 def as_async_result(
-    *exceptions: Type[TBE],
+    *exceptions: type[TBE],
 ) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[Result[R, TBE]]]]:
     """
     Make a decorator to turn an async function into one that returns a ``Result``.
@@ -563,7 +559,7 @@ def is_err(result: Result[T, E]) -> TypeIs[Err[E]]:
     return result.is_err()
 
 
-def do(gen: Generator[Result[T, E], None, None]) -> Result[T, E]:
+def do(gen: Generator[Result[T, E]]) -> Result[T, E]:
     """Do notation for Result (syntactic sugar for sequence of `and_then()` calls).
 
 
@@ -609,7 +605,7 @@ def do(gen: Generator[Result[T, E], None, None]) -> Result[T, E]:
 
 
 async def do_async(
-    gen: Union[Generator[Result[T, E], None, None], AsyncGenerator[Result[T, E], None]]
+    gen: Generator[Result[T, E]] | AsyncGenerator[Result[T, E]]
 ) -> Result[T, E]:
     """Async version of do. Example:
 
