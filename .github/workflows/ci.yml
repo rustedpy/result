@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         python:
+          - '3.13'
           - '3.12'
           - '3.11'
           - '3.10'
@@ -53,7 +54,7 @@ jobs:
         # one for > 3.9)
         run: pytest tests/type_checking/test_result.yml
       - name: Run tests (pattern matching)
-        if: matrix.python == '3.10' || matrix.python == '3.11' || matrix.python == '3.12'
+        if: matrix.python == '3.10' || matrix.python == '3.11' || matrix.python == '3.12' || matrix.python == '3.13'
         run: pytest tests/test_pattern_matching.py
 
       # Linters
