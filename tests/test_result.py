@@ -4,7 +4,7 @@ from typing import Callable
 
 import pytest
 
-from result import Err, Ok, OkErr, Result, UnwrapError, as_async_result, as_result
+from result import Err, Ok, OkErr, Result, UnwrapError, as_async_result, as_result, returns_result
 
 
 def test_ok_factories() -> None:
@@ -156,6 +156,22 @@ def test_unwrap_or_raise() -> None:
     with pytest.raises(ValueError) as exc_info:
         n.unwrap_or_raise(ValueError)
     assert exc_info.value.args == ('nay',)
+
+
+def test_unwrap_or_return() -> None:
+    @returns_result()
+    def func(yay):
+        if yay:
+            o = Ok('yay')
+            value = o.unwrap_or_return()
+            return Ok(value)
+        else:
+            n = Err('nay')
+            value = n.unwrap_or_return()
+            assert False
+
+    assert func(True).ok() == 'yay'
+    assert func(False).err() == 'nay'
 
 
 def test_map() -> None:
