@@ -146,6 +146,12 @@ class Ok(Generic[T]):
         """
         return self._value
 
+    def unwrap_or_return(self) -> T:
+        """
+        Return the value.
+        """
+        return self._value
+
     def map(self, op: Callable[[T], U]) -> Ok[U]:
         """
         The contained result is `Ok`, so return `Ok` with original value mapped to
@@ -358,6 +364,12 @@ class Err(Generic[E]):
         """
         raise e(self._value)
 
+    def unwrap_or_return(self) -> NoReturn:
+        """
+        The contained result is ``Err``, raise DoException with self.
+        """
+        raise DoException(self)
+
     def map(self, op: object) -> Err[E]:
         """
         Return `Err` with the same value
@@ -462,6 +474,24 @@ class UnwrapError(Exception):
         Returns the original result.
         """
         return self._result
+
+
+def returns_result() -> Callable[[Callable[P, Result[R, E]]], Callable[P, Result[R, E]]]:
+    """
+    Make a decorator to turn a function into one that allows using unwrap_or_return.
+    """
+    def decorator(f: Callable[P, Result[R, E]]) -> Callable[P, Result[R, E]]:
+        @functools.wraps(f)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> Result[R, E]:
+            try:
+                return f(*args, **kwargs)
+            except DoException as e:
+                out: Err[E] = e.err  # type: ignore
+                return out
+
+        return wrapper
+
+    return decorator
 
 
 def as_result(
