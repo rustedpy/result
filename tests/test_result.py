@@ -160,7 +160,7 @@ def test_unwrap_or_raise() -> None:
 
 def test_unwrap_or_return() -> None:
     @returns_result()
-    def func(yay):
+    def func(yay: bool) -> Result[str, str]:
         if yay:
             o = Ok('yay')
             value = o.unwrap_or_return()
