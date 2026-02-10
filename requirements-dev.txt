@@ -1,9 +1,0 @@
-build
-flake8
-twine
-pytest
-pytest-cov
-mypy
-pytest-mypy-plugins
-pytest-asyncio
-lazydocs

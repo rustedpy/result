@@ -1,3 +1,5 @@
+"""A Rust-like Result type for Python."""
+
 from .result import (
     Err,
     Ok,
@@ -6,10 +8,10 @@ from .result import (
     UnwrapError,
     as_async_result,
     as_result,
-    is_ok,
-    is_err,
     do,
     do_async,
+    is_err,
+    is_ok,
 )
 
 __all__ = [
@@ -20,9 +22,8 @@ __all__ = [
     "UnwrapError",
     "as_async_result",
     "as_result",
-    "is_ok",
-    "is_err",
     "do",
     "do_async",
+    "is_err",
+    "is_ok",
 ]
-__version__ = "0.18.0.dev0"

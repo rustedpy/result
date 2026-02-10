@@ -1,426 +1,477 @@
 from __future__ import annotations
 
-from typing import Callable
-
 import pytest
 
-from result import Err, Ok, OkErr, Result, UnwrapError, as_async_result, as_result
+from result import Err, Ok, OkErr, Result, UnwrapError, as_async_result, as_result, is_err, is_ok
 
+# ---------------------------------------------------------------------------
+# Construction, repr, equality, hashing
+# ---------------------------------------------------------------------------
 
-def test_ok_factories() -> None:
-    instance = Ok(1)
-    assert instance._value == 1
-    assert instance.is_ok() is True
 
+class TestConstruction:
+    def test_ok(self) -> None:
+        o = Ok(1)
+        assert o._value == 1
+        assert o.is_ok() is True
+        assert o.is_err() is False
 
-def test_err_factories() -> None:
-    instance = Err(2)
-    assert instance._value == 2
-    assert instance.is_err() is True
+    def test_err(self) -> None:
+        e = Err(2)
+        assert e._value == 2
+        assert e.is_ok() is False
+        assert e.is_err() is True
 
 
-def test_eq() -> None:
-    assert Ok(1) == Ok(1)
-    assert Err(1) == Err(1)
-    assert Ok(1) != Err(1)
-    assert Ok(1) != Ok(2)
-    assert Err(1) != Err(2)
-    assert not (Ok(1) != Ok(1))
-    assert Ok(1) != "abc"
-    assert Ok("0") != Ok(0)
+class TestRepr:
+    @pytest.mark.parametrize(
+        ("result", "expected"),
+        [
+            (Ok(123), "Ok(123)"),
+            (Ok("hello"), "Ok('hello')"),
+            (Err(-1), "Err(-1)"),
+            (Err("bad"), "Err('bad')"),
+        ],
+    )
+    def test_repr(self, result: Ok[object] | Err[object], expected: str) -> None:
+        assert repr(result) == expected
 
+    def test_repr_roundtrip(self) -> None:
+        for r in (Ok(123), Err(-1)):
+            assert r == eval(repr(r))
 
-def test_hash() -> None:
-    assert len({Ok(1), Err("2"), Ok(1), Err("2")}) == 2
-    assert len({Ok(1), Ok(2)}) == 2
-    assert len({Ok("a"), Err("a")}) == 2
 
+class TestEquality:
+    @pytest.mark.parametrize(
+        ("a", "b", "eq"),
+        [
+            (Ok(1), Ok(1), True),
+            (Ok(1), Ok(2), False),
+            (Err(1), Err(1), True),
+            (Err(1), Err(2), False),
+            (Ok(1), Err(1), False),
+            (Ok("0"), Ok(0), False),
+            (Ok(1), "abc", False),
+        ],
+    )
+    def test_eq(self, a: object, b: object, *, eq: bool) -> None:
+        assert (a == b) is eq
+        assert (a != b) is (not eq)
 
-def test_repr() -> None:
-    """
-    ``repr()`` returns valid code if the wrapped value's ``repr()`` does as well.
-    """
-    o = Ok(123)
-    n = Err(-1)
 
-    assert repr(o) == "Ok(123)"
-    assert o == eval(repr(o))
+class TestHash:
+    def test_deduplication(self) -> None:
+        assert len({Ok(1), Err("2"), Ok(1), Err("2")}) == 2
 
-    assert repr(n) == "Err(-1)"
-    assert n == eval(repr(n))
+    def test_ok_distinct(self) -> None:
+        assert len({Ok(1), Ok(2)}) == 2
 
+    def test_ok_err_same_inner_differ(self) -> None:
+        assert len({Ok("a"), Err("a")}) == 2
 
-def test_ok_value() -> None:
-    res = Ok('haha')
-    assert res.ok_value == 'haha'
 
+# ---------------------------------------------------------------------------
+# Accessors: ok(), err(), ok_value, err_value
+# ---------------------------------------------------------------------------
 
-def test_err_value() -> None:
-    res = Err('haha')
-    assert res.err_value == 'haha'
 
+class TestAccessors:
+    def test_ok_ok(self) -> None:
+        assert Ok("yay").ok() == "yay"
 
-def test_ok() -> None:
-    res = Ok('haha')
-    assert res.is_ok() is True
-    assert res.is_err() is False
-    assert res.ok_value == 'haha'
+    def test_ok_err(self) -> None:
+        assert Ok("yay").err() is None
 
+    def test_err_ok(self) -> None:
+        assert Err("nay").ok() is None
 
-def test_err() -> None:
-    res = Err(':(')
-    assert res.is_ok() is False
-    assert res.is_err() is True
-    assert res.err_value == ':('
+    def test_err_err(self) -> None:
+        assert Err("nay").err() == "nay"
 
+    def test_ok_value_property(self) -> None:
+        assert Ok("val").ok_value == "val"
 
-def test_err_value_is_exception() -> None:
-    res = Err(ValueError("Some Error"))
-    assert res.is_ok() is False
-    assert res.is_err() is True
+    def test_err_value_property(self) -> None:
+        assert Err("val").err_value == "val"
 
-    with pytest.raises(UnwrapError):
-        res.unwrap()
 
-    try:
-        res.unwrap()
-    except UnwrapError as e:
-        cause = e.__cause__
-        assert isinstance(cause, ValueError)
+# ---------------------------------------------------------------------------
+# expect / expect_err
+# ---------------------------------------------------------------------------
 
 
-def test_ok_method() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.ok() == 'yay'
-    assert n.ok() is None  # type: ignore[func-returns-value]
+class TestExpect:
+    def test_ok_expect(self) -> None:
+        assert Ok("yay").expect("failure") == "yay"
 
+    def test_err_expect_raises(self) -> None:
+        with pytest.raises(UnwrapError):
+            Err("nay").expect("failure")
 
-def test_err_method() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.err() is None  # type: ignore[func-returns-value]
-    assert n.err() == 'nay'
+    def test_err_expect_raises_with_base_exception(self) -> None:
+        err = Err(ValueError("boom"))
+        with pytest.raises(UnwrapError) as exc_info:
+            err.expect("oh no")
+        assert exc_info.value.__cause__ is err.err_value
 
+    def test_err_expect_err(self) -> None:
+        assert Err("nay").expect_err("hello") == "nay"
 
-def test_expect() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.expect('failure') == 'yay'
-    with pytest.raises(UnwrapError):
-        n.expect('failure')
-
-
-def test_expect_err() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert n.expect_err('hello') == 'nay'
-    with pytest.raises(UnwrapError):
-        o.expect_err('hello')
+    def test_ok_expect_err_raises(self) -> None:
+        with pytest.raises(UnwrapError):
+            Ok("yay").expect_err("hello")
 
 
-def test_unwrap() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.unwrap() == 'yay'
-    with pytest.raises(UnwrapError):
-        n.unwrap()
+# ---------------------------------------------------------------------------
+# unwrap / unwrap_err / unwrap_or / unwrap_or_else / unwrap_or_raise
+# ---------------------------------------------------------------------------
 
 
-def test_unwrap_err() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert n.unwrap_err() == 'nay'
-    with pytest.raises(UnwrapError):
-        o.unwrap_err()
+class TestUnwrap:
+    def test_ok_unwrap(self) -> None:
+        assert Ok("yay").unwrap() == "yay"
 
+    def test_err_unwrap_raises(self) -> None:
+        with pytest.raises(UnwrapError):
+            Err("nay").unwrap()
 
-def test_unwrap_or() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.unwrap_or('some_default') == 'yay'
-    assert n.unwrap_or('another_default') == 'another_default'
+    def test_err_unwrap_chains_base_exception(self) -> None:
+        original = ValueError("Some Error")
+        res = Err(original)
+        with pytest.raises(UnwrapError) as exc_info:
+            res.unwrap()
+        assert isinstance(exc_info.value.__cause__, ValueError)
 
+    def test_ok_unwrap_err_raises(self) -> None:
+        with pytest.raises(UnwrapError):
+            Ok("yay").unwrap_err()
 
-def test_unwrap_or_else() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.unwrap_or_else(str.upper) == 'yay'
-    assert n.unwrap_or_else(str.upper) == 'NAY'
+    def test_err_unwrap_err(self) -> None:
+        assert Err("nay").unwrap_err() == "nay"
 
 
-def test_unwrap_or_raise() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.unwrap_or_raise(ValueError) == 'yay'
-    with pytest.raises(ValueError) as exc_info:
-        n.unwrap_or_raise(ValueError)
-    assert exc_info.value.args == ('nay',)
+class TestUnwrapOr:
+    def test_ok_returns_value(self) -> None:
+        assert Ok("yay").unwrap_or("default") == "yay"
 
+    def test_err_returns_default(self) -> None:
+        assert Err("nay").unwrap_or("default") == "default"
 
-def test_map() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.map(str.upper).ok() == 'YAY'
-    assert n.map(str.upper).err() == 'nay'
 
-    num = Ok(3)
-    errnum = Err(2)
-    assert num.map(str).ok() == '3'
-    assert errnum.map(str).err() == 2
+class TestUnwrapOrElse:
+    def test_ok_ignores_callable(self) -> None:
+        assert Ok("yay").unwrap_or_else(str.upper) == "yay"
 
+    def test_err_applies_callable(self) -> None:
+        assert Err("nay").unwrap_or_else(str.upper) == "NAY"
 
-def test_map_or() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.map_or('hay', str.upper) == 'YAY'
-    assert n.map_or('hay', str.upper) == 'hay'
 
-    num = Ok(3)
-    errnum = Err(2)
-    assert num.map_or('-1', str) == '3'
-    assert errnum.map_or('-1', str) == '-1'
+class TestUnwrapOrRaise:
+    def test_ok_returns_value(self) -> None:
+        assert Ok("yay").unwrap_or_raise(ValueError) == "yay"
 
+    def test_err_raises(self) -> None:
+        with pytest.raises(ValueError, match="nay"):
+            Err("nay").unwrap_or_raise(ValueError)
 
-def test_map_or_else() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.map_or_else(lambda: 'hay', str.upper) == 'YAY'
-    assert n.map_or_else(lambda: 'hay', str.upper) == 'hay'
 
-    num = Ok(3)
-    errnum = Err(2)
-    assert num.map_or_else(lambda: '-1', str) == '3'
-    assert errnum.map_or_else(lambda: '-1', str) == '-1'
+# ---------------------------------------------------------------------------
+# map / map_async / map_or / map_or_else / map_err
+# ---------------------------------------------------------------------------
 
 
-def test_map_err() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert o.map_err(str.upper).ok() == 'yay'
-    assert n.map_err(str.upper).err() == 'NAY'
+class TestMap:
+    def test_ok_map(self) -> None:
+        assert Ok("yay").map(str.upper) == Ok("YAY")
 
+    def test_err_map(self) -> None:
+        assert Err("nay").map(str.upper) == Err("nay")
 
-def test_and_then() -> None:
-    assert Ok(2).and_then(sq).and_then(sq).ok() == 16
-    assert Ok(2).and_then(sq).and_then(to_err).err() == 4
-    assert Ok(2).and_then(to_err).and_then(sq).err() == 2
-    assert Err(3).and_then(sq).and_then(sq).err() == 3
+    @pytest.mark.asyncio
+    async def test_ok_map_async(self) -> None:
+        async def upper(s: str) -> str:
+            return s.upper()
 
-    assert Ok(2).and_then(sq_lambda).and_then(sq_lambda).ok() == 16
-    assert Ok(2).and_then(sq_lambda).and_then(to_err_lambda).err() == 4
-    assert Ok(2).and_then(to_err_lambda).and_then(sq_lambda).err() == 2
-    assert Err(3).and_then(sq_lambda).and_then(sq_lambda).err() == 3
+        assert (await Ok("yay").map_async(upper)) == Ok("YAY")
 
+    @pytest.mark.asyncio
+    async def test_err_map_async(self) -> None:
+        async def upper(s: str) -> str:
+            return s.upper()
 
-def test_inspect() -> None:
-    oks: list[int] = []
-    add_to_oks: Callable[[int], None] = lambda x: oks.append(x)
+        assert (await Err("nay").map_async(upper)) == Err("nay")
 
-    assert Ok(2).inspect(add_to_oks) == Ok(2)
-    assert Err("e").inspect(add_to_oks) == Err("e")
-    assert oks == [2]
 
+class TestMapOr:
+    def test_ok(self) -> None:
+        assert Ok("yay").map_or("hay", str.upper) == "YAY"
 
-def test_inspect_err() -> None:
-    errs: list[str] = []
-    add_to_errs: Callable[[str], None] = lambda x: errs.append(x)
+    def test_err(self) -> None:
+        assert Err("nay").map_or("hay", str.upper) == "hay"
 
-    assert Ok(2).inspect_err(add_to_errs) == Ok(2)
-    assert Err("e").inspect_err(add_to_errs) == Err("e")
-    assert errs == ["e"]
 
+class TestMapOrElse:
+    def test_ok(self) -> None:
+        assert Ok("yay").map_or_else(lambda: "hay", str.upper) == "YAY"
 
-def test_inspect_regular_fn() -> None:
-    oks: list[str] = []
+    def test_err(self) -> None:
+        assert Err("nay").map_or_else(lambda: "hay", str.upper) == "hay"
 
-    def _add_to_oks(x: str) -> str:
-        oks.append(x)
-        return x + x
 
-    assert Ok("hello").inspect(_add_to_oks) == Ok("hello")
-    assert Err("error").inspect(_add_to_oks) == Err("error")
-    assert oks == ["hello"]
+class TestMapErr:
+    def test_ok(self) -> None:
+        assert Ok("yay").map_err(str.upper) == Ok("yay")
 
+    def test_err(self) -> None:
+        assert Err("nay").map_err(str.upper) == Err("NAY")
 
-@pytest.mark.asyncio
-async def test_and_then_async() -> None:
-    assert (await (await Ok(2).and_then_async(sq_async)).and_then_async(sq_async)).ok() == 16
-    assert (await (await Ok(2).and_then_async(sq_async)).and_then_async(to_err_async)).err() == 4
-    assert (
-        await (await Ok(2).and_then_async(to_err_async)).and_then_async(to_err_async)
-    ).err() == 2
-    assert (
-        await (await Err(3).and_then_async(sq_async)).and_then_async(sq_async)
-    ).err() == 3
 
+# ---------------------------------------------------------------------------
+# and_then / and_then_async / or_else
+# ---------------------------------------------------------------------------
 
-@pytest.mark.asyncio
-async def test_map_async() -> None:
-    async def str_upper_async(s: str) -> str:
-        return s.upper()
 
-    async def str_async(x: int) -> str:
-        return str(x)
+def _sq(i: int) -> Result[int, int]:
+    return Ok(i * i)
 
-    o = Ok('yay')
-    n = Err('nay')
-    assert (await o.map_async(str_upper_async)).ok() == 'YAY'
-    assert (await n.map_async(str_upper_async)).err() == 'nay'
 
-    num = Ok(3)
-    errnum = Err(2)
-    assert (await num.map_async(str_async)).ok() == '3'
-    assert (await errnum.map_async(str_async)).err() == 2
+def _to_err(i: int) -> Result[int, int]:
+    return Err(i)
 
 
-def test_or_else() -> None:
-    assert Ok(2).or_else(sq).or_else(sq).ok() == 2
-    assert Ok(2).or_else(to_err).or_else(sq).ok() == 2
-    assert Err(3).or_else(sq).or_else(to_err).ok() == 9
-    assert Err(3).or_else(to_err).or_else(to_err).err() == 3
+class TestAndThen:
+    def test_ok_chain(self) -> None:
+        assert Ok(2).and_then(_sq).and_then(_sq).ok() == 16
 
-    assert Ok(2).or_else(sq_lambda).or_else(sq).ok() == 2
-    assert Ok(2).or_else(to_err_lambda).or_else(sq_lambda).ok() == 2
-    assert Err(3).or_else(sq_lambda).or_else(to_err_lambda).ok() == 9
-    assert Err(3).or_else(to_err_lambda).or_else(to_err_lambda).err() == 3
+    def test_ok_then_err(self) -> None:
+        assert Ok(2).and_then(_sq).and_then(_to_err).err() == 4
 
+    def test_err_short_circuits(self) -> None:
+        assert Err(3).and_then(_sq).and_then(_sq).err() == 3
 
-def test_isinstance_result_type() -> None:
-    o = Ok('yay')
-    n = Err('nay')
-    assert isinstance(o, OkErr)
-    assert isinstance(n, OkErr)
-    assert not isinstance(1, OkErr)
+    @pytest.mark.asyncio
+    async def test_ok_chain_async(self) -> None:
+        async def sq_async(i: int) -> Result[int, int]:
+            return Ok(i * i)
 
+        result = await (await Ok(2).and_then_async(sq_async)).and_then_async(sq_async)
+        assert result.ok() == 16
 
-def test_error_context() -> None:
-    n = Err('nay')
-    with pytest.raises(UnwrapError) as exc_info:
-        n.unwrap()
-    exc = exc_info.value
-    assert exc.result is n
+    @pytest.mark.asyncio
+    async def test_err_short_circuits_async(self) -> None:
+        async def sq_async(i: int) -> Result[int, int]:
+            return Ok(i * i)
 
+        result = await (await Err(3).and_then_async(sq_async)).and_then_async(sq_async)
+        assert result.err() == 3
 
-def test_slots() -> None:
-    """
-    Ok and Err have slots, so assigning arbitrary attributes fails.
-    """
-    o = Ok('yay')
-    n = Err('nay')
-    with pytest.raises(AttributeError):
-        o.some_arbitrary_attribute = 1  # type: ignore[attr-defined]
-    with pytest.raises(AttributeError):
-        n.some_arbitrary_attribute = 1  # type: ignore[attr-defined]
 
+class TestOrElse:
+    def test_ok_returns_self(self) -> None:
+        assert Ok(2).or_else(_sq).or_else(_sq).ok() == 2
 
-def test_as_result() -> None:
-    """
-    ``as_result()`` turns functions into ones that return a ``Result``.
-    """
+    def test_err_applies_op(self) -> None:
+        assert Err(3).or_else(_sq).or_else(_to_err).ok() == 9
 
-    @as_result(ValueError)
-    def good(value: int) -> int:
-        return value
+    def test_err_chain(self) -> None:
+        assert Err(3).or_else(_to_err).or_else(_to_err).err() == 3
 
-    @as_result(IndexError, ValueError)
-    def bad(value: int) -> int:
-        raise ValueError
 
-    good_result = good(123)
-    bad_result = bad(123)
+# ---------------------------------------------------------------------------
+# inspect / inspect_err
+# ---------------------------------------------------------------------------
 
-    assert isinstance(good_result, Ok)
-    assert good_result.unwrap() == 123
-    assert isinstance(bad_result, Err)
-    assert isinstance(bad_result.unwrap_err(), ValueError)
 
+class TestInspect:
+    def test_ok_calls_op(self) -> None:
+        seen: list[int] = []
+        result = Ok(42).inspect(seen.append)
+        assert result == Ok(42)
+        assert seen == [42]
 
-def test_as_result_other_exception() -> None:
-    """
-    ``as_result()`` only catches the specified exceptions.
-    """
+    def test_err_skips_op(self) -> None:
+        seen: list[int] = []
+        result = Err("e").inspect(seen.append)
+        assert result == Err("e")
+        assert seen == []
 
-    @as_result(ValueError)
-    def f() -> int:
-        raise IndexError
 
-    with pytest.raises(IndexError):
-        f()
+class TestInspectErr:
+    def test_err_calls_op(self) -> None:
+        seen: list[str] = []
+        result = Err("e").inspect_err(seen.append)
+        assert result == Err("e")
+        assert seen == ["e"]
 
+    def test_ok_skips_op(self) -> None:
+        seen: list[str] = []
+        result = Ok(42).inspect_err(seen.append)
+        assert result == Ok(42)
+        assert seen == []
 
-def test_as_result_invalid_usage() -> None:
-    """
-    Invalid use of ``as_result()`` raises reasonable errors.
-    """
-    message = "requires one or more exception types"
 
-    with pytest.raises(TypeError, match=message):
+# ---------------------------------------------------------------------------
+# isinstance / OkErr
+# ---------------------------------------------------------------------------
 
-        @as_result()  # No exception types specified
+
+class TestOkErr:
+    def test_ok_is_instance(self) -> None:
+        assert isinstance(Ok("yay"), OkErr)
+
+    def test_err_is_instance(self) -> None:
+        assert isinstance(Err("nay"), OkErr)
+
+    def test_other_is_not(self) -> None:
+        assert not isinstance(1, OkErr)
+
+
+# ---------------------------------------------------------------------------
+# UnwrapError.result
+# ---------------------------------------------------------------------------
+
+
+class TestUnwrapError:
+    def test_result_attribute(self) -> None:
+        n = Err("nay")
+        with pytest.raises(UnwrapError) as exc_info:
+            n.unwrap()
+        assert exc_info.value.result is n
+
+
+# ---------------------------------------------------------------------------
+# Slots
+# ---------------------------------------------------------------------------
+
+
+class TestSlots:
+    def test_ok_no_dict(self) -> None:
+        with pytest.raises(AttributeError):
+            Ok("yay").arbitrary = 1  # type: ignore[attr-defined]
+
+    def test_err_no_dict(self) -> None:
+        with pytest.raises(AttributeError):
+            Err("nay").arbitrary = 1  # type: ignore[attr-defined]
+
+
+# ---------------------------------------------------------------------------
+# Pattern matching
+# ---------------------------------------------------------------------------
+
+
+class TestPatternMatching:
+    def test_ok(self) -> None:
+        o: Result[str, int] = Ok("yay")
+        match o:
+            case Ok(value):
+                assert value == "yay"
+            case _:
+                pytest.fail("Expected Ok match")
+
+    def test_err(self) -> None:
+        n: Result[int, str] = Err("nay")
+        match n:
+            case Err(value):
+                assert value == "nay"
+            case _:
+                pytest.fail("Expected Err match")
+
+
+# ---------------------------------------------------------------------------
+# is_ok / is_err type guards
+# ---------------------------------------------------------------------------
+
+
+class TestTypeGuards:
+    def test_is_ok(self) -> None:
+        r: Result[int, str] = Ok(1)
+        assert is_ok(r) is True
+        assert is_err(r) is False
+
+    def test_is_err(self) -> None:
+        r: Result[int, str] = Err("e")
+        assert is_ok(r) is False
+        assert is_err(r) is True
+
+
+# ---------------------------------------------------------------------------
+# as_result / as_async_result
+# ---------------------------------------------------------------------------
+
+
+class TestAsResult:
+    def test_success(self) -> None:
+        @as_result(ValueError)
+        def good(value: int) -> int:
+            return value
+
+        result = good(123)
+        assert isinstance(result, Ok)
+        assert result.unwrap() == 123
+
+    def test_caught_exception(self) -> None:
+        @as_result(IndexError, ValueError)
+        def bad(value: int) -> int:
+            raise ValueError(value)
+
+        result = bad(123)
+        assert isinstance(result, Err)
+        assert isinstance(result.unwrap_err(), ValueError)
+
+    def test_uncaught_exception_propagates(self) -> None:
+        @as_result(ValueError)
         def f() -> int:
-            return 1
+            raise IndexError
 
-    with pytest.raises(TypeError, match=message):
+        with pytest.raises(IndexError):
+            f()
 
-        @as_result("not an exception type")  # type: ignore[arg-type]
-        def g() -> int:
-            return 1
+    def test_no_exception_types_raises(self) -> None:
+        with pytest.raises(TypeError, match="requires one or more exception types"):
 
+            @as_result()
+            def f() -> int:
+                return 1
 
-def test_as_result_type_checking() -> None:
-    """
-    The ``as_result()`` is a signature-preserving decorator.
-    """
+    def test_non_exception_type_raises(self) -> None:
+        with pytest.raises(TypeError, match="requires one or more exception types"):
 
-    @as_result(ValueError)
-    def f(a: int) -> int:
-        return a
-
-    res: Result[int, ValueError]
-    res = f(123)  # No mypy error here.
-    assert res.ok() == 123
+            @as_result("not an exception type")  # type: ignore[arg-type]
+            def f() -> int:
+                return 1
 
 
-@pytest.mark.asyncio
-async def test_as_async_result() -> None:
-    """
-    ``as_async_result()`` turns functions into ones that return a ``Result``.
-    """
+class TestAsAsyncResult:
+    @pytest.mark.asyncio
+    async def test_success(self) -> None:
+        @as_async_result(ValueError)
+        async def good(value: int) -> int:
+            return value
 
-    @as_async_result(ValueError)
-    async def good(value: int) -> int:
-        return value
+        result = await good(123)
+        assert isinstance(result, Ok)
+        assert result.unwrap() == 123
 
-    @as_async_result(IndexError, ValueError)
-    async def bad(value: int) -> int:
-        raise ValueError
+    @pytest.mark.asyncio
+    async def test_caught_exception(self) -> None:
+        @as_async_result(IndexError, ValueError)
+        async def bad(value: int) -> int:
+            raise ValueError(value)
 
-    good_result = await good(123)
-    bad_result = await bad(123)
+        result = await bad(123)
+        assert isinstance(result, Err)
+        assert isinstance(result.unwrap_err(), ValueError)
 
-    assert isinstance(good_result, Ok)
-    assert good_result.unwrap() == 123
-    assert isinstance(bad_result, Err)
-    assert isinstance(bad_result.unwrap_err(), ValueError)
+    def test_no_exception_types_raises(self) -> None:
+        with pytest.raises(TypeError, match="requires one or more exception types"):
 
+            @as_async_result()
+            async def f() -> int:
+                return 1
 
-def sq(i: int) -> Result[int, int]:
-    return Ok(i * i)
+    def test_non_exception_type_raises(self) -> None:
+        with pytest.raises(TypeError, match="requires one or more exception types"):
 
-
-async def sq_async(i: int) -> Result[int, int]:
-    return Ok(i * i)
-
-
-def to_err(i: int) -> Result[int, int]:
-    return Err(i)
-
-
-async def to_err_async(i: int) -> Result[int, int]:
-    return Err(i)
-
-
-# Lambda versions of the same functions, just for test/type coverage
-sq_lambda: Callable[[int], Result[int, int]] = lambda i: Ok(i * i)
-to_err_lambda: Callable[[int], Result[int, int]] = lambda i: Err(i)
+            @as_async_result("not an exception type")  # type: ignore[arg-type]
+            async def f() -> int:
+                return 1

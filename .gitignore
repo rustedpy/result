@@ -10,6 +10,5 @@ build/
 .idea/
 .mypy_cache/
 venv/
-/.tox/
 .vscode
 pyrightconfig.json

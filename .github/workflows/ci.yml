@@ -8,73 +8,45 @@ on:
 name: CI
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python:
-          - '3.12'
-          - '3.11'
-          - '3.10'
-          - '3.9'
-          - '3.8'
+          - "3.14"
+          - "3.13"
+          - "3.12"
+          - "3.11"
     name: Python ${{ matrix.python }}
     steps:
-      # Python
-      - name: Setup python ${{ matrix.python }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python }}
+      - uses: actions/checkout@v4
 
-      # Check out code
-      - uses: actions/checkout@v2
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
-      # Cached dependencies
-      - uses: actions/cache@v1
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-py${{ matrix.python }}-${{ hashFiles('**/requirements-dev.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-py${{ matrix.python }}-
-      - name: Install dev dependencies
-        # There's no virtual env in CI environment, just bypass it with a dummy
-        # env var value
-        run: VIRTUAL_ENV=none make install
+      - name: Setup Python ${{ matrix.python }}
+        run: uv python install ${{ matrix.python }}
+
+      - name: Install dependencies
+        run: uv sync
 
       # Tests
       - name: Run tests
-        run: pytest --ignore=tests/test_pattern_matching.py --ignore=tests/type_checking/test_result.yml
-      - name: Run tests (type checking)
-        if: matrix.python != '3.8' && matrix.python != '3.9'
-        # These started breaking for <= 3.9, due to the type checker using a
-        # '|' for unions rather than 'Union[...]', so it's not possible to run
-        # the tests without maintaining two duplicate files (one for <= 3.9 and
-        # one for > 3.9)
-        run: pytest tests/type_checking/test_result.yml
-      - name: Run tests (pattern matching)
-        if: matrix.python == '3.10' || matrix.python == '3.11' || matrix.python == '3.12'
-        run: pytest tests/test_pattern_matching.py
+        run: uv run pytest
 
       # Linters
-      - name: Run flake8 (Python >= 3.10)
-        run: make lint-flake
-        if: matrix.python != '3.9' && matrix.python != '3.8'
-      - name: Run flake8 (Python < 3.10)
-        run: make lint-flake-pre310
-        if: matrix.python == '3.9' || matrix.python == '3.8'
+      - name: Run ruff
+        run: uv run ruff check .
       - name: Run mypy
-        run: make lint-mypy
+        run: uv run mypy
 
       # Packaging
       - name: Build packages
-        run: |
-          pip install --upgrade build pip setuptools wheel
-          python -m build
+        run: uv build
 
       # Coverage
       - name: Upload coverage to codecov.io
-        uses: codecov/codecov-action@v1
-        if: matrix.python == '3.9'
+        uses: codecov/codecov-action@v4
+        if: matrix.python == '3.12'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
