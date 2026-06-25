@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pickle
 from typing import Callable
 
 import pytest
@@ -300,6 +301,30 @@ def test_error_context() -> None:
         n.unwrap()
     exc = exc_info.value
     assert exc.result is n
+
+
+def test_unwrap_error_pickleable() -> None:
+    """UnwrapError must survive a pickle round-trip (e.g. across multiprocessing)."""
+    n = Err('nay')
+    with pytest.raises(UnwrapError) as exc_info:
+        n.unwrap()
+    exc = exc_info.value
+
+    restored: UnwrapError = pickle.loads(pickle.dumps(exc))
+
+    assert restored.args == exc.args
+    assert restored._result == exc._result
+    assert restored.result == exc.result
+
+    # Also check the Ok variant (expect_err raises with an Ok result)
+    o = Ok('yay')
+    with pytest.raises(UnwrapError) as exc_info2:
+        o.expect_err('must fail')
+    exc2 = exc_info2.value
+
+    restored2: UnwrapError = pickle.loads(pickle.dumps(exc2))
+    assert restored2.args == exc2.args
+    assert restored2._result == exc2._result
 
 
 def test_slots() -> None:

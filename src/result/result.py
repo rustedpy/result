@@ -456,6 +456,14 @@ class UnwrapError(Exception):
         self._result = result
         super().__init__(message)
 
+    def __reduce__(self) -> tuple[type[UnwrapError], tuple[Result[object, object], str]]:
+        # Exception.__reduce__ only preserves self.args, which contains just the
+        # message string.  The `_result` attribute is stored separately and is
+        # therefore lost during pickling/unpickling (e.g. across a multiprocessing
+        # boundary).  Returning both constructor arguments here ensures faithful
+        # round-trip serialisation.
+        return (type(self), (self._result, self.args[0]))
+
     @property
     def result(self) -> Result[Any, Any]:
         """
