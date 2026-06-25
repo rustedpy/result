@@ -6,6 +6,10 @@
 A simple Result type for Python 3 [inspired by
 Rust](https://doc.rust-lang.org/std/result/), fully type annotated.
 
+## THIS PROJECT IS NO LONGER MAINTAINED
+
+See [issue 201](https://github.com/rustedpy/result/issues/201) for more information.
+
 ## Installation
 
 Latest release:
